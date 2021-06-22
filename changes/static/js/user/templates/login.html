@@ -1,0 +1,66 @@
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padd_zero" id="login_section_wwlcme" ng-hide="succ">
+  <div class="mar_zero">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 top_login_section padd_zero">
+      <h3>&nbsp;</h3>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin:20px 0px;">
+      <form name="loginForm" id="form_login" role="form">
+        <div class="username form-group">
+          <label for="user_login">
+            Email </label>
+          <input type="text" class="input form-control" tabindex="1"
+                 id="user_login" size="20" value="" ng-model="data.email" ng-disabled="sync" />
+        </div>
+        <div class="password form-group">
+          <label for="user_pass">
+            Password </label>
+          <input type="password" class="input_password form-control" tabindex="2" id="user_pass" size="20"
+                 ng-model="data.password" ng-disabled="sync" />
+        </div>
+        <div class="login_fields form-group">
+          <input type="submit" tabindex="3" value="Login" id='login_btn' ng-click="ok(loginForm)" ng-disabled="sync"
+                 class="btn btn-default btn-sm" name="Login">
+        </div>
+        <div class="lost-password text-center form-group">
+          <a tabindex="4" class="sign-up" href="{% url 'register_type' %}">Sign Up?</a>&nbsp;&nbsp;
+          <a tabindex="5" href="{% url 'reset' %}">Forgot Password?</a>
+        </div>
+
+        <span id="wp-social-login-connect-with">OR Connect with:</span>
+
+        <div class="social_ul">
+          <a tabindex="" class="social_sing_ups" href="">
+            <img alt="Facebook" title="Facebook" src="/static/images/facebook.png"/>
+          </a>
+          <a tabindex="" class="social_sing_ups" href="">
+            <img alt="Twitter" title="Twitter" src="/static/images/twitter.png"/>
+          </a>
+          <a tabindex="" class="social_sing_ups" href="">
+            <img alt="Google" title="Google" src="/static/images/google.png"/>
+          </a>
+          <a tabindex="" class="social_sing_ups" href="">
+            <img alt="LinkedIn" title="LinkedIn" src="/static/images/linkedin.png"/>
+          </a>
+          <a tabindex="" class="social_sing_ups" href="">
+            <img alt="Yahoo!" title="Yahoo!" src="/static/images/yahoo.png"/>
+          </a>
+        </div>
+
+      </form>
+      <div class="form-group" style="text-align: center;" id="login_info_msg">
+        <p class="success_msg" ng-show="success">
+        <span class='sign-error'>
+          <i class='glyphicon glyphicon-ok-circle' />
+        </span>
+        <span class='text-error'>{{ success }}</span>
+        </p>
+        <p class="error_msg" ng-show="erro!=''">
+        <span class='sign-error' ng-show="error!=''">
+          <i class='glyphicon glyphicon-remove-circle' />
+        </span>
+        <span class='text-error'>{{ error }}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

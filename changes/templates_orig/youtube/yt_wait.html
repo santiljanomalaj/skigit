@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block main_video_block %}
+{% endblock %}
+
+{% block window_page_title_block %}
+    Upload - Skigit
+{% endblock %}
+
+{% block head_inline_css_block %}{% endblock %}
+
+{% block main_nav_under_css_block %}{% endblock %}
+
+{% block main_div_block %}
+    <div id="main">
+        <div class="wrap cf">
+            <div id="content" role="main">
+                <div class="post-2110 page type-page status-publish hentry" id="post-2110">
+                    <h1 class="page-title">You video is uploaded and processing now. Please, wait.</h1>
+                    {{ job }}
+                </div>
+            </div>
+        </div>
+    </div><!-- end #main -->
+
+{% endblock %}
+
+
+{% load i18n %}

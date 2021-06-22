@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load category_list %}
+
+{% block title %}{{ block.super }}Brochure{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" type="text/css" media="screen" href="{% static 'css/brochure_screen.css' %}">
+
+  <style>
+    .contain_broshar {
+      width: 100% !important;
+      background-image: url('{{ poster_2 }}') !important;
+      background-size: 100% 100% !important;
+      background-repeat: no-repeat !important;
+    }
+
+    .contain_broshar1 {
+      width: 100% !important;
+      background-image: url('{{ poster_1 }}') !important;
+      background-size: 100% 100% !important;
+      background-repeat: no-repeat !important;
+    }
+
+    iframe {
+      display: block;
+      height: 0;
+      width: 0;
+      border: 0;
+    }
+	
+
+  </style>
+{% endblock css %}
+
+{% block content %}
+
+  <div class="list-group" style="margin-top:15px; background: transparent; border:none;">
+    {% if wall_post_exists %}
+      <section class="list-group-item text-center" style="background: transparent; border: none;" id="id_logo_section">
+        <h3 class="f_type">Select business logo:</h3>
+        <div class="logo-url f_type" id="logos" style="margin-bottom:20px;">
+        </div>
+
+        <div class="list-group poster_size_box" style="  background: transparent; border: none;">
+          <div class="list-group-item " style="background: transparent; border: none;">
+            <h4 class="f_type">Select Wall Poster Size</h4>
+          </div>
+          <div class="list-group-item" style="background: transparent; border: none;">
+            <label>
+              <input type="radio" onclick="posterSize(0)" name="poster_size" id='id_poster18x24' value="0" checked/> 18"x24"
+            </label>
+            <label>
+              <input type="radio" onclick="posterSize(1)" name="poster_size" id='id_poster24x36' value="1"/>24"x36"
+            </label>
+          </div>
+        </div>
+
+      </section>
+      <section class="list-group-item text-center" style="background: transparent; border: none;" id="id_print_section">
+        <iframe src="/friends/brochure-skigit-24x36/" name="frame24x36"></iframe>
+        <iframe src="/friends/brochure-skigit-18x24/" name="frame18x24"></iframe>
+        <input type="button" id="id_print24x36" onclick="window.frames['frame24x36'].print();"
+               value="Print" hidden>
+        <input type="button" id="id_print18x24" onclick="window.frames['frame18x24'].print();"
+               value="Print" >
+			   
+        <!--<input type="button" onclick="javascript:history.go(-1)" value="Cancel"/>-->
+		<!--<a onclick="location.href = '/'" class="btn" style= "margin-top: 8px;">Cancel</a>-->
+		<a href="{% url 'user_profile' %}" class="btn" style= "margin-top: 8px;">Cancel</a>
+		
+      </section>
+      <section id="id_section24x36" style="margin: 15px;" hidden>
+        {% include 'includes/wall_post_brochure.html' %}
+      </section>
+
+      <section id="id_section18x24" style="margin: 15px;">
+        {% include 'includes/wall_post_brochure.html' %}
+      </section>
+
+    {% else %}
+      <center><label class="f_type">No Wall Poster are Available Now. Coming Soon...</label></center>
+    {% endif %}
+
+  </div>
+
+{% endblock %}
+
+{% block js %}
+  <script>
+    $j = jQuery.noConflict();
+    posterSize = function (val) {
+      if (val == 0) {
+        $j('#id_print18x24').show();
+        $j('#id_section18x24').show();
+        $j('#id_print24x36').hide();
+        $j('#id_section24x36').hide();
+      }
+      else if (val == 1) {
+        $j('#id_print18x24').hide();
+        $j('#id_section18x24').hide();
+        $j('#id_print24x36').show();
+        $j('#id_section24x36').show();
+      }
+
+    };
+
+    refreshIframe18x24 = function () {
+      var ifr18x24 = document.getElementsByName('frame18x24')[0];
+      ifr18x24.src = ifr18x24.src;
+    };
+
+    refreshIframe24x36 = function () {
+      var ifr24x36 = document.getElementsByName('frame24x36')[0];
+      ifr24x36.src = ifr24x36.src;
+    };
+
+    selectLogo = function (logo_id) {
+      var logoImg, url;
+      logoImg = $j("input[type='radio'][name='select_logo']:checked").closest('[data-img]').attr('data-img')
+
+      $j.ajax({
+        url: '/friends/set-poster-b-logo/',
+        type: "POST", // http method
+        data: {'b_logo': logoImg, 'logo_id': logo_id, 'user_id': {{ request.user.id }}}, // data sent with the post request
+        success: function (data) {
+          if (data.is_success) {
+            $j('.b_logo_poster_dynamic').attr('src', logoImg);
+            refreshIframe18x24();
+            refreshIframe24x36();
+          }
+        }
+      });
+    };
+
+    $j(document).ready(function () {
+
+      $j.getJSON('/friends/wall-poster-b-logos/', function (data) {
+        var idd, check, current_logo, i, imagesCollection, image_div;
+        imagesCollection = data.all_business_logo;
+        if (imagesCollection) {
+
+          for (i = 0; i < imagesCollection.length; i++) {
+            idd = imagesCollection[i][0];
+            if ((idd.length == 0)) {
+              continue;
+            }
+            current_logo = '{{ poster_obj.b_logo }}';
+
+            if (current_logo == imagesCollection[i][1]) {
+              check = 'checked'
+            }
+            else {
+              check = ''
+            }
+
+            image_div = ' <input type="radio" class="b_logo_poster"  data-img="' + imagesCollection[i][1] + '" onclick="selectLogo(' + idd + ')" id=' + idd + ' value=' + idd + '  name="select_logo" ' + check + '/>' + '<label for=' + idd + ' class="label"><div class="dz-image"> <img data-dz-thumbnail="" src=' + imagesCollection[i][1] + '></div></label>'
+            $j('.logo-url').append(image_div);
+          }
+        }
+      });
+
+    });
+
+  </script>
+{% endblock js %}

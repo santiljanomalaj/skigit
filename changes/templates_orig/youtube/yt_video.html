@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block main_video_block %}
+<div class="home-featured-full wall">
+    <div id="video" class="wrap cf">
+        <div id="headline" class="cf">
+            <h1 id="title"><a href="andy-popup/index.html">Andy Popup</a></h1>
+        </div>
+        <div id="screen">
+            <div id="screen-inner">
+                <div align="center">
+                    <iframe id="homeframe" class="homeframe" title="YouTube video player" width="{{ width }}" height="{{ height }}"
+                            src="http://www.youtube.com/embed/{{ video_id }}?autoplay=0&origin={{ origin }}&modestbranding=0&showinfo=0"
+                            frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen/>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

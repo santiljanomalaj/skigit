@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load compress %}
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-8">
+  {% block css %}
+    <link rel="stylesheet" href="{% static 'css/ibacor-sosmed-button.css' %}" type="text/css" media="all"/>
+    <link href="{% static 'css/font-awesome-4.1.0.min.css' %}" type="text/css" type="text/css" media="all">
+    <link rel="stylesheet" href="{% static 'css/jquery.bxslider.min.css' %}" type="text/css" media="all"/>
+  {% endblock css %}
+
+{% block main-header-block %}
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <header id="header">
+            <nav class="navbar navbar-default">
+                <div class="logo center-align pull-left">
+                  <a href="/">
+                      <img src="https://static.skigit.com/images/logo_glow_2.png" alt="Skigit logo" style="width:145px; height:100px;margin-top:65px">
+                  </a>
+                </div>
+            </nav>
+          </header>
+        </div>
+    </div>
+{% endblock main-header-block %}
+
+{% block content %}
+<div class="row mar_zero" id="main">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 welcome_text_div">
+	<br>
+        <div class="welcome_title" style="width:100%;font-size: 4.5vw!important;font-family: segoe print!important;font-weight:bold; text-align:center">It's about time you found us!</div>
+ 
+        <div class="clear"></div>
+		
+        <div class="welcome_content col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin: -35px auto 0 auto; text-align:left; width:105%;font-size: 16px;">
+         Welcome to Skigit! Turn your <span style="font-size: 16px;">
+          <strong>30 Second</strong> video skits into widgets and make the world a better place. Receive or donate <span style="font-size: 18px; font-weight:700;font-family: segoe print;color: #ce4d11;">Skitbits</span> to your favorite cause just for showing-off what matters to you. We're so glad you could join us!</span><br></br></div>
+  
+			<!--<div style="margin-left:auto; margin-right:auto;width:100%;font-size: 18px; font-weight: bold;text-align:center">We're so glad you could join us! </div>-->
+		 
+		<p style="color: #0386b4;font-size: 5.0vw; font-weight: bold; margin-left: 10%;font-family: segoe print!important">Live</p>
+		
+			<p style="color: #0386b4;font-size: 5.1vw;margin-left: 17%!important;font-weight: bold; font-family: segoe print!important">
+        Share</p>
+			<p style="color: #0386b4;font-size: 5.2vw;text-align: center;font-weight: bold;font-family: segoe print!important;margin-left:18%;">
+        Make a difference!</p>
+		<span class="imgLeft"><center><img src="/static/images/aboutus_sun.gif" width="85" alt="" ></center></span>
+		</span></span></span></span></span>
+        </span>
+
+
+        <div class="img_userbanner">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 welcome_text_div">
+            <p ALIGN=center class="welcome_img">
+              <!--<center><img src="{% static 'images/welcome_graphics_fs.gif' %}" class="img-responsive" style="max-width:55%"></center>-->
+            </p>
+          </div>
+        </div><!--img_userbanner-->
+      </div>
+    <p>&nbsp;</p>
+
+
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;text-align: center;margin: -35px auto 0 auto;">
+        <div style="padding-bottom: 12px;">
+            <a href="javascript:void(0);">
+                <img class="" src="{% static 'images/download_ios.png' %}" width="135px" height="49px"/>
+            </a>
+        </div>
+        <div>
+            <a href="javascript:void(0);">
+                <img class="" src="{% static 'images/google_store.png' %}" width="135px" height="49px"/>
+            </a>
+        </div>
+    </div>
+
+    </div>
+  </div>
+  </div>
+{% endblock content %}

@@ -1,0 +1,418 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load category_list %}payment_confirm_box
+{% load math %}
+
+{% block title %}{{ user.first_name }} {{ user.last_name }} | Invoice{% endblock %}
+
+{% block content %}
+
+  <style>
+
+
+    .count, .due, .inv_table_head {
+      text-align: end;
+    }
+
+    .panel {
+      margin-top: 20px;
+	  width: 80%;
+	  border: none;
+    }
+
+    .panel .year_head {
+      text-align: center;
+    }
+
+    .panel-heading {
+      padding: 5px 10px;
+    }
+
+    .panel .table {
+      border: none;
+    }
+
+    .panel .table tr td {
+      border: none !important;
+    }
+
+    .invoice_row_div {
+      font-size: 18px;
+    }
+
+    .col_exp_view {
+      margin-top: 15px;
+    }
+
+    .for-button select {
+      width: 15%;
+    }
+
+    @media only screen and (max-width: 500px) {
+      .for-button select {
+        width: 35%;
+      }
+    }
+  </style>
+
+  <script>
+
+    invoiceDetail = function (num) {
+
+      if ($j('#toggle_btn' + num).text() != 'Expand detail') {
+        $j('#toggle_btn' + num).html('Expand detail')
+      } else {
+        $j('#toggle_btn' + num).html('Collapse detail')
+      }
+      $j('#invoice_details' + num).toggle()
+    }
+
+    // Ask confirmation
+    payment = function (month, year, amount) {
+
+      var inv = $j('.payment_method.' + month + '-' + year + ':checked').val();
+      $j('#pyament_btn' + month).attr('disabled', true);
+      $j('#pyament_btn' + month).attr('value', 'Wait');
+      $j('#payment_confirm_box #amount_text').text(amount);
+      $j('#payment_confirm_box #payment_confirm_btn').attr({'onclick': 'process_payment(' + month + ',' + year + ',' + amount + ',' + inv + ')'});
+      $j('#payment_confirm_box #cancel_btn').attr({'onclick': 'cancel_click(' + month + ')'});
+      $j('#payment_confirm_box').addClass('open');
+      $j('.overlay').addClass('open')
+    }
+
+    // Invoke the payment process after confirmation!
+    process_payment = function (month, year, amount, inv) {
+      // Hide the confirmation box
+      $j('#payment_confirm_box').removeClass('open')
+      $j('.overlay').removeClass('open')
+      $j('#amount_text').empty();
+
+      jQuery.ajax({
+        url: "/invoice/pay-bill/",
+        type: "POST",
+        data: {
+          'month': month, 'type': '{{ card_type }}', 'inv_id': inv, 'year': year, 'amount': amount,
+          csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        success: function (data) {
+          if (data.is_success) {
+            $j('#transaction_text').html('Transaction id: ' + data.transaction_id)
+            $j('#confirm_text').html(data.message)
+            $j('#confirmBox').addClass('open')
+            $j('.overlay').addClass('open')
+            $j('.due_button' + month).empty()
+            $j('.due_button' + month).append('<lable style="float: right;"><i class="pay-made"><img id="pay-made" src="/static/images/icons/Pay-made.png"></i></lable>')
+            $j('.transaction' + month).empty()
+            $j('.transaction' + month).html('<lable>Transaction Id: ' + data.transaction_id + '</label>')
+            $j('.transaction_date' + month).html('<lable>' + data.transaction_date + '</label>')
+            $j('.amount_text' + month).empty()
+            $j('.amount_text' + month).html('Amount Paid')
+            $j('#pyament_btn' + month).hide()
+            $j('#pay-status' + month).empty()
+            $j('#pay-status' + month).append('<label style="padding-left: 15px; float:right;  font-size: 18px;">Status: <span style="font-weight:700; color:green">Paid</span></label>')
+          }
+          else {
+            $j('#pyament_btn' + month).attr('disabled', false);
+            $j('#pyament_btn' + month).attr('value', 'Paynow')
+            $j('#transaction_text').html('Code: ' + data.code)
+            $j('#confirm_text').html(data.message)
+            $j('#confirmBox').addClass('open')
+            $j('.overlay').addClass('open')
+          }
+        }
+      });
+    }
+
+    ok_click = function () {
+      $j('#confirmBox').removeClass('open')
+      $j('.overlay').removeClass('open')
+      $j('#transaction_text').empty()
+      $j('#confirm_text').empty()
+    }
+
+    cancel_click = function (month) {
+      $j('#payment_confirm_box').removeClass('open')
+      $j('.overlay').removeClass('open')
+      $j('#amount_text').empty();
+      $j('#pyament_btn' + month).attr('disabled', false);
+      $j('#pyament_btn' + month).attr('value', 'Pay');
+    }
+
+  </script>
+  <script>
+
+    $(function () {
+      $j('#id_invoice_year').val('{{ year }}');
+      $j('#id_invoice_year').change(function () {
+        window.location.href = "{% url 'user_payment_setup' %}?year=" + $j("#id_invoice_year option:selected").val();
+      });
+    })
+
+  </script>
+
+  <div class="overlay"></div>
+  <div id="payment_confirm_box" style="border: none !important;">
+    <div style="text-align: center !important;">
+      <p><img src="{% static 'images/logo.png' %}" width="65px;" height="50px;" style="filter: contrast(1.3);"/></p>
+      <p style="color:#ffffff">The amount is $<span id="amount_text"></span></p>
+    </div>
+    <div class="del-bott">
+      <button type="button" id="payment_confirm_btn">Pay</button>
+      <button type="button" id="cancel_btn">Cancel</button>
+    </div>
+  </div>
+  <div id="confirmBox" style="border: none !important;">
+    <div style="text-align: center !important;">
+      <p><img src="{% static 'images/logo.png' %}" width="65px;" height="50px;" style="filter: contrast(1.3);"/></p>
+
+      <p id="transaction_text" style="color:#ffffff"></p>
+      <p id="payment_confirm_text" style="color:#ffffff"></p>
+      <p id="confirm_text"></p>
+    </div>
+    <div class="del-bott">
+      <button type="button" id="ok_delete" onclick="ok_click()">OK</button>
+    </div>
+  </div>
+  <div class="row profile mar_zero for-button white-back">
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+      <div class="profile-sidebar" id="adjust_2">
+        <div class="profile-usermenu padd-left ">
+          <ul class="nav">
+            <li><a href="{% url 'user_profile' %}">Member Profile</a></li>
+
+			{% if is_business %}
+			   <div  class="hidden-xs hidden-sm" style="margin: 0 0 0 20px;">
+					<li><a href="/brochure-preview" style="padding-top: 0 !important; margin-left: 10px;">View/Print Brochure</a></li>
+					<li><a href="/wall-poster-preview" style="padding-top: 0 !important; margin-left: 10px;">View/Print Wall Poster</a></li>
+				</div>
+                <li><a href="{% url 'user_payment_setup' %}">Invoice</a></li>
+              {% endif %}
+
+            <li><a href="{% url 'password_change' %}">Change Password</a></li>
+            <li><a href="{% url 'user_profile_notifications' %}">Notification Settings</a></li>
+            <li><a href="{% url 'user_profile_delete' %}">Delete Account</a></li>
+            <li><a href="{% url 'my_statistics' %}">My Skigistats</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+
+      <div class="panel">
+        <div class="invoice_header">
+          My Skigit Invoices
+        </div>
+        <div class="panel-heading">
+          <h3 class="year_head">
+            <label style="margin-left: 10px;">Year:</label>
+            <select id="id_invoice_year">
+              {% for years in year_list %}
+                <option value="{{ years }}">{{ years }}</option>
+              {% endfor %}
+            </select>
+          </h3>
+          {#                    <h3 class="year_head">Year {{ year }}</h3>#}
+        </div>
+      </div>
+
+      {% for invoice in business_invoices_list %}
+
+        <div class="panel panel-default">
+        <div class="panel-heading">
+          <div style="width: 50%;">
+            <h3 class="panel-title invoice-month" >{{ invoice.month }}</h3>
+          </div>
+          <div class="col-sm-2 due_button due_button{{ invoice.month_num }}" style="width:50%;font-size:26px">
+            {% if invoice.payment_recived or invoice.total_amount <= 0  %}
+              <lable style=" float: right;"><i class="pay-made"><img id="pay-made" src="/static/images/icons/Pay-made.png"></i></lable>
+            {% else %}
+              <lable style="float: right;"><i class="pay-due"><img id="pay-due" src="/static/images/icons/Pay-due.png"></i></lable>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="panel-body">
+
+          <div class="row invoice_row_div">
+            <div style='width:22%; margin-top: 5px;' class="col-sm-3 due_label invoice-label amount_text{{ invoice.month_num }}">
+                {% if invoice.payment_recived %}
+                 Amount Paid
+                {% else %}
+                 Amount Due
+                {% endif %}
+            </div>
+            <div style="width: 14%; margin-top:5px" class="col-sm-2 due_amount;">${{ invoice.total_amount }}</div>
+            <div style="width: 42%;" class="col-sm-5 due_button">
+            {% if invoice.payment_recived %}
+              <label>
+              <img src="{{ invoice.card_img }}">
+              {{ invoice.card_detail }}
+              </label>
+            {% else %}
+              <form>
+                {% for method in payment_methods %}
+                  <div style="margin-top: 10px;">
+
+                    <label style="margin-left: -11px;">
+                    <input type="radio" name="payment_method" class="payment_method {{ invoice.month_num }}-{{ year }}" value="{{ method.inv.id }}"{% if method.default_account %} checked{% endif %}>
+                    <img src="{{ method.card_img }}"> {{ method.card_detail }}</label>
+                  </div>
+                {% endfor %}
+              </form>
+            {% endif %}
+            </div>
+            <div id="pay-status{{ invoice.month_num }}" class="col-sm-2" style="width:26%; margin-left: -30px;">
+              {% if invoice.payment_recived %}
+              <label style="font-size: 18px;float: right;padding: 0;">Status: <span style=" color: green; font-weight: 700;">Paid</span></label>
+              {% elif invoice.total_amount > 0 %}
+              <label style="font-size: 18px;float: right;padding: 0;">Status: <span style=" color: #c02c2c; font-weight: 700;">Unpaid</span></label>
+              {% else %}
+             <label style="font-size: 14px;float: right;padding: 0;"><span style=" color: #c02c2c; font-weight: 700;">No payment required</span></label>
+              {% endif %}
+            </div>
+            </div>
+            <hr>
+            <div class="row col_exp_view">
+              <div class="col-sm-6 due_label" style="width: 36%;">
+                <label class="invoice-label expand-detail" style="color: #037bb8;" id='toggle_btn{{ invoice.month_num }}'
+                       onclick="invoiceDetail({{ invoice.month_num }})">Expand detail</label>
+              </div>
+              <div style="width: 42%;" class="col-sm-4 transaction{{ invoice.month_num }}">
+                {% if invoice.payment_recived %}
+                <lable>Transaction Id: {{ invoice.transaction_id }}</lable>
+                {% endif %}
+              </div>
+              <div class="col-sm-2 transaction_date{{ invoice.month_num }}">
+                {% if invoice.payment_recived %}
+                    <lable>{{ bill.transaction_date }}</lable>
+                {% endif %}
+              </div>
+              <div style="float: right;" class="col-sm-2{{ invoice.month_num }}">
+                {% if not invoice.payment_recived and invoice.month_num|can_pay_now:invoice.year and invoice.total_amount > 0  %}
+                  <input type="button"
+                         onclick="payment({{ invoice.month_num }},{{ year }},{{ invoice.total_amount }})"
+                         id="pyament_btn{{ invoice.month_num }}" value="Pay now"/>
+                {% else %}
+                  <input type="button" disabled="disabled" style="background-color:#7f7f7f" value="Pay now"/>
+                {% endif %}
+              </div>
+            </div>
+
+          </div>
+
+          <table class="table" id="invoice_details{{ invoice.month_num }}" hidden>
+            <tr>
+              <th>Business Value Service</th>
+              <th class="inv_table_head">Count</th>
+              <th class="inv_table_head">Due Amount ($)</th>
+            </tr>
+            <tr>
+              <td>Business Skigit Logo Monthly Maintenance</td>
+              <td class="count">{% if not invoice.monthly_logo_detail %}1{% else %}
+                {{ invoice.monthly_logo_detail.total_logo_count }}{% endif %}</td>
+              <td class="due">{% if not invoice.monthly_logo_detail %}{{ invoice.monthly_logo_fee }}{% else %}
+                {{ invoice.monthly_logo_detail.logo_total_amount }}{% endif %}</td>
+            </tr>
+            <tr>
+              <td>Business Skigit Monthly Maintenance</td>
+              <td class="count">{% if not invoice.monthly_skigit_detail %}0{% else %}
+                {{ invoice.monthly_skigit_detail.total_skigit_count }}{% endif %}</td>
+              <td class="due">{% if not invoice.monthly_skigit_detail %}0{% else %}
+                {{ invoice.monthly_skigit_detail.skigit_total_amount }}{% endif %}</td>
+            </tr>
+            <tr>
+              <td>Learn More (PPC) Fee</td>
+              <td class="count">{% if not invoice.learn_more_detail %}0{% else %}
+                {{ invoice.learn_more_detail.learn_total_count }}{% endif %}</td>
+              <td class="due">{% if not invoice.learn_more_detail %}0{% else %}
+                {{ invoice.learn_more_detail.learn_total_amount }}{% endif %}</td>
+            </tr>
+            <tr>
+              <td>Logo Click Thru (PPC)</td>
+              <td class="count">{% if not invoice.logo_detail %}0{% else %}
+                {{ invoice.logo_detail.total_logo_count }}{% endif %}</td>
+              <td class="due">{% if not invoice.logo_detail %}0{% else %}
+                {{ invoice.logo_detail.user_total_due }}{% endif %}</td>
+            </tr>
+            <tr>
+              <td>Website Links Click Through</td>
+              <td class="count">{% if not invoice.link_detail %}0{% else %}
+                {{ invoice.link_detail.link_total_count }}{% endif %}</td>
+              <td class="due">{% if not invoice.link_detail %}0{% else %}
+                {{ invoice.link_detail.link_total_due }}{% endif %}</td>
+            </tr>
+            <tr>
+              <td>Skigit Plugin</td>
+              <td class="count">{% if not invoice.plug_detail %}0{% else %}
+                {{ invoice.plug_detail.plugin_total_count }}{% endif %}</td>
+              <td class="due">{% if not invoice.plug_detail %}0{% else %}
+                {{ invoice.plug_detail.plugin_total_amount }}{% endif %}</td>
+            </tr>
+            <tr>
+              <td>Skigit Post</td>
+              <td class="count">{% if not invoice.post_detail %}0{% else %}
+                {{ invoice.post_detail.post_total_count }}{% endif %}</td>
+              <td class="due">{% if not invoice.post_detail %}0{% else %}
+                {{ invoice.post_detail.post_total_amount }}{% endif %}</td>
+            </tr>
+            <tr>
+              <td>Skigit Share</td>
+              <td class="count">{% if not invoice.share_detail %}0{% else %}
+                {{ invoice.share_detail.total_share_count }}{% endif %}</td>
+              <td class="due">{% if not invoice.share_detail %}0{% else %}
+                {{ invoice.share_detail.share_total_amount }}{% endif %}</td>
+            </tr>
+            <tr>
+              <td>Skigit Embed (My Site)</td>
+              <td class="count">{% if not invoice.embed_detail %}0{% else %}
+                {{ invoice.embed_detail.embed_total_count }}{% endif %}</td>
+              <td class="due">{% if not invoice.embed_detail %}0{% else %}
+                {{ invoice.embed_detail.embed_total_amount }}{% endif %}</td>
+            </tr>
+            <tr>
+              <td>Skigit Embed (Skigit)</td>
+              <td class="count">{% if not invoice.internel_embed_detail %}0{% else %}
+                {{ invoice.internel_embed_detail.embed_total_count }}{% endif %}</td>
+              <td class="due">{% if not invoice.internel_embed_detail %}0{% else %}
+                {{ invoice.internel_embed_detail.embed_total_amount }}{% endif %}</td>
+            </tr>
+            <tr>
+              <td>Skigit View (Skigit)</td>
+              <td class="count">{% if not invoice.view_detail and not invoice.home_view_detail %}0{% else %}
+                {% if invoice.view_detail and invoice.home_view_detail %}
+                  {{ invoice.view_detail.total_view_count|add:invoice.home_view_detail.total_view_count }}
+                {% elif invoice.view_detail %}
+                  {{ invoice.view_detail.total_view_count }}
+                {% else %}
+                  {{ invoice.home_view_detail.total_view_count }}
+                {% endif %}
+              {% endif %}</td>
+              <td class="due">{% if not invoice.view_detail and not invoice.home_view_detail %}0{% else %}
+                {% if invoice.view_detail and invoice.home_view_detail %}
+                  {{ invoice.view_detail.view_total_amount|add_decimal:invoice.home_view_detail.view_total_amount }}
+                {% elif invoice.view_detail %}
+                  {{ invoice.view_detail.view_total_amount }}
+                {% else %}
+                  {{ invoice.home_view_detail.view_total_amount }}
+                {% endif %}
+              {% endif %}</td>
+            </tr>
+            <tr></tr>
+            <tr>
+              <td></td>
+              <td class="count"></td>
+              <td class="due">Total Due ($)&nbsp;&nbsp;{{ invoice.total_amount }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

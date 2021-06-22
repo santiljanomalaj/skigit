@@ -1,0 +1,500 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block title %}Upload{% endblock %}
+
+{% block content %}
+
+  <link href="https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css"
+        rel="stylesheet">
+
+  <link rel="stylesheet"
+        href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
+  {#  <script type="text/javascript"#}
+  {#          src="{% static 'skigit/js/dropzone-yt-direct.js' %}"></script>#}
+  {##}
+  {#  <script type="text/javascript"#}
+  {#          src="{% static 'skigit/js/jquery.validate.min.js' %}"></script>#}
+  {#  <script type="text/javascript"#}
+  {#          src="{% static 'skigit/js/additional-methods.min.js' %}"></script>#}
+
+  <div ng-controller="ValidateUpload">
+    <div class="box_fulllodar f_type" hidden>
+      {#    <div class="box_fulllodar f_type" >#}
+      <div id="processbar_div">
+        <div class="progress_uploading">
+          <span class="progress_text">Skigit upload progress</span>
+          <img class="ski_img_logo" src="/static/images/logo.png"/>
+        <span class="progress-label">
+          0%
+        </span>
+        </div>
+        <div id="progressbar-5"></div>
+      </div>
+    </div>
+
+    <div class="p_body js__p_body f_type" ng-click="pbody()"></div>
+    <div class="row" id="main">
+      <div class="wrap cf f_type">
+        <div id="content" class=" no-padd-form f_type" role="main">
+          <div class="post-2110 page type-page status-publish hentry f_type"
+               id="post-2110">
+            <div class="page-content rich-content f_type">
+              <div class="title">
+                <h1 class="lao f_type">Upload your Primary Skigit</h1>
+              </div>
+              <input type="hidden" id="temp_logo_val"/>
+              <form class="form-horizontal f_type" id='skigit_form1'
+                    enctype="multipart/form-data">
+                <div class="form-group f_type">
+                  <div class="control-label col-sm-3 col-sm-offset-1 f_type"
+                       for="id_title">My Skigit Title <span class="red">*</span>
+                    <div class="dropdown f_type">
+                      <i>
+                        <img src="/static/images/help.png" width="15"/>
+                      </i>
+                      <!-- dropdown menu -->
+                      <ul class="dropdown-menu f_type">
+                        <div class="pop f_type">
+                          <h2 class="f_type">My Skigit Title</h2>
+                          <p class="f_type"
+                             style="font-family: Segoe_Print !important;">Enter
+                            the name that best describes your Skigit. The title
+                            will display at the top of your Skigit thumbnail.</p>
+                        </div>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="col-sm-4"
+                       style="font-family: Segoe_Print !important;">
+                    {{ form1.title }}
+                    {% if form1.title.errors %}
+                      <div
+                          class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero"
+                          style="font-family: Segoe_Print !important;">
+                        {{ form1.title.errors }}
+                      </div>
+                    {% endif %}
+                  </div>
+                  <div class="col-sm-4 small"
+                       style="line-height:34px; font-size:11px;">Limit 40
+                    Characters
+                  </div>
+                </div>
+                <div class="form-group f_type">
+                  <div class="control-label col-sm-3 col-sm-offset-1 f_type"
+                       for="id_category">My Skigit Category <span
+                      class="red">*</span>
+                    <div class="dropdown">
+                      <i><img src="/static/images/help.png" width="15"/>
+                      </i>
+                      <!-- dropdown menu -->
+                      <ul class="dropdown-menu">
+                        <div class="pop">
+                          <h2 style="font-family: Segoe_Print !important;">My
+                            Skigit Category</h2>
+                          <p style="font-family: Segoe_Print !important;">Enter or
+                            select the category that best describes the
+                            presentation style of your Skigit. Refer to <a
+                                href="guidelines/" target="_blank">Guidelines.</a>
+                          </p>
+                        </div>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    {{ form1.category }}
+                  </div>
+                </div>
+                <div class="form-group f_type">
+                  <div class="control-label col-sm-3 col-sm-offset-1 f_type"
+                       for="id_subject_category">My Subject Category <span
+                      class="red">*</span>
+                    <div class="dropdown">
+                      <i><img src="/static/images/help.png" width="15"/>
+                      </i>
+                      <!-- dropdown menu -->
+                      <ul class="dropdown-menu f_type">
+                        <div class="pop">
+                          <h2 style="font-family: Segoe_Print !important;">My
+                            Subject Category</h2>
+                          <p style="font-family: Segoe_Print !important;">Enter or
+                            select the category that best classifies the awesome
+                            thing in your Skigit. </p>
+                        </div>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="col-sm-4 f_type">
+                    {{ form1.subject_category }}
+                  </div>
+                </div>
+                <div class="form-group f_type">
+                  <div
+                      class="control-label col-sm-3 col-sm-offset-1 sel-padd f_type no-padding-left"
+                      for="id_mad_by">My awesome thing was made by <span
+                      class="red">*</span>
+                    <div class="dropdown">
+                      <i><img src="/static/images/help.png" width="15"/>
+                      </i>
+                      <!-- dropdown menu -->
+                      <ul class="dropdown-menu">
+                        <div class="pop">
+                          <h2 style="font-family: Segoe_Print !important;">My
+                            awesome thing was made by</h2>
+                          <p style="font-family: Segoe_Print !important;">Enter or
+                            select the name of the manufacturer or creator of your
+                            awesome thing.
+                            Add maker, proprietor, establishment or organization
+                            name. For people,places, ideas or other, simply add a
+                            cool or fun name that best fits the originator of your
+                            awesome thing.
+                            e.g. Awesome Idea; “E=mc2”, maker: “Albert
+                            Einstein”<br/>
+                            Awesome Person: “Michael Jordan”, maker: “Deloris and
+                            James”
+                          </p>
+                        </div>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    {{ form1.made_by }}
+                  </div>
+                </div>
+                <div class="col-sm-12 text-center"
+                     style="font-family: Segoe_Print !important;  margin:-5,0,5,0;">
+                  or
+                </div>
+                <div class="form-group">
+                  <p class="control-label col-sm-3 col-sm-offset-1 f_type"
+                     for="id_made_by_option"
+                     style="font-family: Segoe_Print !important;">
+                    If not found in
+                    the list above, add maker or proprietor name</p>
+                  <div class="col-sm-4 f_type">
+                    <input type="text" name="made_by_option" class="form-control" maxlength="200"
+                           ng-model="changemade"
+                           ng-change="changemadeby()"
+                           id="id_made_by_option">
+                  </div>
+                </div>
+                <div class="form-group f_type" id="bought_at">
+                  <div class="control-label col-sm-3 col-sm-offset-1 f_type"
+                       for="id_bought_at">I bought my awesome thing at
+                    <div class="dropdown">
+                      <i><img src="/static/images/help.png" width="15"/>
+                      </i>
+                      <!-- dropdown menu -->
+                      <ul class="dropdown-menu">
+                        <div class="pop">
+                          <center><img
+                              src='/static/images/sperk_sorry_logo.png'
+                              width='55px;' height='40px;'></center>
+                          <h2 style="font-family: Segoe_Print !important;">I bought my awesome thing at</h2>
+                          <p style="font-family: Segoe_Print !important;">Enter
+                            the name of the internet URL of the retailer or
+                            website where you purchased your awesome thing. If not
+                            a purchased item, enter the item home page or
+                            information page where viewers can learn more about
+                            your awesome thing.
+                            e.g. https//www.amazon.com, <br/>
+                            Only enter the URL suffix: amazon.com
+                          </p>
+                        </div>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="col-sm-4 f_type">
+                    {{ form1.bought_at }}
+                  </div>
+                </div>
+                <div class="form-group f_type">
+                  <div class="control-label col-sm-3 col-sm-offset-1 f_type"
+                       for="id_add_logo">Spice up your Skigit thumbnail by adding
+                    your item logo <span>&nbsp</span>
+                    <div class="dropdown">
+                      <i>
+                        <img src="/static/images/help.png" width="15"/>
+                      </i>
+                      <!-- dropdown menu -->
+                      <ul class="dropdown-menu">
+                        <div class="pop">
+                          <h2 style="font-family: Segoe_Print !important;">Spice
+                            up your Skigit thumbnail by adding your item logo</h2>
+                          <p style="font-family: Segoe_Print !important;">
+                            We recommend adding the manufacturer or
+                            creators logo to your Skigit to spice up
+                            your thumbnail. Let others know who made
+                            your awesome thing. The logo will be
+                            displayed in your thumbnail for the whole world to
+                            see!
+                          </p>
+                        </div>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 main-box radio">
+                    <label class="radio-inline"
+                           style="padding-left:0px; padding-right:20px">
+                      <div class="radio-box f_type">
+                      <ul id="id_add_logo">
+                        <li>
+                          <label for="id_add_logo_0">
+                            <input type="radio" ng-model="add_logo" name="add_logo" value="1" required=""
+                            id="id_add_logo_0" checked="">
+                            Yes
+                          </label>
+                        </li>
+                        <li>
+                          <label for="id_add_logo_1">
+                            <input type="radio" ng-model="add_logo" name="add_logo" value="0" required=""
+                                   id="id_add_logo_1">
+                            No
+                          </label>
+                        </li>
+                      </ul>
+                        <label id='id_sperk_label'
+                               ng-hide="add_logo == 1"
+                               class="radio-inline small f_type">
+                          <span class="red">*</span>
+                          Check for <b class="sperk-logo-n f_type" ng-click="showsperklogo()">
+                          <img width="40" height="31"
+                               src="{% static 'images/sperks.png' %}"/>
+                        </b> offer for logo display
+                        </label>
+                        {% if not profile %}
+                          <ul class="sperk-logo f_type">
+                            <li>
+                              <div class="sperk-content">
+
+                              <span
+                                  class="glyphicon glyphicon-triangle-top"></span>
+                                <center><img
+                                    src='/static/images/sperk_sorry_logo.png'
+                                    width='65px;' height='50px;'></center>
+                                <h2 class="sorry f_type"
+                                    style="color:#ff0004 !important;">We're sorry!</h2>
+                                <p style="font-family: Segoe_Print !important;">
+                                  This maker is not offering any Skigit incentives
+                                  at this time. Check back later!</p>
+                                <span id="close-button" ng-click="pbody()"></span>
+                              </div>
+                            </li>
+                          </ul>
+                        {% else %}
+                          <ul class="sperk-logo" ng-show="showsperklogo">
+                            <li>
+                              <div class="sperk-content">
+                                <div ng-show="ops">
+                                  <center>
+                                  <img src='/static/images/opps_no_logo.png' width='65px;' height='50px;'>
+                                  <p>
+                                    <b>Oops!</b>The logo for your awesome thing is not available at this time. We
+                                    recommend that you select <b>&#10077 YES &#10078</b> to display the logo so that
+                                    it can be added to your Skigit at a later date if the maker becomes a member of
+                                    Skigit </p>
+                                  </center>
+                                </div>
+                                <div ng-show="sorry">
+                                  <h2 class='sorry f_type' style='color:#FF0004 !important;' >We're Sorry!</h2>
+                                  <center>
+                                    <p> This maker is not offering any Skigit incentives at this time. Check back
+                                      later! </p>
+                                  </center>
+                                </div>
+
+
+                              <span
+                                  class="glyphicon glyphicon-triangle-top"></span>
+                                <center><img
+                                    src='/static/images/sperk_sorry_logo.png'
+                                    width='65px;' height='50px;'></center>
+                                <h2 class="sorry f_type"
+                                    style="color:#ff0004 !important;">We're sorry!</h2>
+                                <p style="font-family: Segoe_Print !important;">
+                                  This maker is not offering any Skigit incentives
+                                  at this time. Check back later!</p>
+                                <span id="close-button"></span>
+                              </div>
+                            </li>
+                          </ul>
+                        {% endif %}
+
+                      </div>
+                    </label>
+                    <div id='show-me' style="padding-left:15px;" ng-hide="changemade">
+                      <div class="form-group gender">
+                        {% for choice in form1.receive_donate_sperk %}
+                          {{ choice }}
+                        {% endfor %}
+                        {% if form1.gender.errors %}
+                          <div
+                              class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                            {{ form1.gender.errors }}
+                          </div>
+                        {% endif %}
+                        <span id='target'
+                              style="padding-left:10px; display:none; font-weight:800; color:#3abe75; cursor:pointer;">
+                        Select Your Cause
+                        <div class="target-div">
+                          <span class="glyphicon glyphicon-triangle-top"></span>
+                          <center>
+                            <img src="/static/images/donation.png"
+                                 width="65px;"
+                                 height="50px;">
+                          </center>
+                          <h2 style="font-family: Segoe_Print !important;">Who do you want to receive your sperk?</h2>
+                          <div class="donation-content">
+                            <ul class="list-group">
+                              {% for organiation in organization_list %}
+                                <li class="list-group-item f_type"
+                                    style="border: none; background: transparent; background-color: transparent; margin-bottom:-15px; ">
+                                  <label style="font-family: Segoe_Print !important;">
+                                    <input
+                                        type="radio"
+                                        name="donateGroup"
+                                        value="{{ organiation.id }}"
+                                        id="donateGroup_{{ organiation.id }}">
+                                    {{ organiation.ngo_name }}
+                                  </label>
+                                </li>
+                              {% endfor %}
+                            </ul>
+                          </div>
+                        </div>
+                      </span>
+                      </div>
+                    </div>
+                    <div class="logo-url f_type" id="logos" ng-hide="changemade"
+                         style="margin-bottom:20px;">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group f_type">
+                  <div class="control-label col-sm-3 col-sm-offset-1 f_type"
+                       for="id_why_rocks">Why my awesome thing rocks!<span
+                      class="red">*</span>
+                    <div class="dropdown">
+                      <i><img src="/static/images/help.png" width="15"/></i>
+                      <!-- dropdown menu -->
+                      <ul class="dropdown-menu">
+                        <div class="pop">
+                          <h2 style="font-family: Segoe_Print !important;">Why
+                            my awesome thing rocks!</h2>
+                          <p style="font-family: Segoe_Print !important;">Let
+                            others know why your awesome thing is so glorious in
+                            its awesomeness by adding your personal insights,
+                            story and feelings in your own words. Trust
+                            us…others want to know!
+                          </p>
+                        </div>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="col-sm-4 f_type">
+                    {{ form1.why_rocks }}
+                  </div>
+                  <div class="col-md-3 col-sm-3 col-xs-12 f_type"
+                       style="font-size:11px; line-height:90px;">Limit 200
+                    characters
+                  </div>
+                </div>
+
+            </div>
+
+          </div>
+          </form>
+          <div class="form-horizontal">
+            <div class="form-group">
+              <div class="control-label col-sm-3 col-sm-offset-1 f_type"
+                   id='file_uplod_div' for="fileUploadform">Upload or link to
+                your video (max = 20MB) <span class="red">*</span>
+                <div class="dropdown">
+                  <i><img src="/static/images/help.png" width="15"/> </i>
+                  <!-- dropdown menu -->
+                  <ul class="dropdown-menu">
+                    <div class="pop">
+                      <h2 style="font-family: Segoe_Print !important;">Upload or
+                        link to your video</h2>
+                      <p style="font-family: Segoe_Print !important;">Upload
+                        your Skigit from your computer or link to video file
+                        from a website URL.
+                        Enter the complete URL Paths (http://...). For example:
+                        https://www.youtube.com/watch?v=YeFgAVfMVQk
+                      </p>
+                    </div>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-sm-4 fileUpload f_type" style="margin:10px 0px;">
+                <form method="post" id="fileUploadform"
+                      enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div id="myId" style="width: inherit;" class="dropzone"></div>
+                  <div class="dz-progress"><span class="dz-upload"
+                                                 data-dz-uploadprogress></span>
+                  </div>
+                </form>
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-12 f_type"
+                   id='file_uplode_note' style="font-size:11px;">If a file is
+                uploaded, it will be posted in your Skigit. Otherwise, you must
+                enter a valid URL for your video in order to link to it.
+              </div>
+            </div>
+            <div class="form-group">
+              <p class="control-label col-sm-3 col-sm-offset-1 f_type"
+                 id="id_link_label" for="id_video_link"
+                 style="font-family: Segoe_Print !important;">Link video from
+                other website <span class="red">*</span></p>
+              <div class="col-sm-4">
+                {{ form2.video_link }}
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-12 f_type"
+                   id='id_link_instruction'
+                   style="font-size:11px; padding-left:19px;">Enter the complete
+                URL <br/>e.g https://www.youtube.com/watch?v=YeFgAVfMVQk
+              </div>
+            </div>
+            <div class="col-sm-8 col-sm-offset-4 upload_btn_main upload-btn"
+                 style="margin-top: 20px;">
+              <input name="submit" type="button" class="btn" id="vidsubmit"
+                     value="Post Skigit"/>
+              <input name="cancel" type="button" id="clear_form" value="Cancel"
+                     class="btn"/>
+              <div id='errors'
+                   style="margin-top:25px; list-style-type:none; "></div>
+              <div>
+                <ul>
+                  <li style="list-style-type:none;color:red;" id="msg_donate"
+                      hidden>
+                    <label id="msg_donate" style="margin-top:5px; color:red;"
+                           hidden/>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <ul>
+                  <li style="list-style-type: none; color:red;" id="msg" hidden>
+                    <label id="msg" style="margin-top:5px; color:red;"
+                           hidden></label></li>
+                </ul>
+              </div>
+            </div>
+            <div id="status"></div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script
+      src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+      integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+      crossorigin="anonymous"></script>
+{% endblock %}

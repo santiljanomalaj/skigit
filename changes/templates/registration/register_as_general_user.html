@@ -1,0 +1,336 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n%}
+{% load category_list %}
+
+
+{% block window_page_meta_block %}
+<title>General User Register | Skigit</title>
+<meta name="description" content="General User Register" />
+<link rel="image_src" href="{% static 'img/ico/arabic-media-icon-100x110.jpg' %}" />
+<meta property="og:title" content="Skigit" />
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="{{ request.build_absolute_uri }}"/>
+<meta property="og:image" content="{% static 'img/ico/arabic-media-icon-100x110.jpg' %}"/>
+<meta name="description" content="General User Register"/>
+<link rel="image_src" href="{% static 'img/ico/arabic-media-icon-100x110.jpg' %}" />
+<meta property="og:site_name" content="Skigit"/>
+<!--        <meta property="fb:app_id" content="120554071328497"/>-->
+<meta property="og:description" content="General User Register"/>
+
+<meta itemprop="name" content="Skigit" />
+<meta itemprop="description" content="General User Register" />
+<meta itemprop="image" content="{% static 'img/ico/arabic-media-icon-100x110.jpg' %}" />
+<meta name="description" content=  "Register General User Register"/>
+<meta name="keywords" content="Register General User Register" />
+<meta name="rating" content="Skigit"/>
+<meta name="revisit-after" content="1 days"/>
+<meta name="robots" content="index,follow"/>
+<meta name="Author" content="(c) Skigit"/>
+
+
+{% endblock window_page_meta_block %}
+
+{% block head_inline_css_block %}
+{% endblock %}
+
+{% block main_video_block %}
+{% endblock %}
+
+{% block main_div_block %}
+    <style>
+        #id_username,#id_email,#id_password1,#id_password2
+        ,#type_check, #usepolicy_check, #ageconfirm_check {
+            color: #555 !important;
+            background-color: #fff !important;
+            margin-bottom:0px;
+        }
+        #id_username-error,#id_email-error,#id_password1-error,
+        #id_password2-error,#type_check-error,#usepolicy_check-error,
+        #ageconfirm_check-error {
+            color: red !important;
+           /* background-color: #fff !important;*/
+            margin-bottom:-14px;
+
+        }
+		
+        .error_msg, .errorlist li, .form_error_message{
+            color: #ed1b2e !important;
+            display: -webkit-inline-box !important;
+        }
+        .error_msg{
+            color: #ed1b2e !important;
+            font-family: Segoe_Print !important;
+        }
+        li {
+            font-family: Segoe_Print !important;
+        }
+        .dropdown {
+            position: relative; cursor:pointer;  display: inline-block;
+        }
+        .dropdown-menu p
+        {
+            white-space: initial;
+        }
+
+        .dropdown .dropdown-menu {  position: absolute;  top: 100%;  left: 0; margin: 0;border:1px solid #ccc !important; width:189px !important;}
+        .dropdown .dropdown-menu .pop{padding:1px 7px 1px 16px; margin: 0px 1px -16px -1px !important;}
+        .dropdown .dropdown-menu h2{ font-weight:bold; font-size:12px; color:#000 !important; margin:0 0 4px 0 !important; padding:0 !important ;}
+        .dropdown .dropdown-menu p{ display:block; line-height:17px; font-size:11px;  font-family: "segoe_print" !important;    font-weight: normal !important;}
+        .dropdown .dropdown-menu p a{ color:#037bb8; text-decoration:underline !important;}
+        .dropdown .dropdown-menu p a:hover{ color:#037bb8; text-decoration:none;}
+        .dropdown .dropdown-menu p span{color:#E40003;}
+        .target-div h2{font-size:14px; color:#3abe75 !important; margin:0px 0 8px 0 !important; padding:0 !important; text-align:center; font-weight:bold;}
+        .donation-content input[type="radio"], .donation-content label {font-family:"segoe_print" !important; text-align:left;}
+        .form-control.error { top: inherit !important; }
+        .form-control.valid{ top: inherit !important; }
+
+    </style>
+    <script type="application/javascript">
+
+        $(function(){
+
+            $('#pass_chang_form').on( 'focus', ':input', function(){
+                $(this).attr( 'autocomplete', 'off' );
+            });
+
+
+            $('.form-control').on('keypress', function(){
+                $('.err_msg').empty()
+                $('.errorlist').empty()
+                $('.errorlist').hide()
+                $('.err_msg').hide()
+            });
+
+            function PasswordFormValidation() {
+                $.validator.addMethod("customemail",
+                        function(value, element) {
+                            return /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test( value );
+                        },"<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Please enter a valid email address."
+                );
+                $.validator.addMethod("oneuppercaseletter",
+                        function(value, element) {
+                            return /^(?=.*[A-Z])[0-9a-zA-Z_@./#&+-]{6,}$/.test( value );
+                        },"<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Your New Password does not meet the minimum requirements. Please try again."
+                );
+                var registrationForm = $("#registration_form")
+
+                errorLabelContainer: '#errors',
+                        registrationForm.validate({
+                            rules: {
+                                'username': {
+                                    required: true,
+                                },
+                                'email': {
+                                    required: {
+                                        depends: function () {
+                                            $(this).val($.trim($(this).val()));
+                                            return true;
+                                        }
+                                    },
+                                    customemail: true,
+
+                                },
+                                'password1': {
+                                    required:{
+                                        depends: function () {
+                                            $(this).val($.trim($(this).val()));
+                                            return true;
+                                        }
+                                    },
+                                    oneuppercaseletter: true,
+                                    minlength: 8,
+                                    maxlength:16,
+                                },
+                                'password2': {
+                                    required: true,
+                                    equalTo: "#id_password1"
+                                },
+                                'type_check': {
+                                    required: true,
+                                },
+                                'usepolicy_check': {
+                                    required: true,
+                                },
+                                'ageconfirm_check': {
+                                    required: true,
+                                },
+                            },
+                            messages: {
+                                'username': {
+                                    required: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Username field is required",
+                                },
+                                'email': {
+                                    required: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> E-Mail field is required",
+                                    customemail: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Please enter a valid email address."
+                                },
+                                'password1': {
+                                    required: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Password field is required",
+                                    minlength: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Password must contain minimum of 8 characters with alteast one upper case character",
+                                    oneuppercaseletter: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Password must contain minimum of 8 characters with alteast one upper case character",
+                                    maxlength: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Password must contain maximu, of 16 characters with alteast one upper case character.",
+                                },
+                                'password2': {
+                                    required: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Re-type field Password is required",
+                                    equalTo: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Your passwords do not match. Please try again."
+                                },
+                                'type_check': {
+                                    required: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Please check the box if you want to proceed",
+                                },
+                                'usepolicy_check': {
+                                    required: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Please check the box if you want to proceed",
+                                },
+                                'ageconfirm_check': {
+                                    required: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Please check the box if you want to proceed",
+                                },
+                            }
+                        });
+                return registrationForm.valid()
+            }
+            $('#form_submit').click(function() {
+
+                PasswordFormValidation();
+                $('.errorlist').show()
+                $('.err_msg').show()
+            });
+
+        });
+    </script>
+<div class="row mar_zero" id="main" style="min-height: 700px;">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 margin_top_30">
+        <h2 class="margin_top_15 sego word_space_2 text-center">Register Here!</h2>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 margin_top_30">
+            <div class="row mar_zero">
+                <form id='registration_form' action="{% url 'register_type' %}" method="POST" name="reg_type">
+                    <div class="row mar_zero">
+                        <div class="col-lg-4 col-md-4 col-sm-4 hidden-xs padd_zero">
+                            &nbsp;
+                        </div>
+                        <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12" id="user_register_type">
+                            {% csrf_token %}
+
+                            {% if form.non_field_errors %}
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    {% for err in form.non_field_errors %}
+                                    <div class="form_error_message">{{ err }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <div class="row mar_zero">
+                               <!--  <label class="pull-right">
+                                    <span class="pull-right">&nbsp;= Required</span>
+                                    <span class="pull-right" style=" margin-top: 2px;">
+                                       <span class="red">*</span>
+                                    </span>
+                                </label> -->
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label for="{{ form.username.id_for_label }}">Username
+                                              <span class="red">*</span>
+                                        </label>
+                                        {{ form.username|addcss:"form-control" }}
+                                        {% if form.username.errors %}
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+					    <span><img class="err_msg cross2-pos" src="{% static 'skigit/images/skigitcross.png' %}" style="width: 22px;"/></span>
+                                            <label class='err_msg text2-error' style="font-family: Segoe_Print !important;color:red;display: -webkit-inline-box;">&nbsp;{{ form.username.errors }}</label>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mar_zero">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label for="{{ form.email.id_for_label }}">Email
+                                              <span class="red">*</span>
+                                        </label>
+                                        {{ form.email|addcss:"form-control" }}
+                                        {% if form.email.errors %}
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+					    <span><img class="err_msg cross2-pos" src="{% static 'skigit/images/skigitcross.png' %}" style="width: 22px;"/></span>
+                                            <label class='err_msg text2-error' style="font-family: Segoe_Print !important;color:red;display: -webkit-inline-box;">&nbsp;{{ form.email.errors }}</label>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mar_zero">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label for="{{ form.password1.id_for_label }}">Password
+                                              <span class="red">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            {{ form.password1|addcss:"form-control" }}
+                                            <span class="input-group-addon" id="password-addon1">
+                                            <div class="dropdown">
+                                                <i><img src="/static/skigit/images/help.png" width="15" /> </i>
+                                                <!-- dropdown menu -->
+                                                <ul class="dropdown-menu">
+                                                    <div class="pop">
+                                                        <p>Your password must contain between 8 and
+                                                            16 characters with at least 1 upper
+                                                            case letter.
+                                                        </p>
+                                                    </div>
+                                                </ul>
+                                            </div>
+                                            </span>
+                                      </div>
+                                        <label id="id_password1-error" class="error" for="id_password1" style="top: -34px;"></label>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row mar_zero">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label for="{{ form.password2.id_for_label }}">Re-type Password
+                                              <span class="red">*</span>
+                                        </label>
+                                        {{ form.password2|addcss:"form-control" }}
+                                        {% if form.password2.errors %}
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                                           <label class='err_msg' style="font-family: Segoe_Print !important;color:red;display: -webkit-inline-box;">&nbsp;{{ form.password2.errors }}</label>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mar_zero">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <input required="required" type="checkbox" id="type_check" tabindex='5' name="type_check"> I agree to the Skigit <a class="blue" href="{% url 'about_us_url:t_and_c_view' %}" target="_blank">Terms of Service</a> and <a class="blue" href="{% url 'about_us_url:privacy_policy_view' %}"  target="_blank" style="margin-left: 20px;">Privacy Policy</a>
+                                        <label id="type_check-error" class="error" for="type_check" style="top: -34px;"></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <input required="required" type="checkbox" id="usepolicy_check" tabindex='6' name="usepolicy_check"> I agree to the terms of the Skigit <a class="blue" href="{% url 'about_us_url:acceptable_use_policy_view' %}" target="_blank">Acceptable</a>
+										<a class="blue" href="{% url 'about_us_url:acceptable_use_policy_view' %}"  target="_blank" style="margin-left: 20px;">Use Policy</a>
+                                        <label id="usepolicy_check-error" class="error" for="usepolicy_check" style="top: -34px;"></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <input required="required" type="checkbox" id="ageconfirm_check" tabindex='7' name="ageconfirm_check"> I confirm that I am at least 13 years of age                                         <label id="ageconfirm_check-error" class="error" for="ageconfirm_check" style="top: -34px;"></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mar_zero">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center margin_tb_10">
+                                    <div class="form-group for-button">
+                                        <button type="submit" id='form_submit' class="btn" name="register_as_general_user">&nbsp;Save&nbsp;</button>
+                                        <a href="#" onclick="location.href = '/'" class="btn">Cancel</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock main_div_block %}

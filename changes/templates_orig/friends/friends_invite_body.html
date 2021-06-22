@@ -1,0 +1,56 @@
+{% load staticfiles %}
+{% load el_pagination_tags %}
+{% lazy_paginate 10,10 friend_list %}
+{% for friend in friend_list %}
+
+    <div class="box_friend" data-skigt="{{friend.user}}">
+        <div class="box_imgcontain">
+            <div class="name_friend">
+                <span class="heade_friend">
+                    {{ friend.username }}
+                </span>
+                <span class="sub_namefriend">
+                    {{ friend.name }}
+                </span>
+                <span class="friend_followers">
+                    <span style="display: inherit;">Followers :
+                        <label id="follow_count{{friend.user}}">{{ friend.count }}</label>
+                    </span>
+                </span>
+            </div>
+
+            {% if friend.profile_img %}
+                <a href="{% url 'user_profile_display' friend.username %}" >
+                    <div class="img_friend">
+                        <img alt="skigit" src="{{friend.profile_img}}" title=" {{ friend.name }} " />
+                    </div>
+                </a>
+            {% else %}
+                <a href="." >
+                    <div class="img_friend">
+                        <img src="/static/skigit/detube/images/noimage_user.jpg" title=" {{ friend.name }} "  />
+                    </div>
+                </a>
+            {% endif %}
+
+            <div class="icon_friend">
+                {% if friend.user in follow_list %}
+                    <a onclick="un_follow_follow({{friend.user}})" id="follow_{{friend.user}}"
+                       class="follow" data-cuid="{{friend.user}}" title="Unfollow" >
+                       <span class="box_footer" id="follow_btn{{friend.user}}" style="color: #0a80be; font-weight: 400;"> Unfollow </span>
+                    </a>
+                {% else %}
+                    <a onclick="un_follow_follow({{friend.user}})" id="follow_{{friend.user}}"
+                       class="unfollow" data-cuid="{{friend.user}}" title="Follow" style="color: #58D68D; font-weight: 400;">
+                        <span class="box_footer" id="follow_btn{{friend.user}}" style="color: #58D68D; font-weight: 400;"> Follow </span>
+                    </a>
+                {% endif %}
+
+                <img width="20" height="20"
+                     src="/static/skigit/images/new_icons/close(32x32).png"
+                     class="close-friend" onclick="close_friend({{friend.user}})">
+            </div>
+        </div>
+    </div>
+{% endfor %}
+<span>{% show_more '&#x27F1;' %}</span>

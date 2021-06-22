@@ -1,0 +1,59 @@
+
+{% load staticfiles %}
+{% load i18n %}
+
+<head>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <title>
+        Brochure | Skigit
+    </title>
+    <link rel="shortcut icon" href="{% static 'skigit/favicon.ico' %}">
+    <link rel="apple-touch-icon" href="{% static 'skigit/apple-touch-icon.png' %}">
+    <link rel="stylesheet" href="{% static 'skigit/css/app.css' %}">
+</head>
+<style>
+
+    .box_pri { width:1800px; height:1376px; display:table; background-image:url('{{ poster_1 }}'); background-size: 100% 100%;}
+    .box_pri img { width:100%; }
+    .imgbox {
+        width: 113px;
+        height: 109px;
+        display: table;
+        margin-left: 39%;
+        margin-top: 14%;
+    }
+
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+        #section-to-print, #section-to-print * {
+            visibility: visible;
+        }
+        #section-to-print {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    }
+    .f_type{
+        font-family: segoe_print !important;
+    }
+    form.form_btn {  position: fixed; right: 30px;  top: 40px;}
+    body{ margin:0 }
+
+</style>
+
+<body>
+
+<section id="section-to-print">
+    <div class="box_pri">
+        <div class="imgbox">
+            <img src="{{ poster_obj.b_logo }}" />
+        </div>
+    </div>
+</section>
+
+</body>
+
+</html>

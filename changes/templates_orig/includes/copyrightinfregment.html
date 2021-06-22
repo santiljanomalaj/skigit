@@ -1,0 +1,571 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block main_video_block %}
+
+{% endblock %}
+
+{% block window_page_title_block %}
+    Sperk - Skigit
+{% endblock %}
+{% block window_page_meta_block %}
+    <meta property="og:site_name" content="Skigit" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content=""/>
+    <meta property="og:title" content="Login - Skigit" />
+{% endblock %}
+
+{% block head_inline_css_block %}
+{% endblock %}
+
+{% block main_nav_under_css_block %}
+{% endblock %}
+
+{% block main_div_block %}
+    <style>
+        .errorlist{
+            text-align: center;
+            color:red;
+            background-color: transparent;
+            background: transparent;
+        }
+
+        #id_urls,#id_description,#submitter_request,
+        #id_address, #id_city, #id_state,#id_full_name,#id_zip_code,
+        #id_country, #id_phone, #id_email,#id_signature{
+            color: #555 !important;
+            background-color: transparent;
+        }
+
+        #id_address-error, #id_city-error, #id_state-error,#confirm_check1-error,
+        #id_country-error, #id_phone-error, #id_email-error,#id_full_name-error,
+        #id_urls-error, #id_description-error,#submitter_request-error,#id_zip_code-error,
+        #confirm_check2-error,#confirm_check3-error,#id_signature-error{
+            color: red !important;
+            background-color: transparent;
+        }
+
+        label#submitter_request-error{
+            float: right;
+            position: absolute;
+            right: 0;
+            top: 0 !important;
+        }
+
+        .error label{
+            top:0px !important;
+        }
+
+        .error_msg, .errorlist li, .form_error_message{
+            color: #ed1b2e !important;
+            display-inside: -webkit-inline-box !important;
+        }
+
+        .error_msg{
+            color: #ed1b2e !important;
+            margin-left: 15%;
+        }
+
+        .errorlist li{
+            font-family: Segoe_Print !important;
+            font-weight: normal !important;
+        }
+
+        .dropdown {
+            position: relative; cursor:pointer;  display: inline-block;
+        }
+
+        .dropdown .dropdown-menu {  position: absolute;  top: 100%;  left: 0; margin: 0;border:1px solid #ccc !important; width:220px !important;}
+        .dropdown .dropdown-menu .pop{padding:8px 8px 1px 8px;}
+        .dropdown .dropdown-menu h2{ font-weight:bold; font-size:12px; color:#000 !important; margin:0 0 4px 0 !important; padding:0 !important ;}
+        .dropdown .dropdown-menu p{ display:block; line-height:17px; font-size:11px;  font-style:italic; font-family: "Noto Sans Lao UI",sans-serif !important;    font-weight: normal !important;}
+        .dropdown .dropdown-menu p a{ color:#037bb8; text-decoration:underline !important;}
+        .dropdown .dropdown-menu p a:hover{ color:#037bb8; text-decoration:none;}
+        .dropdown .dropdown-menu p span{color:#E40003;}
+        .p_body {    background: #000 none repeat scroll 0 0;    height: 100%;    left: 0;    opacity:0;    position: fixed;
+            top: 0;    transition: opacity 800ms ease 0s;    width: 100%;	z-index:99;}
+        .target-div{ display:none;}
+        .target-div.open{ display:block; position:absolute;  width:320px;  background:#e6e6e6; padding:8px; z-index:9999; cursor:default; box-shadow:4px 4px 2px #ddd; left:63px; top:83px;}
+        .target-div h2{font-size:14px; color:#3abe75 !important; margin:0px 0 8px 0 !important; padding:0 !important; text-align:center; font-weight:bold;}
+        .donation-content{color:#000; font-family:"segoe_print" !important; display:block;}
+        .donation-content input[type="radio"], .donation-content label {font-family:"segoe_print" !important; text-align:left;}
+
+        .target-div .glyphicon.glyphicon-triangle-top{font-size:30px; position:absolute; right:8px; top:-22px; color:#e5e7e7 !important;}
+        .form-control{
+            padding: 5px 12px !important;
+        }
+        .form-control label{
+            text-align: justify;
+        }
+        .text-center{
+            text-align: center !important;
+        }
+        .col-lg-6,.col-md-6, .col-sm-6{
+            padding-left:10px !important;
+        }
+        #id_country{
+            padding: 0px 5px !important;
+        }
+        @media (min-width: 1200px) {
+            .col-lg-6 {
+                width: 42% !important;
+            }
+        }
+
+    </style>
+
+    <script>
+
+        jQuery(document).ready(function(){
+
+            function CopyrightFormValidation() {
+                $.validator.addMethod("customemail",
+                        function(value, element) {
+                            return /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test( value );
+                        },"<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Please enter a valid email address."
+                );
+                $.validator.addMethod("lettersonly", function(value, element) {
+                        return this.optional(element) || /^[a-z\s]+$/i.test(value);
+                    }, "Only alphabetical characters");
+                var CopyrightForm = $("#id_copyright_infringement_form")
+
+                errorLabelContainer: '#errors',
+                        CopyrightForm.validate({
+                            rules: {
+                                'urls': {
+                                    required: true,
+{#                                    url:true,#}
+                                },
+                                'description': {
+                                    required: true,
+                                },
+                                'submitter_request': {
+                                    required:true,
+                                },
+                                'full_name':{
+                                    required:true,
+                                    lettersonly:true
+                                },
+                                'address':{
+                                    required:true,
+                                },
+                                'city':{
+                                    required:true,
+                                },
+                                'state':{
+                                    required:true,
+                                },
+                                'country':{
+                                    required:true,
+                                },
+                                'zip_code':{
+                                    required:true,
+                                    digits: true,
+                                    maxlength: 12,
+                                    minlength: 5,
+                                },
+                                'phone':{
+                                    required:true,
+                                    digits: true,
+                                    maxlength: 15
+                                },
+                                'email':{
+                                    required:{
+                                        depends: function(){
+                                            $(this).val($.trim($(this).val()));
+                                            return true;
+                                        }
+                                    },
+                                    customemail: true,
+                                },
+                                'confirm_check1':{
+                                    required:true,
+                                },
+                                'confirm_check2':{
+                                    required:true,
+                                },
+                                'confirm_check3':{
+                                    required:true,
+                                },
+                                'signature':{
+                                    required:true,
+                                    lettersonly: true
+                                },
+                            },
+                            messages: {
+                                'urls': {
+                                    required: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Your own website URL is required",
+                                },
+                                'description': {
+                                    required: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Identify the infringed work on Skigit is required",
+                                },
+                                'submitter_request': {
+                                    required: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Remove all is required",
+                                },
+                                'full_name': {
+                                    required: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Your Full Name is required",
+                                    lettersonly:"<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Letters and spaces only please"
+                                },
+                                'address': {
+                                    required: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Street Address is required",
+                                },
+                                'city': {
+                                    required: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> City is required",
+                                },
+                                'state': {
+                                    required: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> State/Province is required",
+                                },
+                                'country': {
+                                    required: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Country is required",
+                                },
+                                'zip_code': {
+                                    required: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Zip/Postal Code is required",
+                                    digits: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> You can only enter whole numbers",
+                                    maxlength: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> You must not enter more than (12) whole numbers",
+                                    minlength: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> You must enter a minimum of (5) whole numbers",
+                                },
+                                'phone': {
+                                    required: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Phone Number is required",
+                                    digits: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Please enter valid Phone Number. Only digits are allowed",
+                                    maxlength:"<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Contact Phone Number should be less than or equal to 15 digits"
+                                },
+                                'email': {
+                                    required: "<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Email Address is required",
+                                    customemail:"<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Please enter a valid email address."
+                                },
+                                'confirm_check1':{
+                                    required:"<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> This field is required",
+                                },
+                                'confirm_check2':{
+                                    required:"<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> This field is required",
+                                },
+                                'confirm_check3':{
+                                    required:"<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> This field is required",
+                                },
+                                'signature':{
+                                    required:"<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> This field is required",
+                                    lettersonly:"<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Only alphabetical characters"
+                                }
+                            }
+                        });
+                return CopyrightForm.valid()
+            }
+            $('#id_copyright_submit').click(function() {
+                CopyrightFormValidation();
+                $('.errorlist').show()
+                $('#err_msg').show()
+            });
+        });
+
+    </script>
+
+  <div class="row" id="main">
+
+    <div class="row profile mar_zero white-back">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+            <div class="row mar_zero profile-form">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padd_zero margin_bottom_10">
+                    <h3 class="mar margin_bottom_10" style="font-family: Segoe_Print !important; color:#3D3D3D !important; font-size:115% !important; font-weight: 600 !important;">
+                        Copyright Infringement Notification
+                    </h3>
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                    <form id="id_copyright_infringement_form" role="form"
+                          class="for-button" action="{% url 'copyright_infringement' skigitt_id %}"
+                          method="post" novalidate="novalidate" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group for-button">
+                            <div  class="col-lg-3 col-md-3 col-sm-3 col-xs-3"><span></span></div>
+                            <div  class="col-lg-9 col-md-9 col-sm-9 col-xs-9 padd_zero">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.urls.id_for_label }}">
+                                            Identify the video URL from the other site that this Skigit infringes
+                                          upon. Provide URL ie, http://...
+                                            <span class="red">*</span>
+                                        </label>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">{{ form.urls }}</div>
+                                        {% if form.urls.errors %}
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                                                {{ form.urls.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.skigit_id.id_for_label }}">
+                                            ID of Skigit.
+                                            <span class="red">*</span>
+                                        </label>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">{{ form.skigit_id }}</div>
+                                        {% if form.skigit_id.errors %}
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                                                {{ form.skigit_id.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <hr style="width:75%;">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.submitter_request.label }}">
+                                            Remove all
+                                            <div class="dropdown">
+                                                <i><img src="/static/skigit/images/help.png" width="15"  />  </i>
+                                                <ul class="dropdown-menu">
+                                                    <div class="pop">
+                                                        <h2>Removal</h2>
+                                                        <p>You can request the removal of only this specific Skigit, or all Skigits that contains the same video file.
+                                                            Please note that only identical copies of the video file can be removed by this function. If an image file
+                                                            has been altered in other way, then it cannot be detected or removed through thus function.<br>
+                                                            By clicking yes, you are asking Skigit to remove all Skigits containing the same video file. </p>
+                                                    </div>
+                                                </ul>
+                                            </div>
+                                            <span class="red">*</span>
+                                        </label>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            {{ form.submitter_request }}
+                                         <label for="submitter_request" class="error" style="top: -34px;"></label>
+                                        </div>
+                                        {% if form.submitter_request.errors %}
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                                                {{ form.submitter_request.errors }}
+
+                                            </div>
+
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <hr style="width:75%;">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.full_name.id_for_label }}">
+                                            Your Full Name
+                                            <span class="red">*</span>
+                                        </label>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">{{ form.full_name }}</div>
+                                        {% if form.full_name.errors %}
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                                                {{ form.full_name.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.address.id_for_label }}">
+                                            Street Address
+                                            <span class="red">*</span>
+                                        </label>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">{{ form.address }}</div>
+                                        {% if form.address.errors %}
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                                                {{ form.address.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.city.id_for_label }}">
+                                            City
+                                            <span class="red">*</span>
+                                        </label>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">{{ form.city }}</div>
+                                        {% if form.city.errors %}
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                                                {{ form.city.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.sate.id_for_label }}">
+                                            State/Province
+                                            <span class="red">*</span>
+                                        </label>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">{{ form.state }}</div>
+                                        {% if form.state.errors %}
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                                                {{ form.state.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.zip_code.id_for_label }}">
+                                            Zip/Postal Code
+                                            <span class="red">*</span>
+                                        </label>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">{{ form.zip_code }}</div>
+                                        {% if form.zip_code.errors %}
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                                                {{ form.zip_code.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.country.id_for_label }}">
+                                            Country
+                                            <span class="red">*</span>
+                                        </label>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">{{ form.country }}</div>
+                                        {% if form.country.errors %}
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                                                {{ form.country.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.phone.id_for_label }}">
+                                            Phone Number
+                                            <span class="red">*</span>
+                                        </label>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">{{ form.phone }}</div>
+                                        {% if form.phone.errors %}
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                                                {{ form.phone.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.email.id_for_label }}">
+                                            Email Address
+                                            <span class="red">*</span>
+                                        </label>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">{{ form.email }}</div>
+                                        {% if form.email.errors %}
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                                                {{ form.email.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <hr style="width:75%;">
+                                        <label>
+                                            By Clicking the folowing boxes. I confirm:
+                                        </label>
+
+                                        <hr style="width:75%;">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                            The Information in this notice is accurate.
+                                            {#<span class="red">*</span>#}
+                                        </label>
+
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12"  style="text-align:start">
+                                            <input type="checkbox" id="confirm_check1" name="confirm_check1" value="1"  />
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                        <label id="confirm_check1-error" class="error" for="confirm_check1" style="top:0px !important;"></label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                            I have a good faith belif that the disputed use of Copyrighted material is
+                                            not authorized by the copyright owner, its agent, or the law. (eg: as fair use)
+                                            {#<span class="red">*</span>#}
+                                        </label>
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12" style="text-align:start">
+                                            <input type="checkbox" id="confirm_check2" name="confirm_check2" value="2" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                        <label id="confirm_check2-error" class="error" for="confirm_check2" style="top:0px !important;"></label>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                            I state under penalty of perjury that i am the owner, or authorized to act
+                                            on behalf of the owner, of the Copyright or of an exclusive right under the
+                                            Copyrightthat is allegedly infringed.
+                                            {#<span class="red">*</span>#}
+                                        </label>
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12"  style="text-align:start">
+                                            <input type="checkbox" name="confirm_check3" id="id_confirm_check3" value="3" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                        <label id="confirm_check3-error" class="error " for="confirm_check3" style="top:0px !important;"></label>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <hr style="width:75%;">
+                                    </div>
+                                </div>
+
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.signature.id_for_label }}">
+                                            Type your full name in this box acts as your electronic signature
+                                            <span class="red">*</span>
+                                        </label>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">{{ form.signature }}</div>
+                                        {% if form.signature.errors %}
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                                                {{ form.signature.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <hr style="width:75%;">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center" style="padding-right: 254px" >
+                                    <input type="submit" value="Submit" class="btn" id="id_copyright_submit" name="copyright_submit" />
+                                    <a onclick="location.href = '/'" class="btn">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+{% endblock %}

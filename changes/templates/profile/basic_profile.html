@@ -1,0 +1,1651 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load category_list %}
+
+{% block content %}
+  <script type="text/javascript" src="{% static 'js/lightbox-plus-jquery.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/dropzone.js' %}"></script>
+  <script type="text/javascript"
+          src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
+
+  <script>
+    $(document).ready(function () {
+
+      $('#bug_report').on("click", function () {
+        $('#bugModal').modal('show');
+      })
+
+      Dropzone.autoDiscover = false
+      b_logo_length = 0
+
+      $(function () {
+
+        if ($('#my-dropzone-logo').length != 0) {
+          var self;
+          self = new Dropzone("#my-dropzone-logo", {
+            maxFiles: 5,
+            parallelUploads: 5,
+            dictMaxFilesExceeded: "You cannot upload more than (5) logos.",
+          });
+
+          // config
+          self.options.addRemoveLinks = true;
+          self.options.dictRemoveFile = "Delete";
+
+          // load already saved files
+          $.getJSON('/business_logo_get_target/', function (data) {
+            b_logo_length = data.length
+            localStorage.setItem('b_logo_length', b_logo_length)
+            $.each(data, function (index, val) {
+              var mockFile1;
+              mockFile1 = {name: val.logo, type: 'image/jpeg'};
+              self.options.addedfile.call(self, mockFile1);
+              self.options.thumbnail.call(self, mockFile1, "/media/" + val.logo);
+              mockFile1.previewElement.classList.add('dz-success');
+              mockFile1.previewElement.classList.add('dz-complete');
+              self.emit("complete", mockFile1);
+              $(mockFile1.previewTemplate).find('.dz-remove').attr('id', "id_business_logo");
+            });
+          });
+
+          //New file added
+          self.on("addedfile", function (file) {
+            var local_storage_length = localStorage.getItem('b_logo_length')
+            if (local_storage_length < 5) {
+              $('#my-dropzone-logo').find('.dz-message').show()
+              localStorage.setItem('b_logo_length', parseInt(localStorage.getItem('b_logo_length')) + 1)
+            }
+            else {
+              self.removeFile(file)
+              $('#id_blogo_error_msg').html('You cannot upload more than (5) logos.')
+              $('#my-dropzone-logo').find('.dz-message').hide()
+              localStorage.setItem('b_logo_length', parseInt(localStorage.getItem('b_logo_length')) + 1)
+            }
+          });
+
+          // Send file starts
+          self.on("sending", function (file) {
+            $('.meter').show();
+          });
+
+          // File upload Progress
+          self.on("totaluploadprogress", function (progress) {
+            $('.roller').width(progress + '%');
+          });
+
+          self.on("queuecomplete", function (progress) {
+            $('.meter').delay(999).slideUp(999);
+          });
+
+          self.on("success", function (file, responseText) {
+            new_name = responseText.unique_filename;
+            f_img_tag = file.previewElement.querySelector("img")
+            f_img_tag.async = true;
+            f_img_tag.src = "/media/skigit/logo/" + new_name;
+          });
+
+          // On removing file
+          self.on("removedfile", function (file) {
+            rm_file = file.previewElement.querySelector("img").src
+            rm_file_split = rm_file.split("/")
+            f_name = rm_file_split[rm_file_split.length - 1]
+            localStorage.setItem('b_logo_length', parseInt(localStorage.getItem('b_logo_length')) - 1)
+            $.post("/delete_business_logo/",
+                {
+                  file_name: "skigit/logo/" + f_name,
+                },
+                function (data, status) {
+                }
+            );
+          });
+        }
+      });
+    });
+
+    $(function () {
+      var self = new Dropzone("#my-dropzone", {
+        maxFiles: 5,
+        parallelUploads: 5,
+        dictMaxFilesExceeded: "You cannot upload more than (5) images.",
+      });
+      // config
+      self.options.addRemoveLinks = true;
+      self.options.dictRemoveFile = "Delete";
+
+      // load already saved files
+
+      $.getJSON('/profile_get_target/', function (data) {
+        localStorage.setItem('extra_logo', 9999)
+        pp_logo_length = data.length
+        if (pp_logo_length <= 5) {
+          localStorage.setItem('pp_logo_length', pp_logo_length)
+        }
+        $.each(data, function (index, val) {
+          var mockFile = {name: val.profile_img, type: 'image/jpeg'};
+          self.options.addedfile.call(self, mockFile);
+          self.options.thumbnail.call(self, mockFile, "/media/" + val.profile_img);
+          mockFile.previewElement.classList.add('dz-success');
+          mockFile.previewElement.classList.add('dz-complete');
+          self.emit("complete", mockFile);
+          $(mockFile.previewTemplate).find('.dz-remove').attr('id', "id_extra_logo");
+        });
+
+      });
+
+      //New file added
+      self.on("addedfile", function (file) {
+        var local_storage_length = localStorage.getItem('pp_logo_length')
+        console.log(local_storage_length)
+        if (local_storage_length < 5) {
+          $('#my-dropzone').find('.dz-message').show()
+          localStorage.setItem('pp_logo_length', parseInt(local_storage_length) + 1)
+        }
+        else {
+          $('#my-dropzone').find('.dz-message').hide()
+          self.removeFile(file)
+          $('#id_profile_error_msg').html('You cannot upload more than (5) images.')
+          localStorage.setItem('pp_logo_length', parseInt(localStorage.getItem('pp_logo_length')) + 1)
+        }
+      });
+
+      // Send file starts
+      self.on("sending", function (file) {
+        $('.meter').show();
+      });
+
+      // File upload Progress
+      self.on("totaluploadprogress", function (progress) {
+        $('.roller').width(progress + '%');
+      });
+
+      self.on("queuecomplete", function (progress) {
+        $('.meter').delay(999).slideUp(999);
+      });
+
+
+      self.on("success", function (file, responseText) {
+        new_name = responseText.unique_filename;
+        f_img_tag = file.previewElement.querySelector("img")
+        f_img_tag.async = true;
+        f_img_tag.src = "/media/skigit/profile/" + new_name;
+      });
+
+      // On removing file
+      self.on("removedfile", function (file) {
+        rm_file = file.previewElement.querySelector("img").src
+        rm_file_split = rm_file.split("/")
+        f_name = rm_file_split[rm_file_split.length - 1]
+        localStorage.setItem('pp_logo_length', parseInt(localStorage.getItem('pp_logo_length')) - 1)
+        $.post("/delete_extra_profile_image/",
+            {
+              file_name: "skigit/profile/" + f_name,
+            },
+            function (data, status) {
+            });
+      });
+    });
+
+  </script>
+
+  <script>
+    $(document).ready(function () {
+      $(".uplad_p_pic").click(function () {
+
+        var filename = $('#browse_p_pic').val();
+        var form = new FormData();
+        form.append("p_pic", $("#browse_p_pic")[0].files[0]);
+        jQuery.ajax({
+          url: "/profile_pic/",
+          type: "POST",
+          data: form,//Now you attached form datas with filename also,
+          processData: false,
+          contentType: false,
+          success: function (data) {
+            if (data.valid_format == false) {
+              //alert(data.message);
+              $('#ok_confirm_text').html(data.message)
+              $('#okayBox').addClass('open')
+              $('.overlay').addClass('open')
+            }
+            else {
+              $("#user_profile_image").attr("src", "/media/" + data.message)
+              $('#premove_image').show()
+            }
+          }
+        });
+      });
+    });
+  </script>
+
+  <script>
+    $(document).ready(function () {
+      $(".uplad_coupan_img").click(function () {
+        var filename = $('#browse_coupan_img').val();
+        var form = new FormData();
+        form.append("coupan_img", $("#browse_coupan_img")[0].files[0]);
+        jQuery.ajax({
+          url: "/coupan_image_upload/",
+          type: "POST",
+          data: form,//Now you attached form datas with filename also,
+          processData: false,
+          contentType: false,
+          success: function (data) {
+            if (data.valid_format == false) {
+              //alert(data.message);
+              $('#ok_confirm_text').html(data.message)
+              $('#okayBox').addClass('open')
+              $('.overlay').addClass('open')
+              return
+            }
+            else {
+              $("#user_coupan_image").attr("src", "/media/" + data.message)
+              $("#coupan_enlarge_img").attr("src", "/media/" + data.message)
+              $('[data-lightbox="coupan-set"]').attr('href', '/media/' + data.message)
+              $('[data-lightbox="coupan-set"]').css('pointer-events', 'auto')
+              $('#cremove_image').show()
+            }
+          }
+        });
+      });
+    });
+  </script>
+
+  <style>
+    #id_about_me, #id_company_title, #id_search_profile_security, #id_payment_user_name,
+    #id_username, #id_email, #id_first_name, #id_zip_code,
+    #id_last_name, #id_gender, #id_incentive, #id_state, #id_city,
+    #id_contact_name, #id_contact_email, #id_payment_email,
+    #id_biller_name, #id_biller_address1, #id_business_type,
+    #id_contact_phone, #id_language, #id_country,
+    #id_url2, #id_url3, #id_url4, #id_url5, #id_disc1, #id_url1 {
+      color: #555 !important;
+      background-color: transparent;
+    }
+
+    #id_about_me-error, #id_company_title-error, #id_search_profile_security-error,
+    #id_username-error, #id_email-error, #id_first_name-error, #id_zip_code-error,
+    #id_last_name-error, #id_gender-error, #id_payment_method-error, #id_incentive-error, #id_state-error,
+    #id_city-error, #id_contact_name-error, #id_contact_email-error, #gender-error,
+    #id_payment_email-error, #id_biller_name-error, #id_biller_address1-error,
+    #id_business_type-error, #id_contact_phone-error, #id_language-error,
+    #incentive-error, #id_country-error, #id_url2-error, #id_url3-error, #id_payment_user_name-error,
+    #id_url4-error, #id_url5-error, #id_disc1-error, #id_url1-error {
+
+      color: red !important;
+      background-color: transparent;
+    }
+
+    .dropdown {
+      position: relative;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    .dropdown .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin: 0;
+      border: 1px solid #ccc !important;
+      width: 220px !important;
+    }
+
+    .dropdown .dropdown-menu .pop {
+      padding: 8px 8px 1px 8px;
+    }
+
+    .dropdown .dropdown-menu h2 {
+      font-weight: bold;
+      font-size: 12px;
+      color: #000 !important;
+      margin: 0 0 4px 0 !important;
+      padding: 0 !important;
+    }
+
+    .dropdown .dropdown-menu p {
+      display: block;
+      line-height: 17px;
+      font-size: 11px;
+      font-style: italic;
+      font-family: "Noto Sans Lao UI", sans-serif !important;
+      font-weight: normal !important;
+    }
+
+    .dropdown .dropdown-menu p a {
+      color: #037bb8;
+      text-decoration: underline !important;
+    }
+
+    .dropdown .dropdown-menu p a:hover {
+      color: #037bb8;
+      text-decoration: none;
+    }
+
+    .dropdown .dropdown-menu p span {
+      color: #E40003;
+    }
+
+    .social_ul {
+      text-align: center;
+    }
+
+    .remove_image {
+      float: left;
+      cursor: pointer;
+    }
+
+    label#gender-error, label#incentive-error {
+      float: right;
+      position: absolute;
+      right: 0;
+      top: 0 !important;
+    }
+
+    .coupan_enlarge {
+      position: absolute;
+      display: none;
+      left: 37%;
+      background: #fff;
+      top: -114px;
+      z-index: 999;
+      padding: 10px;
+    }
+
+    .coupan_enlarge img {
+      max-width: 300px;
+    }
+
+    #coupan_enlarge_img {
+      min-width: 200px;
+    }
+
+    .box_form_credirt {
+      margin-bottom: 15px;
+      border-radius: 6px;
+    }
+
+    .payment_remove {
+      float: right;
+      z-index: 999;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin-top: 37px;
+      margin-right: -25px;
+      position: relative;
+    }
+  </style>
+
+  <script>
+
+    jQuery(document).ready(function () {
+
+      $('#user_coupan_image').mouseover(function () {
+        $('.coupan_enlarge').fadeIn();
+      });
+
+      $('#user_coupan_image').mouseleave(function () {
+        $('.coupan_enlarge').fadeOut();
+      });
+
+      $('.delete_profile').click(function () {
+        image_type = $(this).closest('[data-type]').attr('data-type')
+        if (image_type == 'profile') {
+          $('#ok_delete').show()
+          $('#ok_delete_logo').hide()
+          $('#confirm_text').html('Are you sure you want to remove your profile image?')
+          $('#confirmBox').addClass('open')
+          $('.overlay').addClass('open')
+        }
+        else if (image_type == 'coupan') {
+          $('#ok_delete').show()
+          $('#ok_delete_logo').hide()
+          $('#confirm_text').html('Are you sure you want to remove Coupon?')
+          $('#confirmBox').addClass('open')
+          $('.overlay').addClass('open')
+        }
+      });
+
+      $('#no_delete').click(function () {
+        $('#confirmBox').removeClass('open')
+        $('.overlay').removeClass('open')
+
+      });
+
+      $('#ok_no_delete').click(function () {
+        $('#okayBox').removeClass('open')
+        $('.overlay').removeClass('open')
+
+      });
+
+      $('#ok_delete').click(function () {
+        $.ajax({
+          url: "/skigit/remove-profile-pic/",
+          type: "POST",
+          data: {'image_type': image_type, 'csrfmiddlewaretoken': '{{csrf_token}}'},
+          success: function (responce) {
+            if (responce.is_success) {
+              if (responce.image_type == 'profile') {
+                $('#user_profile_image').attr('src', '{% static 'skigit/detube/images/noimage_user.jpg' %}')
+                $('#premove_image').hide()
+                $('#confirmBox').removeClass('open')
+                $('.overlay').removeClass('open')
+              }
+              else if (responce.image_type == 'coupan') {
+                $('#user_coupan_image').attr('src', '{% static 'skigit/images/coupan_no_image.png' %}')
+                $('[data-lightbox="coupan-set"]').css('pointer-events', 'none')
+                $('#cremove_image').hide()
+                $('#confirmBox').removeClass('open')
+                $('.overlay').removeClass('open')
+              }
+            }
+          }
+        })
+      });
+
+      $('#id_username, #id_contact_email, #id_coupan_code,' +
+          ' #id_first_name, #id_last_name, #id_email, ' +
+          '#id_url1, #id_url2, #id_url3,' +
+          '#id_url4, #id_url5, #id_contact_phone,' +
+          '#id_payment_email, #id_zip_code').on("focusout", function (e) {
+
+        str = $(this).val();
+        str = str.replace(/\s/g, '');
+        $(this).val(str);
+      });
+
+      $('textarea').on("keyup", function (e) {
+
+        str = $(this).val().trim();
+        if (str == ' ' || str == '') {
+          str = str.replace(/\s/g, '');
+          $(this).val(str);
+        }
+      });
+
+      $('#id_disc1, #id_disc2, #id_disc3, #id_disc4, ' +
+          '#id_disc5, #id_email, #id_company_title,' +
+          '#id_contact_name, #id_payment_user_name,' +
+          '#id_biller_name, #id_biller_address1, ' +
+          '#id_biller_address2, #id_state, #id_city').on("keyup", function (e) {
+
+        str = $(this).val().trim();
+        if (str == ' ' || str == '') {
+          str = str.replace(/\s/g, '');
+          $(this).val(str);
+        }
+      });
+
+      profileFormValidation = function () {
+        $.validator.addMethod("customemail",
+            function (value, element) {
+              return /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(value);
+            }, 'Please enter a valid email address.'
+        );
+        $.validator.addMethod("addincentive",
+            function (value, element) {
+              return /^\d+/.test(value);
+            }, 'Enter valid Incentive amount'
+        );
+
+        var profileForm = $("#basic_information_form")
+        errorLabelContainer: '#errors',
+            profileForm.validate({
+              rules: {
+                'username': {
+                  required: true,
+                },
+                'email': {
+                  required: {
+                    depends: function () {
+                      $(this).val($.trim($(this).val()));
+                      return true;
+                    }
+                  },
+                  customemail: true,
+                },
+                'id_incetive_val': {
+                  number: true,
+                },
+                'first_name': {
+                  required: true,
+                },
+                'last_name': {
+                  required: true,
+                },
+                'gender': {
+                  required: true,
+                },
+                'payment_method': {
+                  required: true,
+                },
+                'language': {
+                  required: true,
+                },
+                'about_me': {
+                  required: true,
+                },
+                'company_title': {
+                  required: true,
+                },
+                'disc1': {
+                  required: true,
+                },
+                'url1': {
+                  required: true,
+                },
+                'incentive': {
+                  required: true,
+                },
+                'contact_name': {
+                  required: true,
+                },
+                'contact_email': {
+                  required: {
+                    depends: function () {
+                      $(this).val($.trim($(this).val()));
+                      return true;
+                    }
+                  },
+                  customemail: true,
+                },
+                'contact_phone': {
+                  required: true,
+                  digits: true,
+                  maxlength: 15
+                },
+                'payment_user_name': {
+                  required: true,
+                },
+                'payment_email': {
+                  required: {
+                    depends: function () {
+                      $(this).val($.trim($(this).val()));
+                      return true;
+                    }
+                  },
+                  customemail: true,
+                },
+                'biller_name': {
+                  required: true,
+                },
+                'biller_address1': {
+                  required: true,
+                },
+                'country': {
+                  required: true,
+                },
+                'state': {
+                  required: true,
+                },
+                'city': {
+                  required: true,
+                },
+                'zip_code': {
+                  required: true,
+                  digits: true,
+                  maxlength: 12,
+                  minlength: 5,
+                },
+                'search_profile_security': {
+                  required: true,
+                },
+                'business_type': {
+                  required: true,
+                },
+
+              },
+              messages: {
+                'username': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> User Name field is required',
+                },
+                'email': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Email field is required',
+                  customemail: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Please enter a valid email address.',
+
+                }, 'first_name': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> First Name field is required',
+
+                }, 'last_name': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Last Name field is required',
+
+                }, 'gender': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Gender field is required',
+                }, 'payment_method': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Gender field is required',
+
+                }, 'language': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Language field is required',
+
+                }, 'about_me': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> About me field is required',
+                },
+                'id_incetive_val': {
+                  number: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Enter valid Incentive (only numbers are allowed)',
+                },
+                'company_title': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Company Title field is required',
+                },
+                'incentive': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Incentive field is required',
+                },
+                'contact_email': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Contact Email field is required',
+                  customemail: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Please enter a valid email address.',
+                },
+                'contact_phone': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Contact Phone field is required',
+                  digits: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Enter whole number',
+                  maxlength: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Contact Phone value should be less than or equal to 15 digits'
+                },
+                'payment_user_name': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Payment User Name field is required',
+                },
+                'payment_email': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Contact Email field is required',
+                  customemail: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Please enter a valid email address.',
+                },
+                'contact_name': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Contact Name field is required',
+                },
+                'biller_name': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Biller Name field is required',
+                },
+                'biller_address1': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Address1 field is required',
+                },
+                'country': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Country field is required',
+                },
+                'state': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> State field is required',
+                },
+                'city': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> City field is required',
+                },
+                'zip_code': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Zip Code field is required',
+                  digits: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> You can only enter whole numbers',
+                  maxlength: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> You must not enter more than (12) whole numbers',
+                  minlength: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> You must enter a minimum of (5) whole numbers',
+                },
+                'business_type': {
+                  required: '<span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;" /></span> Business Type field is required',
+                },
+              }
+            });
+        return profileForm.valid()
+      };
+
+      $('#basic_information_form').submit(function () {
+        if (!profileFormValidation()) {
+          return false;
+        }
+      });
+
+      //called when key is pressed in textbox
+      $("#id_incetive_val").keypress(function (e) {
+        //if the letter is not digit then display error and don't type anything
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+          //display error message
+          $("#errmsg").html("<span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span> Enter valid Incentive amount (Numbers Allowed)").css('color', 'red').show();
+          return false;
+        } else {
+          $("#errmsg").hide();
+          return true;
+        }
+      });
+
+      setTimeout(function () {
+        $('.notify_msg_div').slideUp()
+      }, 3500)
+    });
+
+  </script>
+
+  <div class="overlay"></div>
+  <div id="confirmBox" style="border: none !important;">
+    <div style="text-align: center !important; font-family: segoe_print !important;">
+      <p><img src="{% static 'skigit/images/logo.png' %}" width="65px;" /></p>
+      <p id="confirm_text"></p>
+    </div>
+    <div class="del-bott">
+      <button type="button" id="ok_delete">Yes</button>
+      <button type="button" onclick="ok_delete_click()" id="ok_delete_logo" hidden>Delete</button>
+      <button type="button" id="no_delete">Cancel</button>
+    </div>
+  </div>
+  <div id="okayBox" style="border: none !important;">
+    <div style="text-align: center !important; font-family: segoe_print !important;">
+      <p><img src="{% static 'skigit/images/logo.png' %}" width="65px;"/></p>
+      <p id="ok_confirm_text"></p>
+    </div>
+    <div class="del-bott">
+      <button type="button" id="ok_no_delete">Ok</button>
+    </div>
+  </div>
+  <div class="row profile white-back">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        <div class="profile-sidebar">
+
+          <!-- SIDEBAR MENU -->
+          <div class="profile-usermenu padd-left ">
+            <ul class="nav">
+              <li class="active"><a href="{% url 'user_profile' %}">Member Profile </a></li>
+              <div style="margin: 0 0 0 20px;">
+                {% if is_business %}
+                  <li><a href="{{ request.scheme }}://{{ request.get_host }}/brochure-preview"
+                         style="padding-top: 0 !important;">View/Print Brochure</a></li>
+                  <li><a href="{{ request.scheme }}://{{ request.get_host }}/wall-poster-preview"
+                         style="padding-top: 0 !important;">View/Print Wall Poster</a></li>
+                {% endif %}
+              </div>
+              {% if is_business %}
+                <li><a href="{% url 'user_payment_setup' %}">Invoice</a></li>
+              {% endif %}
+              <li><a href="{% url 'password_change' %}">Password and Email </a></li>
+              <li><a href="{% url 'user_profile_notifications' %}">Notification Setting </a></li>
+              <li><a href="{% url 'user_profile_delete' %}">Delete Account </a></li>
+              <li><a href="{% url 'my_statistics' %}">My Statistic </a></li>
+            </ul>
+          </div>
+          <!-- END MENU -->
+        </div>
+      </div>
+
+      <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+        <div class="profile-content col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="row mar_zero profile-form">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padd_zero margin_bottom_10">
+              <h3 class="mar margin_bottom_10 ">Member Profile</h3>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="form-group for-button">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                  <span>Avatar</span>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12 padd_zero">
+                  {% if user_profile.profile_img %}
+                    <div class="col-md-2 col-sm-2 col-xs-12 img-squire">
+                      <img alt="{{ user.get_full_name|default:user.username }}" src="{{ profile_image }}"
+                           id="user_profile_image" width="100px" />
+                      <img width="20" height="20"
+                           src="{% static 'skigit/images/new_icons/close(32x32).png' %}"
+                           data-type="profile" id="premove_image" class="remove_image delete_profile">
+                    </div>
+                  {% else %}
+                    <div class="col-md-2 col-sm-2 col-xs-12 img-squire">
+                      <img alt="{{ user.get_full_name|default:user.username }}"
+                           src="{% static 'skigit/detube/images/noimage_user.jpg' %}" id="user_profile_image"
+                           width="100px" />
+                      <img width="20" height="20"
+                           src="{% static 'skigit/images/new_icons/close(32x32).png' %}"
+                           data-type="profile" id="premove_image" class="remove_image delete_profile" hidden>
+                    </div>
+                  {% endif %}
+                  <div class="col-md-6 col-sm-6 col-xs-12" style="padding-top:18px;">
+                    <div class="fileUpload btn " style="margin-right:6px;">
+                      <span>Choose File</span>
+                      <input id="browse_p_pic" type="file" class="upload"/>
+                    </div>
+                    <button class="btn uplad_p_pic" id="uplad_p_pic" type="button">Upload</button>
+                  </div>
+                  <!--
+                                    {% if is_business %}
+                                        <div class="box_memberpro col-sm-4">
+                                            <div class="box_linememberprobile">
+                                                <label><a href="{{ request.scheme }}://{{ request.get_host }}/wall-poster-preview" style="color:#0381c3;" >view and print</a> your free in store wall poster</label>
+                                            </div>
+                                            <div class="box_linememberprobile">
+                                                <label> <a href="{{ request.scheme }}://{{ request.get_host }}/brochure-preview" style="color:#0381c3;" >view and print</a> your free in store trifold table brochure</label>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+				-->
+                </div>
+              </div>
+            </div>
+
+            {% if is_business %}
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="form-group for-button">
+                  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <span>Uploaded your logo or select from list (JPG, JPEG, GIF or PNG only)</span>
+                    <span class="red">*</span></div>
+                  <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12" style="margin-bottom:6px; ">
+                    <form id="my-dropzone-logo" action="/business_logo_upload_target/" class="dropzone">
+                      {% csrf_token %}
+                    </form>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                      <center><label style="text-align:center; color:red !important;" id="id_blogo_error_msg"></label>
+                      </center>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="form-group for-button">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                  <span>Uploaded images will be displayed on your profile page (JPG, JPEG, GIF or PNG only)</span>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12 " style="margin-bottom:6px;">
+                  <form id="my-dropzone" action="/profile_upload-target/" class="dropzone">
+                    {% csrf_token %}
+                  </form>
+                  <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <center><label style="text-align:center; color:red !important;" id="id_profile_error_msg"></label>
+                    </center>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padd_zero">
+              <form role="form" class="for-button" id="basic_information_form" name="basic_information_form"
+                    enctype="multipart/form-data" action="{% url 'user_profile' %}" method="post"
+                    novalidate="novalidate">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+                    <div class="form-group">
+                      {% for err in form.non_field_errors %}
+                        <div class="form_error_message">{{ err }}</div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                {% endif %}
+                {% if form1.non_field_errors %}
+                  <div class="form-group">
+                    <div class="form_errors">
+                      {% for err in form1.non_field_errors %}
+                        <div class="form_error_message">{{ err }}</div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                {% endif %}
+
+                <label class="hidden" for="{{ form.profile_img.id_for_label }}">Add a personal
+                  photo<span>*</span></label>
+                <div class="hidden">
+                  {{ form.profile_img|addcss:"form-control" }}
+                </div>
+                {% if form.profile_img.errors %}
+                  <div class="row mar_zero">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <div class="form-group">
+                        {{ form.profile_img.errors }}
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+                <div class="row mar_zero">
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                      <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form1.username.id_for_label }}">User
+                        Name&nbsp;&nbsp;&nbsp;
+                        <span class="red" style="margin-left: -16px;">*</span></label>
+                      <div
+                          class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> {{ form1.username|addcss:"form-control" }}</div>
+                      {% if form1.username.errors %}
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                          {{ form1.username.errors }}
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                      <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form1.email.id_for_label }}">E-mail&nbsp;&nbsp;&nbsp;
+                        <span class="red" style="margin-left: -16px;">*</span>
+                      </label>
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> {{ form1.email|addcss:"form-control" }}</div>
+                      {% if form1.email.errors %}
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                          {{ form1.email.errors }}
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mar_zero">
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                      <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form1.first_name.id_for_label }}">First
+                        Name&nbsp;&nbsp;&nbsp;
+                        <span class="red" style="margin-left: -16px;">*</span>
+                      </label>
+                      <div
+                          class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> {{ form1.first_name|addcss:"form-control" }}</div>
+                      {% if form1.first_name.errors %}
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                          {{ form1.first_name.errors }}
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                      <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form1.last_name.id_for_label }}">Last
+                        Name&nbsp;&nbsp;&nbsp;
+                        <span class="red" style="margin-left: -16px;">*</span></label>
+                      <div
+                          class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> {{ form1.last_name|addcss:"form-control" }}</div>
+                      {% if form1.last_name.errors %}
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                          {{ form1.last_name.errors }}
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mar_zero">
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group gender">
+                      <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.gender.id_for_label }}">Gender&nbsp;&nbsp;&nbsp;
+                        <span class="red" style="margin-left: -16px;">*</span>
+                      </label>
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">{{ form.gender|addcss:"form-control" }} <label
+                          for="gender" class="error"></label></div>
+                      {% if form.gender.errors %}
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                          {{ form.gender.errors }}
+                        </div>
+
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group no-sel">
+                      <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.birthdate.id_for_label }}">Birthdate&nbsp;&nbsp;&nbsp;
+                        <span class="red" style="margin-left: -16px;">*</span>
+
+                      </label>
+                      <div
+                          class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> {{ form.birthdate|addcss:"form-control" }} 
+                      {% if form.birthdate.errors %}
+                      <label for="birthdate" class="error">
+                        <span style="font-size:20px;"><i class="glyphicon glyphicon-remove-circle" style="top: 5px !important;"></i></span>
+                        {{ form.birthdate.errors.as_text }}
+                      </label>
+                      {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mar_zero">
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                      <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.language.id_for_label }}">Primary
+                        Language&nbsp;&nbsp;&nbsp;
+                        <span class="red" style="margin-left: -16px;">*</span>
+                      </label>
+                      <div
+                          class="col-lg-6 col-md-6 col-sm-6 col-xs-12">  {{ form.language|addcss:"form-control" }}</div>
+                      {% if form.language.errors %}
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                          {{ form.language.errors }}
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                <div class="row mar_zero">
+                  {% if form.company_title %}
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <div class="form-group">
+                        <div class="row mar_zero">
+                          <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
+                                 for="{{ form.company_title.id_for_label }}">Company Title&nbsp;&nbsp;&nbsp;
+                            <span class="red" style="margin-left: -16px;">*</span>
+                          </label>
+                          <div
+                              class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> {{ form.company_title|addcss:"form-control" }}</div>
+                          {% if form.company_title.errors %}
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                              {{ form.company_title.errors }}
+                            </div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  {% endif %}
+                  <div class="row mar_zero">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <div class="form-group">
+                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.about_me.id_for_label }}">About
+                          Me<span class="red" style="margin-left: 2px;">*</span>
+                        </label>
+                        <div
+                            class="col-lg-6 col-md-6 col-sm-6 col-xs-12">  {{ form.about_me|addcss:"form-control" }}</div>
+                        {% if form.about_me.errors %}
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                            {{ form.about_me.errors }}
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                  {% if is_business %}
+                    <div class="row mar_zero">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+                        <div class="form-group inp-padd ">
+                          <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.url1.id_for_label }}">Profile
+                            Urls <span class="red" style="margin-left: 2px;">*</span></label>
+
+                          <div class="field col-lg-6 col-md-6 col-sm-6 col-xs-12 padd_zero">
+                            <div class="field col-lg-6 col-md-6 col-sm-6 col-xs-12 ">URL Discription</div>
+                            <div class="field col-lg-6 col-md-6 col-sm-6 col-xs-12">URL</div>
+
+                            <div class="field col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" class="form-control" id="id_disc1" name="disc1"
+                                     value="{{ disc1|default_if_none:'' }}">
+                            </div>
+
+                            <div class="field col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                              <input type="url" class="form-control" id="id_url1" name="url1"
+                                     value="{{ url1|default_if_none:'' }}">
+                            </div>
+
+                            <div class="field col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" class="form-control" id="id_disc2" name="disc2"
+                                     value="{{ disc2|default_if_none:'' }}">
+                            </div>
+
+                            <div class="field col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                              <input type="url" class="form-control" id="id_url2" name="url2"
+                                     value="{{ url2|default_if_none:'' }}">
+                            </div>
+
+                            <div class="field col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" class="form-control" id="id_disc3" name="disc3"
+                                     value="{{ disc3|default_if_none:'' }}">
+                            </div>
+
+                            <div class="field col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                              <input type="url" class="form-control" id="id_url3" name="url3"
+                                     value="{{ url3|default_if_none:'' }}">
+                            </div>
+
+                            <div class="field col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" class="form-control" id="id_disc4" name="disc4"
+                                     value="{{ disc4|default_if_none:'' }}">
+                            </div>
+
+                            <div class="field col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                              <input type="url" class="form-control" id="id_url4" name="url4"
+                                     value="{{ url4|default_if_none:'' }}">
+                            </div>
+
+                            <div class="field col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" class="form-control" id="id_disc5" name="disc5"
+                                     value="{{ disc5|default_if_none:'' }}">
+                            </div>
+
+                            <div class="field col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                              <input type="url" class="form-control" id="id_url5" name="url5"
+                                     value="{{ url5|default_if_none:'' }}">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mar_zero">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group gender">
+                          <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.incentive.id_for_label }}">Incentive&nbsp;&nbsp;&nbsp;
+                            <span class="red" style="margin-left: -16px;">*</span>
+                          </label>
+                          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">{{ form.incentive|addcss:"form-control" }}
+                            <label for="incentive" class="error" style="top: 0px;"></label></div>
+                          {% if form.incentive.errors %}
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                              {{ form.incentive.errors }}
+                            </div>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      <div class="row mar_zero">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                          <div class="form-group">
+                            <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
+                                   for="{{ form.skigit_incentive.id_for_label }}">Skigit Incentive</label>
+                            <div
+                                class="col-lg-6 col-md-6 col-sm-6 col-xs-12">{{ form.skigit_incentive|addcss:"form-control" }}</div>
+                            {% if form.skigit_incentive.errors %}
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                                {{ form.skigit_incentive.errors }}
+                              </div>
+                            {% endif %}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row mar_zero">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                          <div class="form-group">
+                            <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
+                                   for="{{ form.skigit_incentive.id_for_label }}">Redemoption Instrucations</label>
+                            <div
+                                class="col-lg-6 col-md-6 col-sm-6 col-xs-12">{{ form.redemoption_instrucations|addcss:"form-control" }}</div>
+                            {% if form.redemoption_instrucations.errors %}
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                                {{ form.redemoption_instrucations.errors }}
+                              </div>
+                            {% endif %}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row mar_zero">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                          <div class="form-group">
+                            <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
+                                   for="{{ form.coupan_code.id_for_label }}">Coupan Code</label>
+                            <div
+                                class="col-lg-6 col-md-6 col-sm-6 col-xs-12">  {{ form.coupan_code|addcss:"form-control" }}</div>
+                            {% if form.coupan_code.errors %}
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                                {{ form.coupan_code.errors }}
+                              </div>
+                            {% endif %}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row mar_zero">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                          <div class="form-group">
+                            <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
+                                   for="{{ form.incetive_val.id_for_label }}">Incentive value $(USD)</label>
+                            <div
+                                class="col-lg-6 col-md-6 col-sm-6 col-xs-12">  {{ form.incetive_val|addcss:"form-control" }}&nbsp;<span
+                                id="errmsg"></span></div>
+                            {% if form.incentive_val.errors %}
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                                {{ form.incentive_val.errors }}
+                              </div>
+                            {% endif %}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group for-button">
+                          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">Coupan Image</div>
+                          <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12 padd_zero">
+                            {% if user_profile.coupan_image %}
+                              <div class="col-md-2 col-sm-2 col-xs-12 img-squire">
+                                <a href="{{ user_profile.coupan_image.url }}" id="cupon_href"
+                                   data-lightbox="coupan-set">
+                                  <img alt="{{ user.username }}" title="click to enlarge coupan "
+                                       src="{{ user_profile.coupan_image.url }}" id="user_coupan_image" width="100px"/>
+                                </a>
+                                <img width="20" height="20" src="/static/skigit/images/new_icons/close(32x32).png"
+                                     data-type="coupan" id="cremove_image" class="remove_image delete_profile">
+                              </div>
+                            {% else %}
+                              <div class="col-md-2 col-sm-2 col-xs-12 img-squire">
+                                <img alt="{{ user.username }}" src="{% static 'skigit/images/coupan_no_image.png' %}"
+                                     id="user_coupan_image" width="100px"/>
+                                <img width="20" height="20" src="/static/skigit/images/new_icons/close(32x32).png"
+                                     data-type="coupan" id="cremove_image" class="remove_image delete_profile" hidden>
+                              </div>
+                            {% endif %}
+
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <div class="fileUpload btn" style="margin-right:6px;">
+                                <span>Choose File</span>
+                                <input id="browse_coupan_img" type="file" class="upload"/>
+                              </div>
+                              <button class="btn uplad_coupan_img" id="uplad_coupan_img" type="button"> Upload</button>
+                            </div>
+                          </div>
+                          {# {% if user_profile.coupan_image %}<div class="coupan_enlarge"><img id='coupan_enlarge_img' src="{{user_profile.coupan_image.url}}" /></div>{% endif %}#}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mar_zero">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12" style="margin:8px 0px;">
+                            <strong>Contact information for public display in profile</strong>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row mar_zero">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
+                                 for="{{ form.contact_name.id_for_label }}">Contact Name<span class="red"
+                                                                                              style="margin-left: 2px;">*</span>
+                          </label>
+                          <div
+                              class="col-lg-6 col-md-6 col-sm-6 col-xs-12">  {{ form.contact_name|addcss:"form-control" }}</div>
+                          {% if form.contact_name.errors %}
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                              {{ form.contact_name.errors }}
+                            </div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row mar_zero">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
+                                 for="{{ form.contact_email.id_for_label }}">E-mail<span class="red"
+                                                                                         style="margin-left: 2px;">*</span>
+                          </label>
+                          <div
+                              class="col-lg-6 col-md-6 col-sm-6 col-xs-12">  {{ form.contact_email|addcss:"form-control" }}</div>
+                          {% if form.contact_email.errors %}
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                              {{ form.contact_email.errors }}
+                            </div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row mar_zero">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
+                                 for="{{ form.contact_phone.id_for_label }}">Contact Phone<span class="red"
+                                                                                                style="margin-left: 2px;">*</span>
+                          </label>
+                          <div
+                              class="col-lg-6 col-md-6 col-sm-6 col-xs-12">  {{ form.contact_phone|addcss:"form-control" }}</div>
+                          {% if form.contact_phone.errors %}
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                              {{ form.contact_phone.errors }}
+                            </div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row mar_zero">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin:20px 0px 0px 0px;">
+                        <div class="form-group">
+                          <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12" style="margin:8px 0px;">
+                            <strong>Payment setup information</strong>
+                                                        <span>
+                                                            <a target="_blank"
+                                                               href="http://skigit.com/about_us/business_terms_of_service/ "
+                                                               style="font-family: Segoe_Print; color:#037bb8; float:right; font-weight: 600;">Check Skigit Fees</a>
+                                                        </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row mar_zero">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
+                                 for="{{ form.payment_user_name.id_for_label }}">Name for ss setup<span class="red"
+                                                                                                        style="margin-left: 2px;">*</span></label>
+                          <div
+                              class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> {{ form.payment_user_name|addcss:"form-control" }} </div>
+                          {% if form.payment_user_name.errors %}
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                              {{ form.payment_user_name.errors }}
+                            </div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row mar_zero">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
+                                 for="{{ form.payment_email.id_for_label }}">E-mail<span class="red"
+                                                                                         style="margin-left: 2px;">*</span></label>
+                          <div
+                              class="col-lg-6 col-md-6 col-sm-6 col-xs-12">  {{ form.payment_email|addcss:"form-control" }}</div>
+                          {% if form.payment_email.errors %}
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                              {{ form.payment_email.errors }}
+                            </div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row mar_zero" id="payment_selection">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group gender">
+                          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.gender.id_for_label }}">Payment
+                            <span class="red" style="margin-left: 2px;">*</span>
+                            <div class="dropdown f_type">
+                              <i><img src="/static/skigit/images/help.png" width="15"/> </i>
+                              <!-- dropdown menu -->
+                              <ul class="dropdown-menu f_type">
+                                <div class="pop f_type">
+                                  <h2 class="f_type">Payment Information</h2>
+                                  <p class="f_type" style="font-family: Segoe_Print !important;">Select Appropriate
+                                    Payment Method to Procied.</p>
+                                </div>
+                              </ul>
+                            </div>
+                          </div>
+                          <div
+                              class="col-lg-6 col-md-6 col-sm-6 col-xs-12">{{ form.payment_method|addcss:"form-control" }} </div>
+                          {% if form.payment_method.errors %}
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                              {{ form.payment_method.errors }}
+                            </div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                    <script>
+                      $(document).ready(function () {
+                        var radioVal = $("input[name='payment_method']:checked").val();
+                        if (radioVal == 0) {
+                          $('#card_section').hide()
+                          $('#paypal_section').show()
+                        }
+                        else if (radioVal == 1) {
+                          $('#paypal_section').hide()
+                          $('#card_section').show()
+                        }
+
+                        $("input[name='payment_method']").click(function () {
+                          var radioValue = $("input[name='payment_method']:checked").val();
+
+                          if (radioValue == 0) {
+                            $('#card_section').hide()
+                            $('#paypal_section').show()
+                          }
+                          else if (radioValue == 1) {
+                            $('#paypal_section').hide()
+                            $('#card_section').show()
+                          }
+                        });
+
+                        removePaymentMethod = function (type) {
+
+                          jQuery.ajax({
+                            url: "/invoice/payment-method-remove/",
+                            type: "POST",
+                            data: {'type': type},
+                            success: function (data) {
+                              if (data.is_success) {
+                                if (type == 'PayPalAccount') {
+                                  $('.box_form_paypal').empty()
+                                  $('.paypal_form').css('visibility', 'visible')
+                                  $('.paypal_form').show()
+                                }
+                                else if (type == 'CreditCard') {
+                                  $('.card_form').css('visibility', 'visible')
+                                  $('.card_form').show()
+                                  $('.card_section').show()
+
+                                  $('.box_form_credirt').empty()
+                                }
+                              }
+                            }
+                          });
+                        }
+
+                      });
+                    </script>
+                    <div class="row mar_zero" for="id_payment_method_0" id="paypal_section">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12"></div>
+                          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ">
+                            <div class='paypal_form'
+                                 style="visibility:{% if not pay_pal_account_found %}visible;{% else %}hidden; display: none;{% endif %}">{% include 'payment/paypal_form.html' %}</div>
+                            <div class="box_form_paypal">
+                              {% if pay_pal_account_found %}
+                                Saved PayPal Account Detail
+                                {% for invo in paypal_invoice_data %}
+                                  <div class="list-group">
+                                    <div class="list-group-item">
+                                      <img src="{{ invo.c_image_url }}"/> {{ invo.email }}
+                                      <img width="20" height="20" src="/static/skigit/images/new_icons/close(32x32).png"
+                                           onclick="removePaymentMethod('PayPalAccount')" data-type="paypal-delete"
+                                           id="paypal_remove" class="payment_remove"/>
+                                    </div>
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row mar_zero" for="id_payment_method_1" id="card_section" hidden>
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12"></div>
+                          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="card_form"
+                                 style="visibility: {% if not card_found %}visible;display: block;{% else %}hidden; display: none;{% endif %}">{% include 'payment/invoice_card.html' %}</div>
+                            <div class="box_form_credirt">
+                              {% if card_found %}
+
+                                Saved Card Detail
+                                {% for invo in invoice_data %}
+                                  <div class="list-group">
+                                    <div class="list-group-item">
+                                      <img src="{{ invo.c_image_url }}"/>&nbsp;{{ card }}
+                                      <img width="20" height="20" src="/static/skigit/images/new_icons/close(32x32).png"
+                                           onclick="removePaymentMethod('CreditCard')" data-type="credit-card-delete"
+                                           id="card_remove" class="payment_remove"/>
+                                    </div>
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row mar_zero">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin:20px 0px 0px 0px;">
+                        <div class="form-group">
+                          <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12" style="margin:8px 0px;"><strong>Contact
+                            Billing Address Information</strong></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row mar_zero">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.biller_name.id_for_label }}">Biller
+                            Name<span class="red" style="margin-left: 2px;">*</span></label>
+                          <div
+                              class="col-lg-6 col-md-6 col-sm-6 col-xs-12">  {{ form.biller_name|addcss:"form-control" }}</div>
+                          {% if form.biller_name.errors %}
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                              {{ form.biller_name.errors }}
+                            </div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row mar_zero">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
+                                 for="{{ form.biller_address1.id_for_label }}">Address1<span class="red"
+                                                                                             style="margin-left: 2px;">*</span>
+                          </label>
+                          <div
+                              class="col-lg-6 col-md-6 col-sm-6 col-xs-12">  {{ form.biller_address1|addcss:"form-control" }}</div>
+                          {% if form.biller_address1.errors %}
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                              {{ form.biller_address1.errors }}
+                            </div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row mar_zero">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
+                                 for="{{ form.biller_address2.id_for_label }}">Address2
+                          </label>
+                          <div
+                              class="col-lg-6 col-md-6 col-sm-6 col-xs-12">  {{ form.biller_address2|addcss:"form-control" }}</div>
+                          {% if form.biller_address2.errors %}
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                              {{ form.biller_address2.errors }}
+                            </div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  {% endif %}
+
+                  <div class="row mar_zero">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <div class="form-group">
+                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.country.id_for_label }}">Country&nbsp;&nbsp;&nbsp;
+                          <span class="red" style="margin-left: -16px;">*</span>
+                        </label>
+                        <div
+                            class="col-lg-6 col-md-6 col-sm-6 col-xs-12">  {{ form.country|addcss:"form-control" }}</div>
+                        {% if form.country.errors %}
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                            {{ form.country.errors }}
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <div class="form-group">
+                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.state.id_for_label }}">State&nbsp;&nbsp;&nbsp;
+                          <span class="red" style="margin-left: -16px;">*</span>
+                        </label>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">{{ form.state|addcss:"form-control" }}</div>
+                        {% if form.state.errors %}
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                            pay {{ form.state.errors }}
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <div class="form-group">
+                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.city.id_for_label }}">City&nbsp;&nbsp;&nbsp;
+                          <span class="red" style="margin-left: -16px;">*</span>
+                        </label>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> {{ form.city|addcss:"form-control" }}</div>
+                        {% if form.city.errors %}
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                            {{ form.city.errors }}
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                      <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.zip_code.id_for_label }}">Zip
+                        Code&nbsp;&nbsp;&nbsp;
+                        <span class="red" style="margin-left: -16px;">*</span>
+                      </label>
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">{{ form.zip_code|addcss:"form-control" }}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mar_zero">
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                      <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
+                             for="{{ form.search_profile_security.id_for_label }}">Search and Profile Security&nbsp;&nbsp;&nbsp;
+                        <span class="red" style="margin-left: -16px;">*</span>
+                      </label>
+                      <div
+                          class="col-lg-6 col-md-6 col-sm-6 col-xs-12">{{ form.search_profile_security|addcss:"form-control" }}</div>
+                      {% if form.search_profile_security.errors %}
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                          {{ form.search_profile_security.errors }}
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  {% if is_business %}
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <div class="form-group">
+                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="{{ form.business_type.id_for_label }}">Business
+                          Type&nbsp;&nbsp;&nbsp;
+                          <span class="red" style="margin-left: -16px;">*</span>
+                        </label>
+                        <div
+                            class="col-lg-6 col-md-6 col-sm-6 col-xs-12">  {{ form.business_type|addcss:"form-control" }}</div>
+                        {% if form.business_type.errors %}
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                            {{ form.business_type.errors }}
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  {% endif %}
+
+                  {% comment %}
+                                        {% for field in form1.visible_fields %}
+                                            <div class="form-group {% if field.errors %}field_error{% endif %}">
+                                                {{ field.label_tag }}
+                                                {{ field|addcss:"form-control" }}
+                                                {% for err in field.errors %}
+                                                    <span class="error_message">{{ err }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% endfor %}
+                                    {% endcomment %}
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+                    <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                      &nbsp;  </label>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> Keep search engines(ex:Google) from showing your
+                      skigit profile in search result, and keep others from viewing profile.
+                    </div>
+                  </div>
+
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center margin_tb_10">
+                    <input type="submit" value="Save" class="btn" name="basic_profile_submit"/>
+                    <a onclick="location.href = '/'" class="btn">Cancel</a>
+                    <div id='errors' style="list-style-type:none "></div>
+                  </div>
+
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

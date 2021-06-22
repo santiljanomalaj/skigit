@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load thumbnail %}
+{% block main_video_block %}
+{% endblock %}
+
+{% block window_page_title_block %}
+Conversation - Skigit
+{% endblock %}
+
+{% block window_page_meta_block %}
+<meta property="og:site_name" content="Skigit" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="{{ request.build_absolute_uri }}" />
+<meta property="og:title" content="Conversation - Skigit" />
+
+{% endblock %}
+
+{% block head_inline_css_block %}
+{% endblock %}
+
+
+
+{% block main_div_block %}
+<div id="main">
+    <div class="conversation_group">
+        <div class="col1">
+            <div class="headline">
+                <h3>
+                    Inbox
+                </h3>
+
+            </div>
+            <div class="conversation_lists">
+                {% if conv_list and conv_list != None and user and user != None and user_profile and user_profile != None %}
+                    {% for con in conv_list %}
+                       {% if con and con != None and con.con and con.con != None and con.partner_user and con.partner_user != None and con.partner_user_profile and con.partner_user_profile != None %}
+                            {% if con.conv_msg and con.conv_msg != None and con.conv_msg_count and con.conv_msg_count != None and con.conv_msg_count > 0 %}
+                                {% if chat_conv and chat_conv != None and chat_conv.id = con.con.id %}
+                                    <div class="conversation msg_read active_conversation" data-id="{{ con.con.id }}">
+                                {% else %}
+                                    <div class="conversation msg_read" data-id="{{ con.con.id }}">
+                                {% endif %}
+                            {% else %}
+                                {% if chat_conv and chat_conv != None and chat_conv.id = con.con.id %}
+                                    <div class="conversation active_conversation" data-id="{{ con.con.id }}">
+                                {% else %}
+                                    <div class="conversation" data-id="{{ con.con.id }}">
+                                {% endif %}
+                            {% endif %}
+                                <a href="{% url 'messages_conversation1' con.partner_user.username %}">
+                                    <div class="msg_data">
+                                        <div class="partner_profile">
+                                            {% if con.partner_user_profile.profile_img %}
+                                                <img class="avatar" src="{% thumbnail con.partner_user_profile.profile_img "25x25" crop="center" %}">
+                                            {% else %}
+                                                <img class="avatar" src="{% static 'skigit/detube/images/noimage_user.jpg' %}">
+                                            {% endif %}
+                                        </div>
+                                        <h3>{{con.partner_user}}
+                                            {% if con.conv_msg and con.conv_msg != None and con.conv_msg_count and con.conv_msg_count != None and con.conv_msg_count > 0 %}
+                                            <span class="msg_unread_count">({{con.conv_msg_count}})</span>
+                                            {% endif %}
+                                            <span class="online_status">
+                                                {% if con.partner_user_profile.online %}
+                                                    <img src="{% static 'skigit/detube/images/online.png' %}" height="10" width="10">
+                                                 {% else %}
+                                                    <img src="{% static 'skigit/detube/images/offline.png' %}" height="10" width="10">
+                                                {% endif %}
+                                            </span>
+                                        </h3>
+                                        {% if con.conv_msg and con.conv_msg != None %}
+                                            <h6>sub: {{con.conv_msg.msg_subject}}
+                                            </h6>
+                                            <h6>
+                                                {% if con.conv_msg.user == user %}
+                                                    <span><img src="{% static 'skigit/detube/images/Undo-icon.png' %}" height="12" width="12" /></span>
+                                                {% endif %}
+                                                {{ con.conv_msg.text }}
+                                            </h6>
+                                            <small>{{ con.conv_msg.created_date |date:"P b,d" }}</small>
+                                        {% endif %}
+                                    </div>
+                                </a>
+                                    <div class="msg_action">
+                                        <h3>
+                                            {% if con.con.from_user != user or con.con.to_user != user %}
+                                                {% if con.conv_msg and con.conv_msg != None and con.conv_msg_count and con.conv_msg_count != None and con.conv_msg_count > 0 %}
+                                                    <span class="conv_read"><img src="{% static 'skigit/detube/images/read.png' %}" height="10" width="10" /></span>
+                                                {% else %}
+                                                    <span class="conv_unread"><img src="{% static 'skigit/detube/images/unread.png' %}" height="10" width="10" /></span>
+                                                {% endif %}
+                                            {% endif %}
+                                        </h3>
+                                    </div>
+
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                <h3>No Conversation In Your Inbox </h3>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col2">
+
+            {% if chat_conv and chat_conv != None and partner_user and partner_user != None %}
+                <div class="headline">
+                    <h3>
+                        {{partner_user.username}}
+                        <span class="online_status">
+                                                {% if partner_user_profile.online %}
+                                                    <img src="{% static 'skigit/detube/images/online.png' %}" height="10" width="10">
+                                                 {% else %}
+                                                    <img src="{% static 'skigit/detube/images/offline.png' %}" height="10" width="10">
+                                                    <span>     {{ partner_user_profile.last_seen }}</span>
+                                                {% endif %}
+                        </span>
+                    </h3>
+                </div>
+                {% if chat_conv_msg and chat_conv_msg != None %}
+                <div class="chat_screen" data-id="{{chat_conv.id}}">
+                    <div class="conversation_thread">
+                        {% for con in chat_conv_msg %}
+                            {% if con.user and con.user == user %}
+                                        <div class="message_thread" data-id="{{con.id}}">
+                                            <div class="msg_data">
+                                                <div class="partner_profile">
+                                                    {% if user_profile.profile_img %}
+                                                        <img class="avatar" src="{% thumbnail user_profile.profile_img "25x25" crop="center" %}">
+                                                    {% else %}
+                                                        <img class="avatar" src="{% static 'skigit/detube/images/noimage_user.jpg' %}">
+                                                    {% endif %}
+                                                </div>
+                                                <h3>{{ con.user.username}}
+                                                <small>{{ con.created_date |date:"P b,d" }}</small>
+                                                </h3>
+                                                <h6>Subject: {{con.msg_subject}}</h6>
+                                                <h6>{{con.text}}</h6>
+
+                                            </div>
+                                            <div class="msg_action">
+                                                <h3>
+<!--                                                    <span class="read"><img src="{% static 'skigit/detube/images/unread.png' %}" height="15" width="15" /></span>-->
+<span class="chat_delete_msg"><img src="{% static 'skigit/detube/images/delete.png' %}" height="15" width="15" /></span>
+                                                </h3>
+                                            </div>
+                                        </div>
+
+                            {% else %}
+                                        <div class="message_thread" data-id="{{con.id}}">
+                                            <div class="msg_data">
+                                                <div class="partner_profile">
+                                                    {% if partner_user_profile.profile_img %}
+                                                        <img class="avatar" src="{% thumbnail partner_user_profile.profile_img "25x25" crop="center" %}">
+                                                    {% else %}
+                                                        <img class="avatar" src="{% static 'skigit/detube/images/noimage_user.jpg' %}">
+                                                    {% endif %}
+                                                </div>
+                                                <h3>{{con.user.username}}
+                                                <small>{{ con.created_date |date:"P b,d" }}</small>
+                                                </h3>
+                                                <h6>Subject:{{con.msg_subject}}</h6>
+                                                <h6>{{con.text}}</h6>
+
+                                            </div>
+                                            <div class="msg_action">
+                                                <h3>
+<!--                                                    <span class="read"><img src="{% static 'skigit/detube/images/unread.png' %}" height="15" width="15" /></span>-->
+<!--                                                    <span class="delete"><img src="{% static 'skigit/detube/images/delete.png' %}" height="15" width="15" /></span>-->
+                                                </h3>
+                                            </div>
+                                        </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="chat_text_box">
+                        <form id="chat_msg_form">
+                            <input type="text" id="chat_msg_subject" name="chat_msg_subject" placeholder="Message Subject" required  class="chat_text_subject"/>
+                            <textarea id="chat_msg_text" name="chat_msg_text" class="chat_msg_text" rows="4" placeholder="Type Your Message Here" required></textarea>
+                            <h3><input type="submit" class="chat_msg_submit" value="Send" id="chat_msg_submit" /></h3>
+                        </form>
+                    </div>
+
+                </div>
+                {%else%}
+                 <div class="chat_screen" data-id="{{chat_conv.id}}">
+                    <div class="conversation_thread">
+                        <h3>No Message Left In Conversation</h3>
+                    </div>
+                    <div class="chat_text_box">
+                        <form id="chat_msg_form">
+                            <input type="text" id="chat_msg_subject" name="chat_msg_subject" placeholder="Message Subject" required  class="chat_text_subject"/>
+                            <textarea id="chat_msg_text" name="chat_msg_text" class="chat_msg_text" rows="4" placeholder="Type Your Message Here" required></textarea>
+                            <h3><input type="submit" class="chat_msg_submit" value="Send" id="chat_msg_submit" /></h3>
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+</div>
+{% endblock %}
+
+

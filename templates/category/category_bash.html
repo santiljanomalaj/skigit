@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block title %}{{ block.super }}
+  {% if category_current.cat_name %}
+    {{ category_current.cat_name }}
+  {% elif category_current.sub_cat_name %}
+    {{ category_current.sub_cat_name }}
+  {% elif skigit_plug %}
+    Plugged Skigits into {{ skigit_plug }}
+  {% elif skigit_like %}
+    Liked Skigits by {{ skigit_like }}
+  {% else %}
+    Skigits by {{ category_current }}
+  {% endif %}
+{% endblock %}
+{% block content %}
+
+  <div class="mar_zero" id="main">
+    <div class="row">
+      {% block category_video_block %}
+        {% include 'category/category_video.html' %}
+      {% endblock category_video_block %}
+    </div>
+    <div class="row">
+      <div class="col-md-2 col-lg-2 hidden-xs hidden-sm"></div>
+      <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+	  
+	  
+       <!-- <div class="section-box">
+          <div class="section-content grid-small">
+            {% if category_current.cat_name|safe == "Just here for the Drama" %}
+              {% if video_detail %}
+                <div id="CategoryImage" class="categories-video-logo">
+                  <p>Just here for the Drama</p>
+                </div>
+              {% endif %}
+              <div class="categories-content-box">
+                <span>Create a story about your awesome subject. Add a plot, interesting characters and sprinkle in
+                  some creativity for others to see. Convey the heart-felt meaning of your awesome thing by evoking
+                  emotion, make a connection and drawing viewers into your world.</span>
+              </div>
+            {% elif category_current.cat_name|safe == "Let Me Show You Where to Put That" %}
+              {% if video_detail %}
+                <div class="categories-video-logo">
+                  <p>Let Me Show You Where to Put That</p>
+                </div>
+              {% endif %}
+              <div class="categories-content-box" style="font-family:LAOUI">
+                <span>Provide a physical demonstration and highlight the features of your awesome thing and how it works. Show off all of it’s great
+                              features for the whole world to see. Show others how they would be as cool as you if they had your awesome thing. Make use of
+                              flashy catchphrases, repeat basic ideas or employ scientist-like characters, celebrities or a guest host in your skigit. Give us the
+                              straight dope about your awesome person, place, thing or thing to do. Be witty, creative, colorful and innovative but remember
+                              to keep it tasteful.</span>
+              </div>
+            {% elif category_current.cat_name|safe == 'I\'ll do Me, You do You' %}
+              {% if video_detail %}
+                <div class="categories-video-logo">
+                 <p>I'll do Me, You do You</p>
+                </div>
+              {% endif %}
+             <div class="categories-content-box" style="font-family:LAOUI">
+                <span>Are you serious? A self-portrait video, typically taken with a hand-held digital camcorder or camera phone? We say “just do it”
+                              with your camcorder held at arm’s length or in a mirror, and include either yourself or as many people as can be in focus. But
+                              don’t forget to include your awesome thing. Did you know, selfies taken that involve multiple people are known as “group
+                              selfies”? Who’da thunk it?!</span>
+              </div>
+            {% elif category_current.cat_name|safe == "Where Words Fail, Music Speaks" %}
+              {% if video_detail %}
+                <div class="categories-video-logo">
+                 <p>Where Words Fail, Music Speaks</p>
+                </div>
+              {% endif %}
+              <div class="categories-content-box" style="font-family:LAOUI"><span>Don’t just be a one-hit wonder, blow your own horn and be the star. Create your skigit vibe using music, song and dance with a
+                              catchy melody, mesmerizing harmony and a thunderous beat. Get your friends and coworkers to sing and dance the praises of
+                              your favorite things. Pull out all the stops!</span></div>
+            {% elif category_current.cat_name|safe == "Normal is Overrated" %}
+              {% if video_detail %}
+                <div class="categories-video-logo">
+				<p>Normal is Overrated</p>
+                </div>
+              {% endif %}
+             <div class="categories-content-box" style="font-family:LAOUI"><span>Make your skigit zany, funny or inject a healthy dose of side-splitting wackiness! Inject your brand of humor for others to see.
+                              Show off your lighter side when letting others know why your thing is so way-out cool. Don’t hold back any of that creative
+                              energy but don’t get too carried away and remember to keep it tasteful.</span></div>
+            {% endif %}
+
+          </div>
+        </div>-->
+		
+		
+		           {% if video_detail %}
+              <div class="categories-sort-box">
+                <ul>
+                  <li>
+                    <a href="{% url 'date_sort_view' category_current.cat_slug order %}">Sort Date</a>
+                    {% if page_type == 'sort_date' %}
+                      <span class="sort_arrow">
+                        {% if order == 1 %}&#9206;{% else %}&#9207;{% endif %}
+                      </span>
+                    {% endif %}
+                  </li>
+                  |
+                  <li>
+                    <a href="{% url 'title_sort_view' category_current.cat_slug order_title %}">Titles
+                    </a>
+                    {% if page_type == 'sort_title' %}
+                      <span class="sort_arrow">
+                        {% if order_title == 1 %}&#9206;{% else %}&#9207;{% endif %}
+                      </span>
+                    {% endif %}
+                  </li>
+                  |
+                  <li>
+                    <a href="{% url 'views_sort_view' category_current.cat_slug order_views %}">Views
+                    </a>
+                    {% if page_type == 'sort_views' %}
+                      <span class="sort_arrow">
+                        {% if order_views == 1 %}&#9206;{% else %}&#9207;{% endif %}
+                      </span>
+                    {% endif %}
+                  </li>
+                  |
+                  <li>
+                    <a href="{% url 'like_sort_view' category_current.cat_slug order_likes %}">Likes
+                    </a>
+                    {% if page_type == 'sort_likes' %}
+                      <span class="sort_arrow">
+                        {% if order_likes == 1 %}&#9206;{% else %}&#9207;{% endif %}
+                      </span>
+                    {% endif %}
+                  </li>
+                  |
+                  <li>
+                    <a href="{% url 'random_sort_view' category_current.cat_slug %}">Random
+                    </a>
+                    {% if page_type == 'sort_random' %}
+                      <span class="sort_arrow">&#9207;</span>
+                    {% endif %}
+                  </li>
+                </ul>
+              </div>
+            {% endif %}
+			
+		
+      </div>
+      <div class="col-md-2 col-lg-2 hidden-xs hidden-sm"></div>
+    </div>
+    {% if video_detail %}
+      <div id="skigit_content_list" Style="padding:10px 20px 10px 20px;" >  
+        <div class="row endless_page_template">
+          {% include 'includes/skigit_list.html' %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
+{% block js %}
+  <script>jQuery.endlessPaginate({paginateOnScroll: true});</script>
+{% endblock %}
+{#{% block js %}#}
+{#  {{ block.super }}#}
+{#  <script>jQuery.endlessPaginate({paginateOnScroll: true, paginateOnScrollChunkSize: 5});</script>#}
+{#{% endblock %}#}

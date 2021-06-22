@@ -1,0 +1,1021 @@
+{% load staticfiles %}
+{% load social_share %}
+<meta property="og:url" content="{{ request.build_absolute_uri|urlencode }}" />
+
+<link rel="stylesheet" href="{% static 'skigit/detube/css/app.css' %}" type="text/css" media="all" />
+
+<style type="text/css">
+    #details{
+        width: 775px;
+    }
+    .drag-contentarea{
+        background-color: #eee !important;
+    }
+    .post_div{
+        margin-left: 174px;
+        margin-top: 5px;
+    }
+    .singlevideo_left
+    {
+        width: 100%;
+        margin: 8px 0 0;
+        height: 40px;
+    }
+    .inner{
+        width: 57%;
+        float: left;
+
+    }
+    /*    .single_youtube {
+            height: auto;
+            //margin: 0 0 0 370px;
+            //width: 775px;
+        }*/
+
+    .single_youtube {
+        height: auto;
+        margin: 0 0 0 0px;
+        width: 775px;
+    }
+
+    .entry-content {
+        margin: 0 0 0 1px;
+    }
+
+    #main {
+        background: #eee none repeat scroll 0 0;
+        box-shadow: none;
+        margin: 0;
+        min-height: 500px;
+        padding: 0 10px 10px;
+        width: 97.2% !important;
+    }
+
+    /*    #main {
+            background: #eee none repeat scroll 0 0;
+            box-shadow: none;
+            margin: 0;
+            min-height: 500px;
+            padding: 0 10px 10px;
+            width: 97.2% !important;
+        }*/
+    /*    #main {
+            background: transparent url("") no-repeat fixed 60px 0;
+            border-radius: 2px 2px 8px 8px;
+            box-shadow: 8px 7px 14px 0 #afafaf;
+            //margin: 0 0 0 60px;
+            min-height: 900px;
+
+            padding: 5px 5px 15px 15px;
+            position: relative;
+            width: 100% !important;
+        }*/
+
+    #content {
+        //float: right;
+        //width: 100% !important;
+    }
+    .suggestedvds {
+        margin: 10px 0 0 45px;
+        width: 90%;
+    }
+
+    .section-title_thumbs {
+        float: left;
+        margin-top: 45px;
+        width: 30%;
+    }
+
+    #suggestedvds .scroll-img {
+        width: 100%;
+    }
+    .scroll-img {
+        font-size: 5px;
+        font-family: "Segoe Print";
+        height: 110px;
+        margin: 0px auto auto -81px;
+        overflow: hidden;
+        //width: 860px;
+    }
+
+    .section-title_thumbs h2 {
+        color: #000;
+        font-family: "Segoe Print" !important;
+        font-size: 11px;
+        font-weight: bold;
+        line-height: 24px;
+        margin: 0 10px 0 15px;
+        text-align: left;
+        text-transform: capitalize;
+    }
+
+    .demo_gal {
+        float: left;
+        margin: 0;
+        position: relative;
+        width: 67.7%;
+    }
+
+    .demo_gal_head {
+        float: left;
+        margin-top: 46px;
+        width: 27%;
+    }
+
+    .scroll-img ul {
+        height: 110px;
+        //margin: 0 0 0 100px;
+        width: 100%;
+    }
+
+    .drag-handle .drag-controls {
+        right: -6px !important;
+        top: -26px !important;
+    }
+
+    /*    ul, ol {
+            list-style: outside none none;
+            margin: 0;
+            padding: 0;
+            text-align: left !important;
+        }*/
+
+    .scroll-img ul li {
+        background: none repeat scroll 0 0 #3f95b7;
+        border-radius: 7px;
+        display: inline-block;
+        height: 100%;
+        margin: 2px 15px 0 0;
+        width: 115px;
+    }
+
+    .scroll-img ul li h2{
+        text-align: center;
+        color: #fff;
+        font: normal 12px/20px "Segoe Print";
+        padding:0px 0px 0px 0px;
+        margin: 0px;
+        height: 22px;
+    }
+
+    #post_class_home_box_gal h2 a {
+        color: #fff;
+        font-family: "Segoe Print";
+        margin : 0px 4px 0px 6px !important;
+    }
+    a {
+        color: #555;
+        outline: 0 none;
+        text-decoration: none;
+        transition: background-color 0.15s linear 0s, color 0.15s linear 0s;
+    }
+
+
+    #post_class_home_box_gal .thumb {
+        height: 70px;
+        width: 100%;
+    }
+    .thumb {
+        background: none repeat scroll 0 0 #000;
+        display: inline-block;
+        overflow: hidden;
+        position: relative;
+        vertical-align: bottom;
+    }
+
+    .clip {
+        height: 150px !important;
+        width: 220px !important;
+    }
+
+    .single_title {
+        color: #000;
+        font-family: "Segoe Print";
+        font-size: 11px;
+        //margin: 30px 0 0;
+        text-align: left
+    }
+    #title_single {
+        color: #1e72b0;
+        float: left;
+        font: 300 18px/10px segoe print;
+        //margin: 0 10px 0 45px;
+        text-align: center;
+        text-shadow: 1px 1px 7px #44bae9;
+    }
+    h1 {
+        font-size: 24px;
+    }
+    h1, h2, h3 {
+        line-height: 1.25;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        color: #111;
+        margin: 0 0 15px;
+    }
+
+    .video_heading {
+        float: left;
+        width: 25%;
+    }
+
+    .video_text_color{
+        float: left;
+        margin: 0 0 0 5px;
+    }
+
+    .video_text_color a {
+        color: #0381c3;
+        font: 600 11px/26px segoe print;
+    }
+
+    .video_text {
+        color: #000;
+        float: left;
+        font: 400 11px/26px segoe print;
+        margin-left: 10px;
+    }
+    .fb_default {
+        display: block !important;
+        float: left;
+        width: 100% !important;
+        margin: 32px 0 0 0
+    }
+    .drag-handle { /*CSS for Drag Handle*/
+        font:600 14px/20px segoe print;
+        color: #000;
+        cursor: move;
+        overflow: hidden;
+        width: auto;
+        filter:progid:DXImageTransform.Microsoft.alpha(opacity=100);
+        background:#eeeeee !important;
+        /*margin:5px 0 0 18px;*/
+        margin:-20px 0px 0 0px !important;
+        height:15px;
+
+    }
+
+    /* .fb_default {
+            //margin: 20px 0px 21px -40px;
+            margin: 17px 0 15px -45px;
+            width: 600px !important;
+        }*/
+
+    .videofooter {
+        color: #000;
+        float: left;
+        font: 400 11px/26px segoe print;
+        margin: 0 0 0 5px;
+    }
+
+    .single_title span {
+        color: #0381c3;
+        font-family: "Segoe Print";
+    }
+
+    .single_title span a {
+        color: #0381c3;
+        font-family: "Segoe Print";
+        font-size: 12px;
+        font-weight: normal;
+    }
+    .collapse_div {
+        margin-top: 11px;
+        position: relative;
+        width: 100%;
+    }
+
+    .video_det_heading {
+        color: #000000;
+        //float: left;
+        font-family: "Segoe Print";
+        font-size: 11px;
+        font-weight: bold;
+        line-height: 15px;
+        //margin: 17px 0 0 0px;
+    }
+
+    .collapse_div > p {
+        color: #000;
+        font: 400 10px/15px "Segoe Print";
+        margin: 8px 0px 0px 10px;
+        min-height: 70px;
+        text-align: justify;
+        width: 280px;
+        word-wrap: break-word;
+    }
+    ol, p, table, form, pre {
+        margin: 0;
+    }
+    .singlejoin_icon {
+        //margin-left: 10px;
+        width: 12%;
+    }
+
+    .singlejoin_icon a {
+        margin: 0 0 0 -5px !important;
+    }
+    .video_fav a {
+        color: #0381c3;
+        float: left;
+        font: 400 12px/14px segoe print;
+    }
+
+    .user_view {
+        float: left;
+        /*
+        margin-left: 12px;
+        margin-top: 7px;
+        */
+        margin: 7px 0px 0px 16px;
+        width: 10%;
+    }
+    .video_fav {
+        float: left;
+        //margin: -20px 0 0 520px;
+        width: 43%;
+    }
+
+    #actions {
+        float: right;
+        height: auto;
+        width: 20%;
+    }
+    .actions_right {
+        float: left !important;
+    }
+    .favorites {
+        float: left;
+        margin-left: 9px;
+        width: 12%;
+    }
+
+    .user_follow {
+        float: left;
+        width: 11%;
+    }
+
+    .user_follow a {
+        margin: 0 !important;
+    }
+
+    .copy_rightspan {
+        float: left;
+        width: 11%;
+        margin: 2px 0 0 4px;
+    }
+
+
+    .copy_flag {
+        float: left;
+        width: 11%;
+        margin: 3px 0 0 0px;
+    }
+    .head_flag_popupbox::after, .head_flag_popupbox::before {
+        border: medium solid transparent;
+        bottom: 100%;
+        content: " ";
+        height: 0;
+        left: 80%;
+        pointer-events: none;
+        position: absolute;
+        width: 0;
+    }
+
+    .head_flag_popupbox {
+        background: #fff none repeat scroll 0 0;
+        border: 6px solid #75cae7 !important;
+        border-radius: 20px;
+        box-shadow: 4px 5px 6px #8c8c8c;
+        font: bold 12px/16px "Segoe Print";
+        margin: 0;
+        position: absolute;
+        right: 55px;
+        top: 415px;
+        width: 265px;
+        z-index: 99;
+    }
+    .singlevideo_right {
+        float: right;
+        position: relative;
+        text-align: left;
+        width: 50%;
+        z-index: 1;
+        margin-top: 3px;
+    }
+    .autor_mainbox {
+        float: left;
+        margin:0px 0 0 63px;
+    }
+
+    .author {
+        color: #000000;
+        display: inline-block;
+        font-family: "Segoe Print";
+        font-size: 10px;
+        padding-left: 1px;
+        position: relative;
+        text-transform: capitalize;
+        margin-left: 5px;
+    }
+
+    .author strong {
+        position: relative;
+        margin-left: 4px;
+    }
+
+    .singvedio_leranmore {
+        float: left;
+        margin: 0;
+        position: relative;
+        text-align: left;
+        width: 100%;
+    }
+    .singvedio_leranmore a {
+        color: #5423c3;
+        font: bold 14px/20px "Segoe Print";
+        position: absolute;
+        right: 30px;
+        top: 5px;
+    }
+    .upload_height {
+        height: 5px !important;
+        min-height: 5px !important;
+    }
+    .upload_img {
+        float: left;
+        margin: 0 0 0 5px;
+        min-height: 50px;
+        text-align: left;
+        width: 50%;
+    }
+
+    .userlogo_img {
+        position: relative;
+    }
+
+
+    .video_det_heading_icon {
+        height: 50px;
+        left: 339px;
+        position: absolute;
+        //top: -39px;
+        width: 14%;
+        margin: -38px 0 0 -101px;
+    }
+    #actions .dp-like-post .like {
+        background: url("{%static 'skigit/detube/images/actions.png'%}") no-repeat scroll 0 -24px rgba(0, 0, 0, 0);
+    }
+
+    #actions .dp-like-post .like:hover, #actions .dp-like-post {
+        background: url("{%static 'skigit/detube/images/actions.png'%}") no-repeat scroll 0 -24px rgba(0, 0, 0, 0);
+        color: #555;
+    }
+    #actions .dp-like-post {
+        float: left;
+        margin-left: 9px;
+        position: relative;
+    }
+    #actions .dp-like-post a {
+        color: #555;
+        display: inline-block;
+        font-size: 11px;
+        font-weight: bold;
+        height: 24px;
+        line-height: 24px;
+        padding: 0;
+        text-transform: uppercase;
+        width: 23px;
+    }
+    #actions a {
+        text-decoration: none;
+    }
+
+    #actions .dp-share {
+        float: left;
+        position: relative;
+        margin-left: 7px;
+    }
+    #actions .dp-share .dropdown-handle {
+        border-radius: 3px;
+        color: #555;
+        display: inline-block;
+        font-size: 11px;
+        font-weight: bold;
+        height: 24px;
+        line-height: 24px;
+        margin: 4px 0 0 5px;
+        padding: 0;
+        text-transform: uppercase;
+        width: 25px;
+    }
+
+    #actions .dp-share .dropdown-handle {
+        background: url("{%static 'skigit/detube/images/share_icon.png'%}") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+        display: block;
+        position: relative;
+    }
+
+
+    #actions .dp-like-post .liked {
+        background: url("{%static 'skigit/detube/images/actions.png'%}") no-repeat scroll 0 -84px rgba(0, 0, 0, 0);
+        color: #555;
+    }
+    #actions .dp-like-post a {
+        color: #555;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 11px;
+        font-weight: bold;
+        height: 24px;
+        line-height: 24px;
+        padding: 0;
+        text-transform: uppercase;
+        width: 23px;
+    }
+
+{#    // CSS for post to#}
+
+
+    .popup_post_text {
+        color: #333 !important;
+        float: left !important;
+        font: 300 12px/22px "Segoe Print" !important;
+        margin: 0 10px 0 30px !important;
+    }
+    .mydiv-fb span{
+        color: #333 !important;
+        float: left !important;
+        font: 300 12px/22px "Segoe Print" !important;
+        margin: -3px 12px 0 0 !important;
+    }
+    .mydiv-fb {
+        float: right;
+        width: 35%;
+        //margin: 0px 0 0 353px;
+    }
+
+    .addtoany_list {
+        display: inline;
+        line-height: 16px;
+        margin:0 0 0 6px;
+    }
+
+    .addtoany_list a {
+        display: inline-block;
+        font-size: 12px;
+        padding: 0 2px;
+        vertical-align: middle;
+    }
+    .a2a_kit a {
+        margin: 0;
+    }
+    .addtoany_list a {
+        padding: 0 2px;
+    }
+    .a2a_kit a {
+        cursor: pointer;
+    }
+
+    .addtoany_list a img {
+        height: auto;
+        opacity: 1;
+        overflow: hidden;
+        vertical-align: top;
+        width: auto;
+    }
+    .tweet-this {
+        float: left;
+        margin: -16px 0 0 23px;
+    }
+    .facebook-this
+    {
+        //float: left;
+        //margin: 4px 0 0;
+    }
+    .pop_h1
+    {
+        max-width: 50%;
+        width: 40%;
+        //margin: 0px 0 0 -2px;
+    }
+    .logo_display
+    {
+        width: 100px;
+        height: 30px;
+        margin:-27px 0px 0px 150px ;
+    }
+
+    .join_box_inapp h6 {
+        color: #000000;
+        display: block;
+        font: bold 10px/14px "Segoe Print";
+        margin: 0 !important;
+        padding: 2px;
+        text-align: left;
+    }
+
+    .section-title_fb {
+        text-align: left;
+    }
+
+    .section-title_fb h2 {
+        color: #000;
+        font-family: "Segoe Print" !important;
+        font-size: 11px;
+        font-weight: bold;
+        line-height: 24px;
+        margin: 10px 0 9px;
+        text-align: left;
+        text-transform: capitalize;
+    }
+
+    #fbcomments {
+        //margin: 5px 0 0 30px;
+        width: 100% !important;
+        background-color: #eee!important;
+    }
+
+</style>
+
+<script src="{% static 'skigit/detube/confirm/jquery-1.9.1.js' %}"></script>
+<script type="text/javascript" src="{% static 'skigit/detube/js/app.js' %}"></script>
+{%if vid%}
+
+<div id="main">
+    <div class="wrap cf" style="">
+        <div role="main" id="content">
+            <div id="post-8762" class="post-8762 post type-post status-publish format-standard hentry category-dramas category-sporting-and-outdoor-goods">
+                <div class="section-box_vedio" id="details">
+                    <div class="fb_default">
+                        <div class='pop_h1'>
+                            <h1 id="title_single">
+
+                                {{vid.skigit_id.title}}
+
+                            </h1>
+                        </div>
+                        <div class="video_heading">
+                            <span class="video_text">
+                                by
+
+                            </span>
+                            <span class="video_text_color">
+                                <a target="_blank" href="{% url 'user_profile_display' vid.skigit_id.user.username %}">
+                                    {{vid.skigit_id.user.username}}
+                                </a>
+                            </span>
+                            <div class="videofooter">
+                                on
+                                {{vid.created_date|date:"M d, Y"}}
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <!--<span class="popup_post_text">Post to</span>-->
+                        <div class="mydiv-fb">
+                            <div class="post_div">
+                                <span class="popup_post_text">Post to</span>
+                                {% post_to_facebook social_redirect_url '<img width="16" height="16" src="/static/skigit/plugins/add-to-any/icons/facebook.png">' %}
+
+                                {% post_to_twitter "" social_redirect_url '<img width="16" height="16" alt="Twitter" src="/static/skigit/plugins/add-to-any/icons/twitter.png">' %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="entry-content">
+                        <div class="single_youtube">
+                            <embed width="100%" height="300" allowfullscreen="true" allowscriptaccess="always"
+                                   type="application/x-shockwave-flash" src="//www.youtube.com/v/{{vid.skigit_id.video_id}}?version=3&autoplay=0;rel=0&modestbranding=1;hl=nb_NO&autohide=1&showinfo=0">
+                            <!--                            <iframe id="homeframe" class="homeframe" title="YouTube video player" width="869" height="350"
+                                                                src="http://www.youtube.com/embed/{{vid.skigit_id.video_id}}?autoplay=0&origin={{ origin }}&modestbranding=0&showinfo=0"
+                                                                frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen/>
+                                                        </iframe>		-->
+                        </div>            <!---->
+                    </div>
+                </div>
+                <!-- end .entry-content -->
+                <div class="singlevideo_left">
+                    <div class="inner">
+                        <!--                        <div style="display:none;" class="fb_extra">
+                                                    <h1 id="title_single">
+                                                        {{vid.skigit_id.title}}
+                                                    </h1>
+                                                    <div class="video_heading"> <span class="video_text">
+                                                            by                  </span>
+                                                        <span class="video_text_color"> <a target="_blank" href="http://demo.mrphpguru.com/skigitdev/members/skigit/profile/">skigit</a></span>
+                                                        <div class="videofooter"> on
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>-->
+                        <!--                        <div class="clearfix"></div>-->
+                        <div class="single_title">
+                            A <span><a target="_blank" href="{{ vid.category.get_absolute_url}}">{{vid.category.cat_name}}</a></span> about <span><a target="_blank" href="{{ vid.subject_category.get_absolute_url}}">{{vid.subject_category.sub_cat_name}}</a></span>
+                        </div>
+                    </div>
+                    <div style="" class="video_fav">
+
+                        <div class="singlejoin_icon"><a title="Plug in" target="_blank" href="{% url 'skigit_plugin' vid.skigit_id.id%}"><img src="{% static 'skigit/detube/images/joinme_icon_small.png' %}"></a></div>
+
+
+                        <div class="user_view">
+                            <a target="_blank" href="{% url 'my_skigits_view' vid.skigit_id.user_id %}" title="View creators other Skigits "><img src="{% static 'skigit/detube/images/view_icon.png' %}"></a>
+                        </div>
+                        <div class="actions_right" id="actions">
+                            <span class="dp-like-post">
+                                {% if user.is_authenticated %}
+                                {% if vid.skigit_id.id in video_likes %}
+                                <a class="liked like_unlike" id="like_{{vid.skigit_id.id}}" data-userid="1" title="Unlike" data-pid="{{vid.skigit_id.id}}"></a>
+                                {% else %}
+                                <a class="like like_unlike" id="like_{{vid.skigit_id.id}}" data-userid="1" title="Like" data-pid="{{vid.skigit_id.id}}"></a>
+                                {% endif %}
+                                {% else %}
+                                <a class="like like_unlike" id="like_{{vid.skigit_id.id}}" data-userid="0" title="Like" data-pid="{{vid.skigit_id.id}}"></a>
+                                {% endif %}
+                            </span>
+                            <div class="dropdown dp-share">
+                                <a id="dropdown-handleloop8764" href="javascript:void(0)" class="dropdown-handle" title="Share Skigit"></a>
+                                <!-- Share Added -->
+                                <div class="head_share_popupbox mrphpguru" id="singlehead_share_popuploop8764" style="display: none;"> <span id="up_arrow"></span>
+                                    <ul>
+                                        <span class="head_share_popupclose" id="skigitt_email_closeloop8764"><a href="javascript:void(0)">
+                                                <img src="{% static 'skigit/detube/images/skigitt_drop_close.png' %}"></a></span>
+                                        <div class="join_box">
+                                            <h6><span id="sharedwith_8764" class="sharedwith">Shared with</span>
+                                                <span id="sharewithothers8764" class="sharewithothers">
+                                                    <a id="dropdown-usershare8764" class="dropdown-usershare" href="javascript:void(0)">Share</a>
+                                                    <!--Share to User-->
+                                                    <div style="display: none;" id="my_skigitt_usershare11" class="my_skigitt_usershare">
+                                                        <ul>
+                                                            <div class="my_skigitt_join_box"></div>
+                                                            <div class="my_skigitt_usershare_inner_layout"><span style="color:#0381C3">Share this Skigit with...</span>
+                                                                <div class="holder">
+                                                                    <input type="text" style="width:245px !important; height:25px; font-size:10px !important; margin-left:-3px;" placeholder="Type your friend's Username" class="keywordclass" id="keyword8764">
+                                                                    <img class="loading" id="loading" src="{% static 'skigit/detube/images/loading.gif' %}"> </div>
+                                                                <div id="singleresponseclass8764" class="responseclass"></div>
+                                                                <div class="shareconfirm" id="singleshareconfirm8764"></div>
+                                                                <input type="button" style="margin-left:35px !important;" onclick="singleshareSkigitt('keyword8764', '772', '8764', '644', 'singleshare_btn8764');" name="share" class="btn" id="singleshare_btn8764" value="Share">
+                                                                <input type="button" name="cancel" id="singlebtncancel8764" class="btncancel" value="Cancel">
+                                                                <div style="color:red" id="divsingshskierr8764" class="divsingshskierr"></div>
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                        </ul>
+                                                        <div class="join_btn"></div>
+                                                    </div>
+                                                    <!--End Share to user -->
+                                                </span>
+                                            </h6>
+                                            <div class="clearfix"></div>
+                                            <div style="height: 100px !important;margin-left: 15px; overflow: auto !important;width: 94% !important;" id="loopajaxshare8764" class="join_inner">
+                                                <center>
+                                                    No Shares found
+                                                </center>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <div class="join_btn"></div>
+                                        </div>
+                                    </ul>
+                                </div>
+                                <!--End Share Added -->
+                            </div>
+                        </div>
+                        <span id="{{vid.skigit_id.id}}" class="favorites">
+                            <a rel="nofollow" title="Add to Favorites" href="javascript:void(0)" id="addfavorite_{{vid.skigit_id.id}}" class="addfavorite">
+                                <img src="{% static 'skigit/detube/images/addstar_icon.png' %}">
+                            </a>
+                        </span>
+                        <!-- Follow -->
+                        <span class="user_follow">
+                            {% if is_followed %}
+                            <span class="followspan"><a href="javascript:void(0);" id="hrefunfid_{{vid.skigit_id.user_id}}" class="hrefunfollow" data-cuid="{{vid.skigit_id.id}}" title="Unfollow"><img src="{% static 'skigit/detube/images/flow_icon.png' %}"></a></span>
+                            {% else %}
+                            <span class="followspan"><a href="javascript:void(0);" id="hrefunfid_{{vid.skigit_id.user_id}}" class="hrefunfollow" data-cuid="{{vid.skigit_id.id}}" title="Follow"><img src="{% static 'skigit/detube/images/unfollow.png' %}"></a></span>
+                            {% endif %}
+                        </span>
+                        <span class="copy_rightspan"><a target="_blank" title="Copyright Infringement Notification" href="http://demo.mrphpguru.com/skigitdev/copyright/?skid=8764"><img src="{% static 'skigit/detube/images/copyright_icon.png' %}"></a></span>
+                        <!--Flag Icon-->
+                        <span class="copy_flag">
+                            <a id="dropdown_handleloop_{{vid.skigit_id.id}}" class="copy_flag_class flag_popup" title="" href="javascript:void(0)">
+                                <img src="{% static 'skigit/detube/images/flag_icon.png' %}">
+                            </a>
+
+                            <div class="head_flag_popupbox mrphpguru" id="singlehead_flag_popuploop" style="display: none; min-height: 64px; padding: 10px;">
+                                <span id="up_arrow"></span>
+                                <form action="/skigit_inapp_reason/" method="POST" id="innapp_reason_form">
+                                    {% csrf_token %}
+                                    <ul>
+                                        <span class="head_flag_popupclose" id="skigitt_flag_closeloop">
+                                            <a href="javascript:void(0)">
+                                                <img src="{% static 'skigit/detube/images/skigitt_drop_close.png' %}">
+                                            </a>
+                                        </span>
+                                        <div class="join_box join_box_inapp">
+                                            <h1 id="title_single_inappropriate">
+                                         <div id="flagwith_{{vid.skigit_id.id}}" class="flagwith flag_title_investigation">Inappropriate Skigit</div>
+                                            </h1>
+
+                                            <!--                                                <div id="flagwithothers{{vid.skigit_id.id}}" class="flagwithothers">Skigit Id : {{vid.skigit_id.id}}					      	  </div>-->
+                                            <div class="reportingReasons">
+
+                                                <!--                                                <div> &nbsp; </div>-->
+                                                <h6>Reason:</h6>
+                                                <div style="clear:both"></div>
+                                                <div id="reportingReasons" class="skigitreasons">
+
+                                                    <ul>
+                                                        {% if inapp_reasons%}
+                                                        {% for reason in inapp_reasons %}
+                                                        <li>
+                                                            <input type="radio" value="{{reason.id}}" id="skigitReasonsNew" name="skigit_reasons">&nbsp;&nbsp;{{reason.reason_title}}
+                                                        </li>
+                                                        {% endfor %}
+                                                        {% endif %}
+
+                                                    </ul>
+
+                                                    <input type="hidden" name="skigit_id" value="{{vid.skigit_id.id}}">
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </ul>
+
+                                    <div class="skigitsborder">
+
+                                        <span class="inputclass inputbuttonshare">
+                                            <input type="submit" name="flag" class="btn" id="singleflag_btn_click" value="Submit">
+                                        </span>
+                                        <span class="inputclass inputbuttoncancel">
+                                            <input type="button" style="display: block;margin: 0px 0px 0px 12px;" name="cancel" id="flagbtncancel" class="btncancel" dataskigitid="8764" value="Cancel" onclick="close_popup_box()">
+                                        </span>
+
+                                    </div>
+                                    <div id="error_message" style=" display: none; color: red;  margin: 7 0 0 25"></div>
+                                </form>
+                            </div>
+
+
+                        </span>
+                        <!--End-->
+                        <!-- End Follow-->
+                    </div>
+                    <div class="singlevideo_right">
+                        <div class="autor_mainbox">
+                            <span class="author"><strong>
+                                    {{vid.get_plug_count}} <a class="singlejoin" id="pop_up{{vid.skigit_id.id}}" href="">Plugs</a>
+                                    <div class="singlejoinpopup" style="display:none;" id="pop_upsingle{{vid.skigit_id.id}}"> <span id="up_arrow"></span>
+                                        <ul>
+                                            <span class="Joinclose" id="skigitt_drop_close8764"><a href="javascript:void(0)"> <img src="{% static 'skigit/detube/images/skigitt_drop_close.png' %}"></a></span>
+                                            <h6>Plugged in Skigits</h6>
+                                            <div class="join_inner">
+                                                <div class="join_box">
+                                                    <div class="join_inner">
+                                                        <div class="join_content">
+                                                            <center style="color: rgb(3, 129, 195); font-weight: 600;">
+                                                                No Plugs found.
+                                                            </center>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="join_btn"></div>
+                                        </ul>
+                                    </div>
+                                </strong>
+                            </span>
+                            <span style="font-family: 'Segoe Print';" class="author">
+                                <strong>
+                                    {{vid.view_count}} Views
+                                </strong>
+                            </span>
+
+                            <span style="font-family: 'Segoe Print';" class="author">
+                                <strong><span id="likecount{{vid.skigit_id.id}}">
+                                        {{vid.get_like_count}}
+                                    </span>
+                                    Likes
+                                </strong>
+
+                            </span>
+                            <span style="font-family: 'Segoe Print';" class="author">
+                                <strong class="ajaxfav">
+                                    <span id="fav_count{{vid.skigit_id.id}}">2</span> Favorites
+                                </strong>
+                            </span>
+                            <span class="author">
+                                <strong>
+                                    0 Shares
+                                </strong>
+                            </span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <!--                    <div data-pid="8764" class="upload_img upload_height">
+                                            <div class="userlogo_img">
+                                                <span class="video_det_heading_icon">
+                                                    <a href="http://demo.mrphpguru.com/skigitdev/members/business/" target="_blank"><img class="logo_display" src="{{vid.get_business_logo.logo_img.url}}"></a>
+                                                </span>
+                                            </div>
+                                        </div>-->
+                </div>
+
+            </div>
+
+            {%if vid.why_rocks %}
+            <div class="collapse_div">
+                <span class="video_det_heading">Why my Skigit rocks!</span>
+                <p>{{vid.why_rocks}}</p>
+
+            </div>
+            {%endif%}
+
+            <div class="collapse_div">
+                <div class="demo_gal_head">
+                    <span class="video_det_heading">Skigits You Might Like</span>
+                </div>
+                <div class="demo_gal">
+                    <div class="scroll-img">
+                        <ul>
+                            {% if skigits_might_like %}
+                            {% for skigits in skigits_might_like%}
+                            <li>
+                                <div id="post_class_home_box_gal">
+                                    <h2><a>{{skigits.title}}</a></h2>
+
+                                    <div class="thumb">
+                                        <a href="{% url 'youtube:popup_page' skigits.skigit_id.id%}" title="{{skigits.title}}" data-id="{{skigits.skigit_id.id}}" onclick="countviews({{skigits.skigit_id.id}});" class="clip-link">
+                                            <span style="background:url(http://i.ytimg.com/vi/{{skigits.skigit_id.video_id}}/0.jpg) center center; display:block; position:relative; height:110px; width:185px;" class="clip"></span>
+                                            <span class="overlay_small">&nbsp;</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+
+                            {% endfor%}
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!--for loop for sligit might like-->
+
+        </div>
+
+
+    </div>
+    <div class="clearfix"></div>
+    <div style="clear: both"></div>
+
+    <div id="comments">
+        <div class="section-title_fb">
+            <h2>Comment on this great work of art</h2>
+        </div>
+        <div id="fbcomments">
+            <div id="fb-root"></div>
+            <script>
+                        var cahnnel_url = '{{ request.build_absolute_uri|urlencode }}'
+                        window.fbAsyncInit = function() {
+                        FB.init({
+                        appId      : '577190729051363', // App ID
+                                channelUrl : cahnnel_url, // Channel File
+                                status     : true, // check login status
+                                cookie     : true, // enable cookies to allow the server to access the session
+                                xfbml      : true  // parse XFBML
+                        });
+                        };
+                        (function(d){
+                        var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+                                if (d.getElementById(id)) {return; }
+                        js = d.createElement('script'); js.id = id; js.async = true;
+                                js.src = "//connect.facebook.net/en_US/all.js";
+                                ref.parentNode.insertBefore(js, ref);
+                        }(document));</script>
+            <div class="fb-comments" data-href="{{ my_object.slug }}" data-num-posts="2" data-width="100%"></div>
+        </div>
+    </div>
+
+
+    {%else%}
+    <div>Video details not found</div>
+    {% endif %}
+
+
+    <div id="popScreen" style="display: none">
+        <a class="cancel_signout1">
+            <img src="{% static 'skigit/detube/images/skigitt_drop_close.png' %}">
+        </a>
+
+        <span class="rfirst1"><img src="{% static 'skigit/detube/images/logo_logout.png' %}" /></span>
+        <p class="logoutp1" id="popup_msg">Please login first to like the Skigit</p>
+        <span class="logout_act1">
+            <input type="button" class="logout_btn1 pop_btn1" id="popclose" value="Ok" onclick="popclose()" style="margin-left:140px !important; margin-top:22px !important">
+            <!--                <input type="button" value="Cancel" class="logout_btn" onclick=""> -->
+
+        </span>
+    </div>
+
+    <!--end #deatils-->
+</div>
+

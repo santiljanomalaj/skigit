@@ -1,0 +1,50 @@
+
+<html>
+<head>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+<body style="overflow: hidden;">
+<section id="skigit_embed" style="position:relative !important" >
+    {% if video_id %}
+        <div style="text-align:center; position: absolute !important; top:5px; right: 0; min-width: 80px; width: 20%;">
+            <img src="/static/skigit/images/logo.png" id="skigit_logo" style=" width: 100%;"/>
+
+        </div>
+
+        <iframe id='skigit_ebd_vid' src="https://www.youtube.com/embed/{{ video_id }}?rel=0&showinfo=0&enablejsapi=1" style="border: 0; overflow:scroll;
+     height: 100%; width: 100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>
+        </iframe>
+        <div style="text-align:center; position: absolute !important; bottom:45px; right: 0; min-width: 80px; width: 20%;">
+            <img class="img-responsive" src="{{ image_url }}" style=" width: 70%;">
+        </div>
+{#         <button id="vid_button" style="display:block">stop :)</button>#}
+    {% else %}
+        <iframe id="skigit_iframe" style="border: 0; overflow:scroll; height: 100%; width: 100%;" frameborder="0"
+                webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+        <script>
+            $(function(){
+                var iframe = document.getElementById("skigit_iframe").contentWindow.document;
+                iframe.open();
+                iframe.write('<div id="errorBox">'+
+                    '<center><p><img src="/static/skigit/images/logo.png" width="65px;" height="50px;"/></p>'+
+                    '<div style="color:red;"><strong><p>This Skigit is no longer available<p></strong></div></center></div>');
+                iframe.close();
+            });
+        </script>
+
+    {% endif %}
+
+    <script>
+
+{#        $('#vid_button').click(function(){#}
+{#            skigt_embed_stop();#}
+{#        });#}
+
+        function skigt_embed_stop(){
+            jQuery("#skigit_ebd_vid")[0].contentWindow.postMessage('{"event":"command","func":"' + 'stopVideo' + '","args":""}', '*');
+        }
+
+    </script>
+</section>
+</body>
+</html>

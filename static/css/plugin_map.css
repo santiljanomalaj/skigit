@@ -1,0 +1,277 @@
+  .skigit-num-1 {
+    top: 455px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+  }
+  .skigit-num-2 {
+    bottom: 455px;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+  }
+  .skigit-num-3 {    right: 460px;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+  }
+  .skigit-num-4 {    left: 464px;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+  }
+  .skigit-num-5 {
+  right: 373px;
+    bottom: 331px;
+  }
+  .skigit-num-6 {
+      left: 374px;
+    bottom: 331px;
+  }
+
+  .skigit-num-7 {
+    right: 374px;
+    top: 331px;
+  }
+  .skigit-num-8 {
+    left: 374px;
+    top: 330px;
+  }
+
+  .plugin-skigit .skigit-thumbnail {
+        height: 85px;
+    width: 86px;
+    padding: 4px;
+    object-fit: cover;
+    border-radius: 100%;
+  }
+
+  .second-level-plugin .skigit_creator_logo {
+    bottom: 7px;
+    right: 0px;
+  }
+  .second-level-plugin .skigit_creator_logo img {
+    height: 30px;
+    width: 30px;
+  }
+  .second-level-plugin {
+    position: absolute;
+    display:flex;
+    justify-content:center;
+    width: 352px;
+    border-radius: 10px;
+    background-color: #f3f3f3;
+    flex-wrap: wrap;
+
+  }
+  .second-level-plugin .btn-more {    width: 100px;
+    margin: 0 auto;
+    display: block;
+    position: absolute;
+    bottom: -60px;
+    left: 0;
+    right: 0;
+  }
+
+  .second-level-plugin .btn-more a {
+    padding-top:5px;
+  }
+  .skigit-num-1 .second-level-plugin {
+    top: 235px;
+    right: -87px;
+  }
+  .skigit-num-2 .second-level-plugin {
+    bottom: 280px;
+    right: -95px;
+  }
+  .skigit-num-6 .second-level-plugin {
+    bottom: 280px;
+  }
+  .skigit-num-7 .second-level-plugin {
+      top: 235px;
+    right: 10px;
+  }
+  .skigit-num-3 .second-level-plugin, .skigit-num-4 .second-level-plugin {
+    width: 175px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    height: 400px;
+  }
+  .skigit-num-3 .second-level-plugin {
+    right: 210px;
+  }
+  .skigit-num-4 .second-level-plugin {
+    left: 210px;
+  }
+
+  .skigit-num-3 .second-level-plugin .btn-more, .skigit-num-4 .second-level-plugin .btn-more  {
+    top: unset;
+  }
+
+  .skigit-num-5 .second-level-plugin {
+    bottom: 280px;
+    right: 0;
+  }
+  .skigit-num-8 .second-level-plugin {
+    top: 240px;
+  }
+
+  .connection-line {
+    height: 18px;
+    background-color: #2e6ca3;
+  }
+  .connection-line-1{
+        position: absolute;
+    transform: rotate(
+90deg
+ );
+    width: 130px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    top: 382px;
+  }
+  .connection-line-2{transform: rotate(
+90deg
+);
+    bottom: 400px;
+    width: 130px;
+    z-index: 0;
+    position: relative;
+    margin: 0 auto;
+  }
+
+  .connection-line-3{    position: absolute;
+    width: 130px;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    right: 332px;
+  }
+  .connection-line-4 {
+    position: absolute;width: 130px;
+    left: 335px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+  }
+  .connection-line-5 {    position: absolute;
+    width: 130px;
+    right: 288px;
+    bottom: 314px;
+    transform: rotate(
+41deg
+);
+  }
+  .connection-line-6 {
+    position: absolute;width: 130px;
+    left: 284px;
+    bottom: 318px;
+    transform: rotate(
+137deg
+ );
+  }
+  .connection-line-7 {    position: absolute;
+    width: 130px;
+    right: 283px;
+    top: 319px;
+    transform: rotate(
+138deg
+ );
+  }
+  .connection-line-8 {
+    position: absolute;width: 130px;
+    left: 281px;
+    top: 320px;
+    transform: rotate(
+41deg
+ );
+  }
+
+
+  .circle_skigitvid {
+  width: 210px;
+    position:absolute;
+    background-color: #2e6ca3;
+    background-position: center;
+    height: 204px;
+    border: 18px solid #2e6ca3;
+    border-radius: 100%;
+    padding: 0;    background-size: cover;
+  }
+  .circle_skigitvid .box_sonvid {
+    position:relative;
+    top:-64px;
+    z-index: 111;
+  }
+  .skigit-num-1 .box_sonvid {
+  top: 200px;
+  }
+
+  .circle_skigitvid.main-skigit {
+  transform: scale(.9);
+    width: 320px;
+    height: 308px;
+    margin: auto;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    bottom: 0;
+    height: 360px;
+    width:368px;
+    background-size:cover;
+    right: 0;
+  }
+
+   .circle_skigitvid .main-skigit-inner { height:100%}
+  .circle_skigitvid .main-skigit-inner .skigit_creator_logo {
+    position: absolute;
+    right: 58px;
+    bottom: 38px;
+    }
+  .circle_skigitvid .skigit_creator_logo {
+    position: absolute;
+    right: 20px;
+    bottom: 12px;
+    }
+
+  .circle_skigitvid.main-skigit .skigit_creator_logo img {
+   border-radius:100%;
+    }
+
+  .circle_skigitvid:not(.main-skigit) .skigit-icon img{
+        height: 65px;
+  }
+  .circle_skigitvid .main-skigit-inner .skigit-icon img{
+        height: 150px;
+  }
+  .circle_skigitvid .skigit-icon{
+        display: none;    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    left: 0;
+    right: 0;
+  }
+  .circle_skigitvid:not(.main-skigit) .skigit-icon{
+    height: 65px;
+  }
+  .circle_skigitvid .main-skigit-inner .skigit-icon{
+    height: 150px;
+  }
+   .more-skigits span {
+    font-size: 77px;
+    padding-right: 30px;
+    color: #2e6ca3;
+   }
+   .no-plugin {    position: absolute;
+    top: -100px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 185px;
+    font-size: 40px;}
+

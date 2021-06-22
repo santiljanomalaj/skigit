@@ -1,0 +1,85 @@
+{% load staticfiles %}
+{% load thumbnail %}
+<div class="modal fade" id="pluginMapModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-lg" role="document" style="width:100%;transform: scale(.75);">
+    <div class="modal-content" style="border-radius:12px!important;background-color: #e2edf6;border: #ce4d11 52px solid;">
+      <div class="modal-body" style="display:table;width:100%;height:1500px;transform: scale(.95);">
+          <div class="row">
+              <div class="col-sm-6" id="plugin-map-header"><h3 style="font-size:42px;">Plugin Connections for this Skigit!</h3></div>
+              <div class="col-sm-6 text-right more-skigits">
+
+              </div>
+          </div>
+
+          <div class="loader"></div>
+          {% thumbnail skigit.skigit_id.thumbnails.all.0.get_absolute_url "x200" as im %}
+         <div class="circle_skigitvid main-skigit skigit_content_wrap " id="home_page"
+               data-skigt="{{ skigit.id }}" style="background-image:url({{ im.url }})">
+            <div class="main-skigit-inner">
+
+              <div class="mar_zero skigit_contents">
+                <div class="pull-right skigit_creator_logo">
+                  {% if skigit.business_logo.id %}
+                    {% if skigit.made_by and skigit.business_logo.is_deleted == False %}
+                      {% if request.user.is_authenticated %}
+                        <a onclick="logoclick({{ skigit.business_logo.id }},'{% url 'sperk_profile' skigit.made_by.id skigit.business_logo.id %}')"
+                         id="profile_hover{{ skigit.id }}">
+                      {% else %}
+                        <a onclick="openMessage()">
+                      {% endif %}
+                        {% if skigit.business_logo %}
+                          {% thumbnail skigit.business_logo.logo "x200" as im %}
+                            <img class="img-responsive image-business lazy"
+                                 src="{{ im.url }}" data-vid="{{ skigit.id }}"
+                                 alt="{{ skigit.skigit_id.user.username }}"/>
+                          {% endthumbnail %}
+                        {% endif %}
+                      </a>
+                    {% else %}
+                      {% for def in default_logo %}
+                        {% if def.made_by == skigit.made_by.id %}
+                          {% if skigit.business_logo %}
+                            {% if request.user.is_authenticated %}
+                              <a href="{% url 'sperk_profile' def.made_by def.business_logo.id %}"
+                               data-vid="{{ skigit.id }}"
+                               class="image-business">
+                            {% else %}
+                              <a onclick="openMessage()">
+                            {% endif %}
+                              {% thumbnail def.business_logo.logo "x200" as im %}
+                                <img class="img-responsive"
+                                     src="{{ im.url }}" class="lazy"/>
+                              {% endthumbnail %}
+                            </a>
+                          {% endif %}
+                        {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                  {% endif %}
+
+                </div>
+              </div>
+
+                  <div class="text-center skigit-icon">
+                    <a href="{% url 'skigit_data' skigit.pk %}"
+                       onclick="viewCount({{ skigit.pk }})"
+                       title="Play {{ skigit.title }} Skigit" class="skigit_playback hidden-xs hidden-sm"
+                       data-skigit="#{{skigit.pk}}">
+                      <img src="{% static 'images/Skigit_Logo_Glow.png' %}"
+                           title="Play Skigit" class="lazy"/>
+                    </a>
+                  </div>
+
+
+
+
+            </div>
+            <div class="plugin-skigits">
+            </div>
+          </div>
+         {% endthumbnail %}
+
+      </div>
+    </div>
+  </div>
+</div>

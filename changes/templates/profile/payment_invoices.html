@@ -1,0 +1,373 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load category_list %}
+
+{% block window_page_meta_block %}
+    <title>{{ user.first_name }} {{ user.last_name }} | Invoice</title>
+
+{% endblock window_page_meta_block %}
+
+{% block head_inline_css_block %}
+{% endblock %}
+
+{% block main_video_block %}
+{% endblock %}
+
+{% block main_div_block %}
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+
+        .invoice_header {
+            color: #000 !important;
+	    font-family: "segoe_print" !important;
+	    font-weight: 900;
+	    font-size: 18px !important;
+	    text-align: center;
+	    margin-top: 25px !important;
+        }
+
+        .count, .due, .inv_table_head {
+            text-align: end;
+        }
+
+        .panel {
+            margin-top: 20px;
+            font-family: "Segoe_Print" !important;
+        }
+
+        .panel .panel-title {
+            font-family: "Segoe_Print" !important;
+        }
+
+        .panel .year_head {
+            text-align: center;
+            font-family: "Segoe_Print" !important;
+        }
+
+        .panel-heading {
+            padding: 5px 10px;
+        }
+
+        .panel .table {
+            font-family: "Segoe_Print" !important;
+            border: none;
+        }
+
+        .panel .table tr td {
+            border: none !important;
+        }
+
+        .invoice_row_div {
+            font-size: larger;
+        }
+
+        .col_exp_view {
+            margin-top: 15px;
+        }
+        .for-button select {
+            width: 15%;
+         }
+    @media only screen and (max-width: 500px) {
+    .for-button select {
+            width: 35%;
+         }
+    }
+    </style>
+
+    <script>
+
+        invoiceDetail = function (num) {
+
+            if ($('#toggle_btn' + num).text() != 'Expand detail') {
+                $('#toggle_btn' + num).html('Expand detail')
+            } else {
+                $('#toggle_btn' + num).html('Collapse detail')
+            }
+            $('#invoice_details' + num).toggle()
+        }
+
+        payment = function (month, year, amount, inv) {
+            $('#pyament_btn' + month).attr('disabled', true);
+            $('#pyament_btn' + month).attr('value', 'Wait')
+            jQuery.ajax({
+                url: "/invoice/pay-bill/",
+                type: "POST",
+                data: {
+                    'month': month, 'type': '{{ card_type }}', 'inv_id': inv, 'year': year, 'amount': amount,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    if (data.is_success) {
+                        $('#transaction_text').html('Transaction id: ' + data.transaction_id)
+                        $('#confirm_text').html(data.message)
+                        $('#confirmBox').addClass('open')
+                        $('.overlay').addClass('open')
+                        $('.due_button' + month).empty()
+                        $('.due_button' + month).append('<lable style=" color: green; float:right;"> <i class="glyphicon glyphicon-ok-circle"></i></lable>')
+                        $('.transaction' + month).empty()
+                        $('.transaction' + month).html('<lable>Transaction Id: ' + data.transaction_id + '</label>')
+                        $('.transaction_date' + month).html('<lable>' + data.transaction_date + '</label>')
+                        $('.amount_text' + month).empty()
+                        $('.amount_text' + month).html('Amount Paid')
+                        $('#pyament_btn' + month).hide()
+                        $('#pay-status' + month).empty()
+                        $('#pay-status' + month).append('<label style="padding-left: 15px;">Status: <span style=" color: green;">Paid</span></label>')
+                    }
+                    else {
+                        $('#pyament_btn' + month).attr('disabled', false);
+                        $('#pyament_btn' + month).attr('value', 'Paynow')
+                        $('#transaction_text').html('Code: ' + data.code)
+                        $('#confirm_text').html(data.message)
+                        $('#confirmBox').addClass('open')
+                        $('.overlay').addClass('open')
+                    }
+                }
+            })
+        }
+
+        ok_click = function () {
+            $('#confirmBox').removeClass('open')
+            $('.overlay').removeClass('open')
+            $('#transaction_text').empty()
+            $('#confirm_text').empty()
+        }
+
+    </script>
+    <script>
+
+        $(document).ready(function (e) {
+
+            e.preventDefault;
+            $('#id_invoice_year').val('{{ year }}');
+            $('#id_invoice_year').change(function () {
+                window.location.href = "{% url 'user_payment_setup' %}?year=" + $("#id_invoice_year option:selected").val();
+            });
+        })
+
+    </script>
+
+    <div class="overlay"></div>
+    <div id="confirmBox" style="border: none !important;">
+        <div style="text-align: center !important; font-family: segoe_print !important;">
+            <p><img src="{% static 'skigit/images/logo.png' %}" width="65px;" height="50px;"/></p>
+
+            <p id="transaction_text"></p>
+
+            <p id="confirm_text"></p>
+        </div>
+        <div class="del-bott">
+            <button type="button" id="ok_delete" onclick="ok_click()">OK</button>
+        </div>
+    </div>
+    <div class="row profile mar_zero for-button white-back">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <div class="profile-sidebar">
+                <div class="profile-usermenu padd-left ">
+                    <ul class="nav">
+                        <li><a href="{% url 'user_profile' %}">Member Profile</a></li>
+                        <li class="active"><a href="{% url 'user_payment_setup' %}">Invoice </a></li>
+                        <li><a href="{% url 'password_change' %}">Password and Email </a></li>
+                        <li><a href="{% url 'user_profile_notifications' %}">Notification Setting </a></li>
+                        <li><a href="{% url 'user_profile_delete' %}">Delete Account </a></li>
+                        <li><a href="{% url 'my_statistics' %}">My Statistic </a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+
+            <div class="panel">
+		<div class="invoice_header">
+                    Invoice
+                </div>
+                <div class="panel-heading">
+                <h3 class="year_head">
+                    <label style="margin-left: 10px;">Year:</label>
+                    <select id="id_invoice_year">
+                        {% for years in year_list %}
+                            <option value="{{ years }}">{{ years }}</option>
+                        {% endfor %}
+                    </select>
+                    </h3>
+{#                    <h3 class="year_head">Year {{ year }}</h3>#}
+                </div>
+            </div>
+
+            {% for invoice in business_invoices_list %}
+
+                <div class="panel panel-default">
+                <div class="panel-heading" style="border-top: #037BB8 5px solid;display: -webkit-box;">
+                    <div style="width: 50%;">
+                        <h3 class="panel-title invoice-month">{{ invoice.month }}</h3>
+                    </div>
+                    <div class="col-sm-2 due_button due_button{{ invoice.month_num }}" style="width:50%;font-size:26px;">
+                        {% for bill in billinglist %}
+                            {% if not bill.payment_recived and bill.month_num  == invoice.month_num %}
+                                {% if not invoice.current_month ==  invoice.month_num %}
+                                    <lable style=" color:red;float: right;"><i class="glyphicon glyphicon-remove-circle"></i></lable>
+                                {% endif %}
+                            {% endif %}
+                            {% if bill.payment_recived and bill.month_num  == invoice.month_num %}
+                                <lable style=" color:green;float: right;"><i class="glyphicon glyphicon-ok-circle"></i></lable>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="panel-body">
+
+                    <div class="row invoice_row_div">
+                        <div style='width:22%;' class="col-sm-3 due_label invoice-label amount_text{{ invoice.month_num }}">
+                            {% for bill in billinglist %}
+                                {% if not bill.payment_recived and bill.month_num  == invoice.month_num %}
+                                    Due Amount
+                                {% endif %}
+                                {% if bill.payment_recived and bill.month_num  == invoice.month_num %}
+                                    Amount Paid
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div style="width: 14%;" class="col-sm-2 due_amount ">${{ invoice.total_amount }}</div>
+                        {% for bill in billinglist %}
+                            {% if not bill.payment_recived and bill.month_num  == invoice.month_num %}
+                                <div style="width: 42%;" class="col-sm-5 due_button"><label><img src="{{ card_img }}"> {{ card_detail }}
+                            {% endif %}
+                            {% if bill.payment_recived and bill.month_num  == invoice.month_num %}
+                                <div style="width: 42%;" class="col-sm-5 due_button"><label><img src="{{ bill.card_img }}">
+                                {{ bill.card_detail }}
+                            {% endif %}
+
+                        {% endfor %}
+                        </label></div>
+                        <div id="pay-status{{ invoice.month_num }}" class="col-sm-2">
+                            {% for bill in billinglist %}
+                                {% if not bill.payment_recived and bill.month_num  == invoice.month_num %}
+                                    {% if not invoice.current_month ==  invoice.month_num %}
+                                        <label style="padding-left: 15px;">Status: <span style=" color: red;">Unpaid</span></label>
+                                    {% endif %}
+                                {% endif %}
+                                {% if bill.payment_recived and bill.month_num  == invoice.month_num %}
+                                    <label style="padding-left: 15px;">Status: <span style=" color: green;">Paid</span></label>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        </div>
+                        <hr>
+                        <div class="row col_exp_view">
+                            <div class="col-sm-6 due_label" style="width: 36%;">
+                                <label class="invoice-label expand-detail" id='toggle_btn{{ invoice.month_num }}'
+                                       onclick="invoiceDetail({{ invoice.month_num }})">Expand detail</label>
+                            </div>
+                            <div style="width: 42%;" class="col-sm-4 transaction{{ invoice.month_num }}">
+                                {% for bill in billinglist %}
+                                    {% if bill.payment_recived and bill.month_num  == invoice.month_num %}
+                                        <lable>Transaction Id: {{ bill.transaction_id }}</lable>
+
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <div class="col-sm-2 transaction_date{{ invoice.month_num }}">
+                                {% for bill in billinglist %}
+                                    {% if bill.payment_recived and bill.month_num  == invoice.month_num %}
+                                        <lable>{{ bill.transaction_date }}</lable>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <div style="float: right;" class="col-sm-2{{ invoice.month_num }}">
+                                {% for bill in billinglist %}
+                                    {% if not bill.payment_recived and bill.month_num  == invoice.month_num %}
+                                        {% if not invoice.current_month ==  invoice.month_num %}
+                                        <input type="button"
+                                               onclick="payment({{ invoice.month_num }},{{ year }},{{ invoice.total_amount }},{{ inv.id }})"
+                                               id="pyament_btn{{ invoice.month_num }}" value="Pay now"/>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <table class="table" id="invoice_details{{ invoice.month_num }}" hidden>
+                        <tr>
+                            <th>Business Value Service</th>
+                            <th class="inv_table_head">Count</th>
+                            <th class="inv_table_head">Due Amount ($)</th>
+                        </tr>
+                        <tr>
+                            <td>Business Skigit Logo Monthly Maintenance</td>
+                            <td class="count">0</td>
+                            <td class="due">0</td>
+                        </tr>
+                        <tr>
+                            <td>Business Skigit Monthly Maintenance</td>
+                            <td class="count">0</td>
+                            <td class="due">0</td>
+                        </tr>
+                        <tr>
+                            <td>Logo Click Thru (PPC)</td>
+                            <td class="count">{% if not invoice.logo_detail %}0{% else %}
+                                {{ invoice.logo_detail.total_logo_count }}{% endif %}</td>
+                            <td class="due">{% if not invoice.logo_detail %}0{% else %}
+                                {{ invoice.logo_detail.user_total_due }}{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>Website Links Click Through</td>
+                            <td class="count">{% if not invoice.link_detail %}0{% else %}
+                                {{ invoice.link_detail.link_total_count }}{% endif %}</td>
+                            <td class="due">{% if not invoice.link_detail %}0{% else %}
+                                {{ invoice.link_detail.link_total_due }}{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>Skigit Plugin</td>
+                            <td class="count">{% if not invoice.plug_detail %}0{% else %}
+                                {{ invoice.plug_detail.plugin_total_count }}{% endif %}</td>
+                            <td class="due">{% if not invoice.plug_detail %}0{% else %}
+                                {{ invoice.plug_detail.plugin_total_amount }}{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>Skigit Post</td>
+                            <td class="count">{% if not invoice.post_detail %}0{% else %}
+                                {{ invoice.post_detail.post_total_count }}{% endif %}</td>
+                            <td class="due">{% if not invoice.post_detail %}0{% else %}
+                                {{ invoice.post_detail.post_total_amount }}{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>Skigit Share</td>
+                            <td class="count">{% if not invoice.share_detail %}0{% else %}
+                                {{ invoice.share_detail.total_share_count }}{% endif %}</td>
+                            <td class="due">{% if not invoice.share_detail %}0{% else %}
+                                {{ invoice.share_detail.share_total_amount }}{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>Skigit Embed (My Site)</td>
+                            <td class="count">{% if not invoice.embed_detail %}0{% else %}
+                                {{ invoice.embed_detail.embed_total_count }}{% endif %}</td>
+                            <td class="due">{% if not invoice.embed_detail %}0{% else %}
+                                {{ invoice.embed_detail.embed_total_amount }}{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>Skigit Embed (Skigit)</td>
+                            <td class="count">0</td>
+                            <td class="due">0</td>
+                        </tr>
+                        <tr></tr>
+                        <tr>
+                            <td></td>
+                            <td class="count"></td>
+                            <td class="due">Total Due ($)&nbsp;&nbsp;{{ invoice.total_amount }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block window_page_title_block %}
+    {%if category_current.cat_name %}
+        {{category_current.cat_name}}
+    {% elif category_current.sub_cat_name %}
+        {{category_current.sub_cat_name}}
+    {% elif skigit_plug %}
+        Plugged Skigits into {{skigit_plug}}
+    {% elif skigit_like %}
+        Liked Skigits by {{skigit_like}}
+    {% else %}
+        Skigits by {{category_current}}
+    {% endif %}
+{% endblock %}
+{% block main_div_block_middel_content %}
+{% endblock%}
+
+{% block main_video_block %}
+
+{% endblock %}
+
+{% block main_div_block_video_list_content %}
+
+    <style>
+
+        .endless_more { font-size: x-large;}
+        .endless_more { display: table; margin: 0 auto; clear: both; }
+        .endless_loading { display: table; width: 100%; }
+        .close-skigit { z-index: 1 !important; }
+        #ordering_link {
+            padding: 0px 5px !important;
+            background: url({% static 'skigit/images/verfy_btn.png' %}) no-repeat !important;
+            width: 175px !important;
+            height: 24px !important;
+            line-height: 24px !important;
+            font-size: 12px !important;
+            margin-top: 4px !important;
+        }
+        #ordering_link:hover {    background: url(http://www.skigit.com/static/skigit/images/verfy_btn_hover.png) no-repeat !important;}
+
+    </style>
+
+    <div class="section-box">
+
+        <div class="section-content grid-small">
+
+            <div class="endless_page_template" id="skigit_content_list">
+
+                <div class="row">
+
+                    <div class="col-lg-12" >
+
+                        <form method='POST' class="form_search" action='{% url 'skigit_search' %}'>
+
+                            {% csrf_token %}
+                            <div class="col-lg-3 col-md-3 col-sm-3">
+
+                            </div>
+
+                            <div class="col-lg-7 col-md-7 col-sm-7">
+                                <div class="input-group">
+                                    <input type="text" autofocus="on" spellcheck="false" autocomplete="off" id="searchBox" name='searchBox' class="form-control f_type" {% if search_text %}value="{{ search_text }}"{% endif %} placeholder="Search Skigit by Skigit Title / Username / Company Name" >
+                                    <span class="input-group-addon" id="basic-addon1"><input type="submit" value="Search"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                <a id='ordering_link' class="btn"
+                                   href="{% url 'skigit_search_ordering' order_value %}">
+                                    {% if togal_val == '1' %}
+                                        Latest Skigit first
+                                    {% elif togal_val == '2' %}
+                                        Oldest Skigit first
+                                    {% endif %}
+                                </a>
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+                <div class="nag cf" id="likedcontent">
+                    {% include 'pages/search_body.html' %}
+                </div>
+
+            </div>
+
+        </div><!-- end .section-content -->
+
+        <script type="text/javascript" src="{% static 'skigit/js/pageUp.js' %}"></script>
+
+    </div>
+
+    <!-- end .section-box -->
+    <a id="latestinifiniteLoader" style="float:left;display:none;margin:5px 425px">
+        <img src="{% static 'skigit/detube/images/inf_loading.gif' %}" />
+    </a>
+
+    <script>
+        var $a = $('#ordering_link').attr('href');
+        var url = $a.split("-");
+        if($.trim($('#searchBox').val()) !='' ){
+            $('#ordering_link').attr('href', url[0] + '&'+$('#searchBox').val());
+        }
+        else{
+            $('#ordering_link').attr('href', url[0]);
+        }
+
+        $(document).ready(function($){
+            like_unlike_my_skigit = function(like_class, like_id) {
+                var skigit_id = like_id
+                var  post_clas= $("#"+like_class).attr('class');
+                var  post_id= like_class
+                var  like_count = $.trim($('#like_count'+like_id).text())
+                {% if video_type == "liked" %}
+                    $("[data-skigt="+skigit_id+"]").css("display", "none");
+                    $(".overlay").removeClass('open');
+                {% endif %}
+                if(post_clas == 'unlike') {
+                    $.ajax({
+                        type: "POST",
+                        url: "/skigit_i_like/",
+                        data: {'skigit_id': skigit_id, 'csrfmiddlewaretoken': '{{csrf_token}}' },
+                        success: function (response) {
+                            if (response.is_success)
+                            {
+                                if (response.like == 1 || response.like == '1')
+                                {
+                                    $("#" + post_id).attr("title", "Unlike");
+                                    $("#" + post_id).removeClass("unlike");
+                                    $("#" + post_id).addClass("like");
+                                    $("#" + post_id + "> img").attr("src", "/static/skigit/images/heart_liked(22x22).png");
+                                    $('#like_count'+like_id).text(parseInt(like_count)+1)
+                                }
+                            }
+                        },
+                        error: function (rs, e) {
+                            $("#popup_msg").text("Error into like the Skigit...! Please try again");
+                            $("#popScreen").show();
+                        }
+                    });
+                }
+                else if(post_clas == 'like'){
+                    $.ajax({
+                        type: "POST",
+                        url: "/skigit_i_unlike/",
+                        data: {'skigit_id': skigit_id, 'csrfmiddlewaretoken': '{{csrf_token}}' },
+                        success: function (response) {
+                            if (response.is_success)
+                            {
+                                if (response.unlike == 1 || response.unlike == '1')
+                                {
+                                    $("#" + post_id).attr("title", "Like");
+                                    $("#" + post_id).removeClass("like");
+                                    $("#" + post_id).addClass("unlike");
+                                    $("#" + post_id + "> img").attr("src", "/static/skigit/images/heart(22x22).png");
+                                    $('#like_count'+like_id).text(parseInt(like_count)-1)
+                                }
+                            }
+                        },
+                        error: function (rs, e) {
+                            $("#popup_msg").text("Error into like the Skigit...! Please try again");
+                            $("#popScreen").show();
+                        }
+                    });
+                }
+            }
+
+            $('#search_ordering').change(function(){
+                $.ajax({
+                    type: "POST",
+                    url: "/skigit_i_unlike/",
+                    data: {'skigit_id': skigit_id, 'csrfmiddlewaretoken': '{{csrf_token}}' },
+                    success: function (response) {
+                        if (response.is_success)
+                        {
+                            if (response.unlike == 1 || response.unlike == '1')
+                            {
+                                $("#" + post_id).attr("title", "Like");
+                                $("#" + post_id).removeClass("like");
+                                $("#" + post_id).addClass("unlike");
+                                $("#" + post_id + "> img").attr("src", "/static/skigit/images/heart(22x22).png");
+                            }
+                        }
+                    },
+                    error: function (rs, e) {
+                        $("#popup_msg").text("Error into like the Skigit...! Please try again");
+                        $("#popScreen").show();
+                    }
+                });
+            });
+
+        $('#searchBox').on('change',function(){
+            var $a = $('#ordering_link').attr('href');
+            var url = $a.split("-");
+            $('#ordering_link').attr('href', url[0] + '&'+$('#searchBox').val());
+        });
+
+        })
+    </script>
+
+{% endblock %}

@@ -1,0 +1,313 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+from django.contrib import messages
+
+{% block main_video_block %}
+{% endblock %}
+
+{% block window_page_title_block %}
+  Profile - Skigit
+{% endblock %}
+
+{% block window_page_meta_block %}
+  <meta property="og:site_name" content="Skigit"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="{{ request.build_absolute_uri }}"/>
+  <meta property="og:title"
+        content="{{ request_user.username }} Profile - Skigit"/>
+{% endblock %}
+
+{% block head_inline_css_block %}
+{% endblock %}
+
+{% block main_nav_under_css_block %}
+  <style type="text/css">
+    form li {
+      list-style: none !important;
+    }
+
+    .errorlist {
+      color: red;
+    }
+
+    .errorlist li {
+      text-align: center;
+    }
+  </style>
+{% endblock %}
+
+{% block main_div_block %}
+  <style>
+
+    .potfolio_box li img {
+      /* display: table;
+       margin: 0 auto !important;*/
+      display: inline-block;
+      height: 100%;
+      width: auto;
+    }
+
+    .potfolio_box li {
+      /* display: table;
+   float: left;
+   margin: 0px 10px;
+   list-style: none;*/
+      display: inline-block;
+      float: left;
+      margin: 0px 10px;
+      margin-bottom: 30px;
+      width: 180px;
+      height: 120px;
+      text-align: center;
+    }
+
+    .business_box {
+      display: table;
+      width: 100%;
+    }
+
+    .business_box ul {
+      display: table;
+      margin: 0 auto;
+    }
+
+    .business_box li img {
+      display: inline-block;
+      height: 100%;
+      width: auto;
+    }
+
+    .business_box li {
+      display: inline-block;
+      float: left;
+      margin: 0px 10px;
+      margin-bottom: 30px;
+      width: 180px;
+      height: 120px;
+      text-align: center;
+    }
+
+    .primary-logo {
+      text-align: center;
+      margin-top: -60px;
+      margin-bottom: 20px;
+    }
+
+    .p-logo-span {
+      height: 120px;
+      width: 180px;
+      display: inline-block;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    @media screen and (max-width: 767px) {
+      .business_box ul, .potfolio_box ul {
+        width: auto;
+      }
+    }
+
+  </style>
+
+  <div id="main">
+    <div id="content">
+      <div class="padder">
+        <div role="complementary" id="item-header">
+          <div style="display:none;" class="bp-template-notice error"
+               id="ErrorProfile"></div>
+        </div>
+        <div class="clearfix"></div>
+        <div id="item-body">
+          <img style="height:45px;width:60px;"
+               src="{% static 'skigit/images/logo.png' %}"/>
+          <div role="main" class="profile_list gen">
+            <div class="bus_photos business_box">
+              <ul>
+                {% for logo in all_logo_url %}
+                  {% if forloop.first %}
+                    <div class="primary-logo">
+                                        <span class="p-logo-span">
+                                            <img id="{{ logo.img_id }}"
+                                                 onclick="imgenlarge({{ logo.l_img }})"
+                                                 class="img-responsive"
+                                                 src="{{ logo.l_img }}"
+                                                 style="height:100%;width:auto;display:inline-block;">
+                                        </span>
+                    </div>
+                  {% else %}
+                    <li>
+                      <img id="{{ logo.img_id }}" class="img-responsive"
+                           src="{{ logo.l_img }}">
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
+            <div class="bus_photos potfolio_box">
+              <ul>
+                {% for extra_img in  extra_profile_img_url %}
+                  <li>
+                    <a href="{{ extra_img }}" data-lightbox="example-set">
+                      <img src="{{ extra_img }}" class="img-responsive">
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+            <div class="gen-user-prof">
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="col-sm-6" style="margin-bottom: 10px;">
+                    <div class="main-wrap">
+                      <div class="bl-text"><b>Company Name</b></div>
+                      <div class="blck-text">
+                        {{ request_user_profile.user.username }}
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+
+              <div class="col-md-12"
+                   style="margin-top: 15px;margin-bottom: 10px;">
+                <div class="main-wrap">
+                  <div class=" bl-text"><b>About Us</b></div>
+                  <div class="blck-text">
+                    <p style="text-align: justify;">
+                      {% if request_user_profile.about_me %}
+                        {{ request_user_profile.about_me }}
+                      {% else %}----{% endif %}
+                    </p>
+                  </div>
+                  <div class="bl-text"
+                       style="margin-top: 15px;margin-bottom: 10px;"><b>Skigit
+                    Incentive</b></div>
+                  <div class="blck-text">
+                    <p style="text-align: justify;">
+                      {% if request_user_profile.skigit_incentive %}
+                        {{ request_user_profile.skigit_incentive }}
+                      {% else %}----{% endif %}
+                    </p>
+                  </div>
+                  <div class="bl-text"
+                       style="margin-top: 15px;margin-bottom: 10px;"><b>Incentive
+                    Value &#36;(USD) :</b>
+                                                <span class="blck-text">
+                                                    &#36;
+                                                  {% if request_user_profile.incetive_val %}
+                                                    {{ request_user_profile.incetive_val }}
+                                                  {% else %}
+                                                    0
+                                                  {% endif %}
+                                                </span>
+                  </div>
+                  <div class="bl-text"
+                       style="margin-top: 15px;margin-bottom: 10px;"><b>Corporate
+                    location</b></div>
+                  <div class="blck-text">
+                    <p>{% if request_user_profile.city %}
+                      {{ request_user_profile.city }},{% endif %}
+                      {% if request_user_profile.state %}
+                        {{ request_user_profile.state }},{% endif %}
+                      {% if request_user_profile.country %}
+                        {{ request_user_profile.country }}{% endif %}</p>
+                    {% if request_user_profile.zip_code %}<p>Area
+                      pin:{{ request_user_profile.zip_code }}</p>{% endif %}
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+
+
+                  <div class="col-sm-6" style="margin-bottom: 10px;">
+                    <div class="main-wrap">
+                      <div class="bl-text"><b>Contact Information</b></div>
+                      <div class="blck-text">
+                        <p>Name: {% if request_user_profile.contact_name %}
+                          {{ request_user_profile.contact_name }}{% else %}
+                          ----{% endif %}</p>
+                        <p>Email: {% if request_user_profile.contact_email %}
+                          {{ request_user_profile.contact_email }}{% else %}
+                          ----{% endif %}</p>
+                        <p>Phone: {% if request_user_profile.contact_phone %}
+                          {{ request_user_profile.contact_phone }}{% else %}
+                          ----{% endif %}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6" style="margin-bottom: 10px;">
+                    <div class="main-wrap">
+                      <div class=" bl-text" style="margin-bottom:10px;">
+                        <b>Awesome Company Links</b>
+                      </div>
+
+                      <div>
+                        <p style="text-align: justify;">
+                          {% if company_url %}
+                            {% for links in company_url %}
+                              {% if links.disc1 %}
+                                <div>{{ links.disc1|safe|capfirst }}<span> <a
+                                    href="{{ links.url1 }}"
+                                    target="_blank">{{ links.url1|safe }}</a></span>
+                                </div>
+                              {% endif %}
+                              {% if links.disc2 %}
+                                <div>{{ links.disc2|safe|capfirst }}<span> <a
+                                    href="{{ links.url2 }}"
+                                    target="_blank">{{ links.url2|safe }}</a></span>
+                                </div>
+                              {% endif %}
+                              {% if links.disc3 %}
+                                <div>{{ links.disc3|safe|capfirst }}<span> <a
+                                    href="{{ links.url3 }}"
+                                    target="_blank">{{ links.url3|safe }}</a></span>
+                                </div>
+                              {% endif %}
+                              {% if links.disc4 %}
+                                <div>{{ links.disc4|safe|capfirst }}<span> <a
+                                    href="{{ links.url4 }}"
+                                    target="_blank">{{ links.url4|safe }}</a></span>
+                                </div>
+                              {% endif %}
+                              {% if links.disc5 %}
+                                <div>{{ links.disc5|safe|capfirst }}<span> <a
+                                    href="{{ links.url5 }}"
+                                    target="_blank">{{ links.url5|safe }}</a></span>
+                                </div>
+                              {% endif %}
+                            {% endfor %}
+                          {% else %}
+                            ----
+                          {% endif %}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div style="margin-left: 60px;margin-right: 63px; margin-top:13px;">
+      {% if video_detail and request.user %}
+
+        {% include 'pages/../../../templates/includes/embed_skigit.html' %}
+      {% endif %}
+    </div>
+  </div>
+
+  <script type="text/javascript"
+          src="{% static 'skigit/js/lightbox-plus-jquery.min.js' %}"></script>
+{% endblock %}
+{% block extra_js %}
+{% endblock %}

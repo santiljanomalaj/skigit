@@ -1,0 +1,40 @@
+
+<html prefix="og: http://ogp.me/ns#">
+
+    <head>
+    <meta charset=utf-8>
+    <meta  prefix="og: http://ogp.me/ns#" property="og:title" content="{{ skigit.title }}" />
+    <meta  prefix="og: http://ogp.me/ns#" property="og:description" content="{{ skigit.why_rocks }}" />
+    <meta  prefix="og: http://ogp.me/ns#" property="og:url" content="http://skigit.com/{{skigit.id}}/?id={{skigit.id}}" />
+    <meta  prefix="og: http://ogp.me/ns#" property="og:image" content="{{ video_share_url1 }}" />
+    <meta prefix="og: http://ogp.me/ns#" property="og:image:width" content="1200" />
+    <meta prefix="og: http://ogp.me/ns#" property="og:image:height" content="67" />
+    </head>
+
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script>
+
+    $(document).ready(function(){
+        function getUrlVars()
+        {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for(var i=0; i < hashes.length; i++)
+            {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+        var id=getUrlVars()['id'];
+        if(id){
+            window.location = 'http://skigit.com/?id='+id
+        }
+    });
+
+</script>
+<body>
+<span style="text-align: start; margin-top: 30px;">Loading Please wait...</span>
+</body>
+</html>

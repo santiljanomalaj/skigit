@@ -1,0 +1,114 @@
+{% load staticfiles %}
+<div class="col-md-2 col-lg-2 hidden-xs hidden-sm"></div>
+
+<div class="section-box">
+       <div class="section-content grid-small">
+            {% if category_current.cat_name|safe == "Just here for the Drama" %}
+              {% if video_detail %}
+                <div id="CategoryImage" class="categories-video-logo">
+                  <p>Just here for the Drama</p>
+                </div>
+              {% endif %}
+
+            {% elif category_current.cat_name|safe == "Let Me Show You Where to Put That" %}
+              {% if video_detail %}
+                <div class="categories-video-logo">
+                  <p>Let Me Show You Where to Put That</p>
+                </div>
+              {% endif %}
+			  
+            {% elif category_current.cat_name|safe == 'I\'ll do Me, You do You' %}
+              {% if video_detail %}
+                <div class="categories-video-logo">
+                 <p>I'll do Me, You do You</p>
+                </div>
+              {% endif %}
+             
+            {% elif category_current.cat_name|safe == "Where Words Fail, Music Speaks" %}
+              {% if video_detail %}
+                <div class="categories-video-logo">
+                 <p>Where Words Fail, Music Speaks</p>
+                </div>
+              {% endif %}
+              
+            {% elif category_current.cat_name|safe == "Normal is Overrated" %}
+              {% if video_detail %}
+                <div class="categories-video-logo">
+				<p>Normal is Overrated</p>
+                </div>
+              {% endif %}
+
+            {% endif %}
+
+          </div>
+        </div>
+		
+<div class="home-featured-full wall col-md-8 col-lg-8 col-sm-12 col-xs-12" style="position:relative;">
+  {% if video_detail %}
+
+    <div id="video" class="wrap cf">
+      <style>
+        .homeframe-dimensions {
+          width: 100%;
+        }
+      </style>
+
+      <div id="screen">
+        <div id="screen-inner">
+          <div align="center">
+            {% if vid_latest_uploaded.skigit_id.youtube_url %}
+            <video id='homeframe' class='video-js vjs-default-skin vjs-big-play-centered' controls preload='auto'
+                   height="250"
+                   poster="{{ vid_latest_uploaded.skigit_id.thumbnails.all.0.get_absolute_url }}"
+                   data-setup='{"autoplay": false,
+                   "techOrder": ["youtube"], "sources": [{ "type": "video/youtube", "src": "{{ vid_latest_uploaded.skigit_id.get_absolute_url }}"}],
+                   "youtube": {"rel": 0, "showinfo": 0, "enablejsapi": 1, "iv_load_policy": 3 }}'>
+              <p class='vjs-no-js'>
+                To view this video please enable JavaScript, and consider upgrading to a web browser that
+                <a href='https://videojs.com/html5-video-support/' target='_blank'>supports HTML5 video</a>
+              </p>
+            </video>
+
+            {% else %}
+            <video id='homeframe' class='homeframe video-js vjs-default-skin vjs-big-play-centered' controls preload='auto'
+                   height="250" width="{{ width }}"
+                   poster="{{ vid_latest_uploaded.skigit_id.thumbnails.all.0.get_absolute_url }}"
+                   data-setup='{"controls": true, "autoplay": false, "preload": "auto", "fluid": true, "aspectRatio":"16:9", }'>
+              <source src='{{ vid_latest_uploaded.skigit_id.get_absolute_url }}' type="video/mp4" />
+              <p class='vjs-no-js'>
+                To view this video please enable JavaScript, and consider upgrading to a web browser that
+                <a href='https://videojs.com/html5-video-support/' target='_blank'>supports HTML5 video</a>
+              </p>
+            </video>
+            {% endif %}
+            <!--<iframe id="homeframe_category" class="homeframe" title="YouTube video player" width="{{ width }}"-->
+                    <!--height="250px"-->
+                    <!--src="https://www.youtube.com/embed/{{ vid_latest_uploaded.skigit_id.video_id }}?rel=0&autoplay=0&modestbranding=0&showinfo=0&&enablejsapi=1"-->
+                    <!--frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen/>-->
+            <!--</iframe>-->
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {% else %}
+    <div id="headline" class="cf">
+      <span style="font-family: 'Segoe Print'; color: black; font-size: 19px">
+        <strong class="no-skigit-text">
+          {% if category_current.cat_name %}
+            Currently no Skigit uploaded in {{ category_current.cat_name }}
+          {% elif category_current.sub_cat_name %}
+            Currently no Skigit uploaded in {{ category_current.sub_cat_name }}
+          {% elif skigit_plug %}
+            Currently no Skigit Plugged into {{ skigit_plug }}
+          {% elif skigit_like %}
+            Currently no Skigit liked by {{ skigit_like }}
+          {% else %}
+            Currently no Skigit uploaded by {{ category_current }}
+          {% endif %}
+        </strong>
+      </span>
+    </div>
+  {% endif %}
+</div>
+<div class="col-md-2 col-lg-2 hidden-xs hidden-sm"></div>

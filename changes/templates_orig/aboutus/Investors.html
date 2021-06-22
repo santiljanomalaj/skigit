@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block main_video_block %}
+{% endblock %}
+
+{% block window_page_title_block %}
+Investors - Skigit
+{% endblock %}
+
+{% block window_page_meta_block %}
+<meta property="og:site_name" content="Skigit" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://demo.mrphpguru.com/skigitdev/step-1/" />
+<meta property="og:title" content="Investors - Skigit" />
+{% endblock %}
+
+{% block head_inline_css_block %}
+<style>
+    .section-title {
+        text-align: center !important;
+    }
+</style>
+{% endblock %}
+
+
+{% block main_div_block %}
+<div id="main"><div class="wrap cf">
+
+        <div role="main" id="content">
+
+            <div id="post-7808" class="post-7808 page type-page status-publish hentry">
+                <h1 class="page-title">Investors</h1>
+
+                <div class="page-content rich-content">
+                    <p>&nbsp;</p>
+                    <p style="text-align: center;"><span style="font-family: 'LAO UI',arial,helvetica,sans-serif; font-size: 16px; color: #333333;">Are you an interested Investor?<br>
+                        </span></p>
+                    <h3><img width="369" height="255" src="{% static 'skigit/detube/images/investor.png' %} " alt="" class="aligncenter"></h3>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p style="text-align: center;"><span style="font-family: 'LAO UI',arial,helvetica,sans-serif; font-size: 16px; color: ##3366ff;">Contact:&nbsp;Frank J. Spina at <a href="mailto:fspina@skigit.com"><span style="color: #3366ff;">fspina@skigit.com</span></a></span></p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                </div>
+            </div><!--end .hentry-->
+
+        </div><!--end #content-->
+
+
+        <div role="complementary" id="sidebar">
+        </div><!--end #sidebar-->
+    </div></div>
+{% endblock %}

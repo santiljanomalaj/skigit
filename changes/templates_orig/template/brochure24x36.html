@@ -1,0 +1,100 @@
+
+{% load staticfiles %}
+{% load i18n %}
+
+<html>
+<head>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <title>
+        Brochure | Skigit
+    </title>
+    <link rel="shortcut icon" href="{% static 'skigit/favicon.ico' %}">
+    <link rel="apple-touch-icon" href="{% static 'skigit/apple-touch-icon.png' %}">
+    <link rel="stylesheet" href="{% static 'skigit/css/app.css' %}">
+</head>
+
+<style>
+
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+        #section-to-print, #section-to-print * {
+            visibility: visible;
+        }
+        #section-to-print {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    }
+    .f_type{
+        font-family: segoe_print !important;
+    }
+    form.form_btn {  position: fixed; right: 30px;  top: 40px;}
+    body{ margin:0 }
+
+</style>
+
+<body>
+
+<section style="border: 8px solid #ffffff;" id="section-to-print">
+
+    <div class="broshar_main" style="width:2470px; margin:0 auto; box-sizing:border-box;">
+        <div class="broshar_head " style="background-color:#005a9e; padding:15px; display: table; width: 100%; box-sizing:border-box;">
+
+            <div class="head_1broshar" style="display:table; float:left"> <span class="f_type" style="display: table; font-size: 45px; float: left; color:#fff; padding: 16px; font-family: segoe_print !important;"> Download The Skigit App today ! </span>
+                <img src="{{ skigit_logo }}"  style="width: 156px;padding: 10px;background: #fff;margin-top:-3px;margin-left: 25px;border: 5px solid #3dbae6; border-radius: 23px; "/>
+            </div>
+            <div class="logo_right" style="display:table; float:right; width:390px; padding:40px; background-color:#fff; border-radius:50%; margin-bottom:-190px;">
+                <img src="{{ poster_obj.b_logo }}" style="width: 200px;display: table;margin: 0 auto; "/>
+            </div><!--logo_right-->
+        </div><!--broshar_head-->
+
+        <div class="contain_broshar" style="width:100%; height:1728px; background-image:url('{{ poster_2 }}'); background-size: 100% 100%; background-repeat: no-repeat;">
+            <div class="contain_01" style="display:table; width:100%;">
+                <div class="head_1broshar" style="display:table; float:left; padding:50px;  width: 100%; box-sizing: border-box;">
+                    <div style="width: 400px; float: left; margin-left: 15px; margin-right: 30px; padding: 40px; background-color: #fff; border-radius: 50%;">
+                        <img src="{{ skigit_logo }}" style="width:100%;"/>
+                    </div>
+                    <div style="display:table;">
+                        <span class="f_type"  style="display: table; color:#fff; font-size:65px; padding-left:115px; font-family: segoe_print !important;">
+                           {{ wall_post.header_text }}
+                            <img src="{{ header_image }}" style="width: 110px; margin-left:15px; margin-bottom:-30px;"/>
+                        </span>
+                        <div class="f_type"  style="color: #fff;font-size:37px; margin:0; width: 1300px; margin-left: 115px; font-family: segoe_print !important;">
+                            {{ wall_post.content1 }}
+                        </div>
+
+                        <p class="f_type"  style="color:#fff; font-size:20px; margin:0; text-align:right; font-family: segoe_print !important;">
+                            <a href="#" style="text-decoration: none; font-size: 55px; color: #318db7; font-weight: bold;  margin-top:-15px; display: table; float: right;"> {{ wall_post.content4 }}</a>
+                        </p>
+                    </div>
+                </div><!--head_1broshar-->
+            </div><!--contain_01-->
+
+            <div class="contain_02" style="display:table; padding:100px 50px; margin-top:10px; box-sizing:border-box; width: 1300px;">
+                <div style="display:table; width:100%; ">
+                    <p class="f_type"  style="color:#fff; font-size:37px; margin:0; font-family: segoe_print !important;">
+                       {{ wall_post.content2 }}
+                    </p>
+                </div>
+            </div><!--contain_02-->
+
+            <div class="contain_02 f_type" style="display:table; padding:20px 20px 0px 20px; box-sizing:border-box; width:100%;">
+                <div style="display:table; width:100%;"></div>
+                <p style="display:table; width:1400px; margin-right:0px; float:right; color: #fff; margin-top:300px; font-size:37px; font-family: segoe_print !important;">
+                     {{ wall_post.content3 }}
+                </p>
+            </div>
+        </div><!--contain_broshar-->
+
+        <div class="contain_03 f_type">
+            <p style="background-color:#000; color:#fff; margin:0; padding:33px 20px; text-align:center; font-size:45px; margin-top:25px; font-family: segoe_print !important;">
+                {{ wall_post.footer_text }}</p>
+        </div><!--contain_03-->
+
+    </div><!--broshar_main-->
+</section>
+</body>
+</html>

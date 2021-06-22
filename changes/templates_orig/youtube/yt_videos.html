@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block main_div_block_video_list_content %}
+    <ul>
+
+        <li>{% include "youtube/yt_video.html" with video_id=params.video_id width=params.width height=params.height origin=params.origin %}</li>
+
+    </ul>
+    {% else %}
+    {% trans "No video found" %}
+
+    <div class="section-box">
+        <div class="section-header"><h2 class="section-title"><span class="name">Latest Skigits</span></h2></div>
+        <div class="section-content grid-small">
+            <div class="nag cf" id="likedcontent">
+                {% if video_params %}
+                    {% for params in video_params %}
+                        <div class="inner_post_box">
+                            <script type="text/javascript">
+                                function add_affiliate(pid)
+                                {
+                                    window.location = 'http://demo.mrphpguru.com/skigitdev/affiliate?postid=' + pid;
+                                }
+                            </script>
+                            <script>
+                                function sample()
+                                {
+                                    document.getElementById('my_modal').style.display = 'block';
+                                    $(document).ready(function () {
+
+                                        $('.my_modal_open').click(function () {
+                                            $('#my_modal').popup({
+                                                'autoopen': true
+                                            });
+                                        });
+                                        $('#my_tooltip').popup({
+                                            type: 'tooltip',
+                                            autozindex: true,
+                                            horizontal: 'center',
+                                            vertical: 'top'
+                                        });
+                                    });
+                                }
+                            </script>
+                            <style>
+                                body
+                                {
+                                    margin:0;
+                                    padding:0;
+                                }
+                                .clear{ clear:both;}
+                            </style>
+                            <ul>
+                                <li>
+                                    <div id="post-8764" class="item cf item-post post-8764 post type-post status-publish format-standard hentry category-computers category-demos">
+                                        <div id="post_class_home_box">
+                                            <h2>Andy Popup</h2>
+                                            <!-- Avatar Div -->
+                                            <div id="avatardiv">
+                                                <a href="members/skigit/profile/index.html">
+                                                    <img src="{% static 'skigit/wp-content/uploads/avatars/644/ebfd7ec30d1fa5d37a2128e3f7e55a0a-bpfull.jpg' %}" class="avatar avatar-wordpress-social-login avatar-32 photo"></a>
+                                    <span class="author_top">by<br />
+                                        <a href="members/skigit/profile/index.html">
+                                            skigit						</a>
+                                    </span>
+                                            </div>
+                                            <!-- End Avatar Div -->
+                                            <div class="thumb">
+                                                <a class="clip-link" onClick="stophomevideo();
+                                            countviews(8764);
+                                            return openPopupframe('', 'andy-popup', '');" data-id="8764" href="javascript:void(0);">
+                                        <span class="clip" style="background:url('http://img.youtube.com/vi/KWZGAExj-es/mqdefault.jpg') center center; display:block; position:relative; height:110px; width:185px;">
+                                            <span class="vertical-align"></span>
+                                        </span>
+                                                    <span class="overlay">&nbsp;</span>
+                                                </a>
+                                            </div>
+                                            <div class="data">
+                                                <p class="stats">
+                                                <div>
+                                                    <!-- upload_img Start -->
+                                                    <div class='upload_img' data-pid='8764'>														<a target="_blank" href="members/business/profile/index.html"><img src="{% static 'skigit/detube/skigittimg/small/1-800-flowers.png' %}" onmouseover="return showbigImage('1-800-flowers.png', '8764', 'skigittimg');" onmouseout="return showsmallImage('8764');" /></a>
+                                                        <div class="logo_bigimage" id="logo_bigimage_8764" style="display:none;"></div>
+                                                    </div>
+                                                    <!-- upload_img End -->
+                                                    <div id="actions">
+                                                        <span class="dp-like-post"><a class="like" id="like_8764" title="Like / Unlike" href="javascript:void(0);" data-pid="8764"></a></span>		<div class="dropdown dp-share">
+                                                        <a class="dropdown-guest" href="javascript:void(0)" id="dropdown-guest8764" onclick="checksharelogin('share');" title="Share Skigit"></a>
+                                                        <!-- Share Added -->
+                                                        <div style="display: none;" id="head_share_popuploop8764" class="head_share_popupbox">
+                                                            <span id="up_arrow"></span>
+                                                            <ul>
+                                                                <div class="join_box">
+                                                                    <h6>
+                                                                        <span class="sharedwith" id="sharedwith_8764">Shared with</span>
+                                                                <span class="sharewithothers" id="sharewithothers8764">
+                                                                    <a href="javascript:void(0)" class="dropdown-usershare" id="dropdown-usershare8764">Share</a>
+
+                                                                    <!--Share to User-->
+                                                                    <div class="my_skigitt_usershare" id="my_skigitt_usershare11" style="display: none;">
+                                                                        <ul>
+                                                                            <div class="my_skigitt_usershare_inner">
+                                                                                <span style="color:#0381C3">Share this Skigit with...</span>
+
+                                                                                <div class="holder">
+                                                                                    <input type="text" id="keyword8764" class="keywordclass" placeholder="Type your friend's Username"
+                                                                                           style="width:230px !important; font-size:10px !important; float:left;">
+                                                                                </div>
+                                                                                <div class="responseclass" id="responseclass8764"></div>
+                                                                                <div id="shareconfirm8764" class="shareconfirm"></div>
+                                                                                <input type="button" value="Share" id="share_btn8764" class="btn" name="share" onclick="shareSkigitt('keyword8764', '0', '8764', '644', 'share_btn8764');">
+                                                                                <input type="button" value="Cancel" class="btncancel" name="cancel">
+                                                                                <!--ramalaskhmi-->
+                                                                                <div class="divshskierr" id="divshskierr8764" style="color:red"></div>
+                                                                                <!--ramalaskhmi-->
+                                                                                <div class="clearfix"></div>
+                                                                            </div></ul>
+                                                                    </div>
+                                                                    <!--End Share to user -->
+                                                                </span>
+                                                                <span id="skigitt_email_closeloop8764" class="head_share_popupclose">
+                                                                    <a href="javascript:void(0)">
+                                                                        <img src="{% static 'skigit/detube/images/skigitt_drop_close.png' %}">
+                                                                    </a>
+                                                                </span>
+                                                                    </h6>
+                                                                    <div class="clearfix"></div>
+
+
+                                                                    <div class="join_inner" id="loopajaxshare8764" style="height:100px !important; overflow:auto !important; width:94% !important; margin-left:15px;">
+                                                                        <center>There are no shares to display</center>
+                                                                        <div class="clearfix"></div>
+
+                                                                    </div>
+                                                                    <div class="join_btn"></div>
+                                                                </div>
+                                                            </ul>
+                                                        </div>
+                                                        <!--End Share Added -->
+                                                    </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    <div id="overlay_form" style="display:none">
+                                                        <div><a href="index.html#" id="close" style="color:#FFFFFF" >Close</a></div>
+                                                    </div>
+                                                    <div class="author_spans">
+                                            <span class="author views">
+                                                <strong>
+                                                    Views <span id="viewscount8764">		65</span></strong></span>
+                                            <span class="author likes"><strong>
+                                                Likes&nbsp;<span id="likecount8764">		3</span>		</strong></span>
+                                                        <span class="author share"><strong>Shares <span id="shareajax_8764">0</span></strong></span>
+
+                                            <span class="author joins"><strong>
+                                                <a href="javascript:void(0)" id="pop_up18764" class="joinpopup" >Plugs&nbsp;</a>0		<div id="pop_uploop8764" style="display:none;" class="joinTooltip_content">
+                                                <span id="up_arrow"></span>
+                                                <ul>
+                                                            <span id="skigitt_drop_close8764" class="Joinclose"><a href="javascript:void(0)">
+                                                                <img src="{% static 'skigit/detube/images/skigitt_drop_close.png' %}" /></a></span>
+                                                    <h6>Plugged in Skigits</h6>
+                                                    <div class="join_inner">
+                                                        <div class="join_box">
+                                                            <div class="join_inner thumb_content">
+                                                                <div class="join_content">
+                                                                    <center style="color: rgb(3, 129, 195); font-weight: 600; margin:0;">No Plugs found.</center>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="join_btn"></div>
+                                                </ul>
+                                            </div>
+                                            </strong>
+                                            </span>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    <div class="join_mian">
+                                                        <div class="join_icon"><a href="javascript:void(0)" onclick="checksharelogin('joinme');"><img src="{% static 'skigit/detube/images/joinme_icon.png' %}" /></a> </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    <div style="margin:0 auto; width:100%;text-align:center;">
+                                                        <div class="con_lernmore"><a href="http://demo.mrphpguru.com/skigitdev/affiliate?postid=8764" target="_blank">Learn more about my awesome thing!</a> </div>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+
+                                                </div>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div><!-- end #post-8764 -->
+                                </li>
+                            </ul>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+            </div>
+        </div>
+
+    </div><!-- end .section-content -->
+
+{% endblock %}

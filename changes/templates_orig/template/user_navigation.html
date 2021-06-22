@@ -1,0 +1,1990 @@
+{% load staticfiles %}
+{% load i18n %}
+{% load thumbnail %}
+{% load static swampdragon_tags %}
+
+<!-- SwampDragon -->
+{% swampdragon_settings %}
+
+<script type="text/javascript" src="{% static 'swampdragon/js/dist/swampdragon.min.js' %}"></script>
+<!-- notifications -->
+<script type="text/javascript" src="{% static 'skigit/js/notifications.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.6/jstz.min.js"></script>
+<script>
+
+  $(function ($) {
+
+    $('.dropdown').hover(function () {
+          $(this).addClass('open');
+        },
+        function () {
+          $(this).removeClass('open');
+        });
+  });
+
+  $('.badge-success').hide()
+
+</script>
+
+<script>
+
+  jQuery(document).ready(function ($) {
+
+    $('#bug_report').on("click", function () {
+      $('#bugModal').modal('show');
+    });
+
+    $('#id_bug_submit').click(function () {
+
+      if ($('#bug_description').val() != '' && $("input[type='radio'][name=repeat]:checked").val() != undefined) {
+        var data = {
+          'skigit_id': $('#id_bug_skigit').val(),
+          'skigit_title': $('#id_bug_skigit_title').val(),
+          'bug_url': $('#id_bug_page_url').val(),
+          'bug_title': $('#id_bug_title').val(),
+          'bug_desc': $('#bug_description').val(),
+          'bug_repeated': $("input[type='radio'][name=repeat]:checked").val()
+        }
+        $('#id_bug_submit').attr("disabled", "disabled");
+        $('#id_bug_close').attr("disabled", "disabled");
+        $("#bug_msg").html('Please Wait...').css('color', 'orange');
+        $.ajax({
+          url: "/bug-management/",
+          type: "POST",
+          data: data,
+          success: function (responce_data) {
+            $('#bug_report_form')[0].reset()
+            $("#bug_msg").html(responce_data.message).css('color', 'green');
+            $('#id_bug_submit').removeAttr('disabled');
+            $('#id_bug_close').removeAttr('disabled');
+          }
+        });
+      }
+      else {
+        $('#id_bug_submit').removeAttr('disabled');
+        $('#id_bug_close').removeAttr('disabled');
+        if (($("input[type='radio'][name=repeat]:checked").val() == '' ||
+            $("input[type='radio'][name=repeat]:checked").val() == undefined ) && $('#bug_description').val() == '') {
+          $("#bug_msg").html("<span style='font-size:19px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span><span style='font-size:13px;'> Please enter a bug description and select an option</span>").css('color', 'red');
+        }
+        else if ($("#bug_description").val() == '') {
+          $("#bug_msg").html("<span style='font-size:19px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span><span style='font-size:13px;'> Please enter a bug description</span>").css('color', 'red');
+        }
+        else if (($("input[type='radio'][name=repeat]:checked").val() == '' ||
+            $("input[type='radio'][name=repeat]:checked").val() == undefined )) {
+          $("#bug_msg").html("<span style='font-size:19px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span><span style='font-size:13px;'> Please select an option</span>").css('color', 'red');
+        }
+        else {
+          $("#bug_msg").html("<span style='font-size:19px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span><span style='font-size:13px;'> Please select an option</span>").css('color', 'red');
+        }
+      }
+
+      setTimeout(function () {
+        $("#bug_msg > * ").fadeOut('slow');
+        $("#bug_msg").empty();
+      }, 5000);
+    });
+
+    bugSubmit = function (skigit) {
+      if ($.trim($('#id_bug_description' + skigit).val()).length > 0 &&
+          $("input[type='radio'][name=repeat]:checked").val() != undefined) {
+        var data = {
+          'skigit_id': $('#id_bug_skigit').val(),
+          'bug_url': window.location.origin + '/?id=' + $('#id_bug_skigit').val(),
+          'bug_title': $('#id_bug_title').val(),
+          'bug_desc': $('#id_bug_description' + skigit).val(),
+          'bug_repeated': $("input[type='radio'][name=repeat]:checked").val()
+        }
+        $('#id_bug_submit1').attr("disabled", "disabled");
+        $('#inapp_form_can').attr("disabled", "disabled");
+        $("#bug_msg" + skigit).html('Please Wait...').css('color', 'orange');
+        $.ajax({
+          url: "/bug-management/",
+          type: "POST",
+          data: data,
+          success: function (responce_data) {
+            if (responce_data.is_success) {
+              $('#bug_report_form' + skigit)[0].reset()
+              $("#bug_msg" + skigit).empty()
+              /* $('.msg_success').html('Thanks for making Skigit better!')
+               $('#id_bug_submit1').removeAttr('disabled')
+               $('#inapp_form_can').removeAttr('disabled')
+               $(".dropdown").removeClass('open');
+               $('.msg_success').show()
+               setTimeout(openPopup, 2500);*/
+
+              $('#id_bug_submit1').removeAttr('disabled')
+              $('#inapp_form_can').removeAttr('disabled')
+              $("#bug_msg" + skigit).html("<span class='sign-error' style='padding: 0 !important;'><i class='glyphicon glyphicon-ok-circle ok-pos'/></span><span class='text-error' style='padding: 0 !important; margin-top: 4px;'> Thanks for making Skigit better!</span>").css('color', 'green');
+              setTimeout(function () {
+                $('#id_bug_submit1').removeAttr('disabled');
+                $('#inapp_form_can').removeAttr('disabled');
+                $('#bug_report_form' + skigit)[0].reset()
+                $("#bug_msg" + skigit).empty()
+                $('.dropdown').removeClass('open');
+              }, 2500);
+            }
+          }
+        });
+      }
+      else {
+        $('#id_bug_submit1').removeAttr('disabled');
+        $('#inapp_form_can').removeAttr('disabled');
+        if ($.trim($('#id_bug_description' + skigit).val()).length <= 0) {
+          $("#bug_msg" + skigit).html("<span class='sign-error' style='padding: 0 !important;'><i class='glyphicon glyphicon-remove-circle cross-pos'/></span><span class='text-error' style='padding: 0 !important; margin-top: 4px;'> Please enter a bug description and select an option</span>").css('color', 'red');
+        }
+        else {
+          $("#bug_msg" + skigit).html("<span class='sign-error' style='padding: 0 !important;'><i class='glyphicon glyphicon-remove-circle cross-pos'/></span><span class='text-error' style='padding: 0 !important; margin-top: 4px;'> Please select an option</span>").css('color', 'red');
+        }
+        setTimeout(function () {
+          $('#id_bug_submit1').removeAttr('disabled');
+          $('#inapp_form_can').removeAttr('disabled');
+          //$('#bug_report_form'+skigit)[0].reset()
+          $("#bug_msg" + skigit).empty()
+        }, 2000);
+      }
+    }
+
+    bugCancel = function (skigit) {
+      $(".dropdown").removeClass('open');
+      $('#id_bug_submit1').removeAttr('disabled');
+      $('#inapp_form_can').removeAttr('disabled');
+      $('#bug_report_form' + skigit)[0].reset()
+      $("#bug_msg" + skigit).empty()
+    }
+
+    flagSubmit = function (skigit) {
+      input_tag = $("input:radio[name=skigit_reasons]:checked")
+      skigit_reasons = input_tag.attr("skigit_reasons")
+      skigit_id = input_tag.attr("skigit_id")
+      data = $("#inapp_form").serialize()
+
+      if ($("input[name='skigit_reasons']:checked").val()) {
+        $('#flag_msg' + skigit).empty()
+        $('#flag_msg' + skigit).html('Please Wait').css('color', 'orange');
+        $('#inapp_form_sub').attr("disabled", "disabled");
+        $('#inapp_flag_can').attr("disabled", "disabled");
+        $.post("/skigit_inapp_reason/", {
+          skigit_reasons: skigit_reasons,
+          skigit_id: skigit_id
+        }, function (data, status) {
+          if (data.is_success) {
+            /*$('#inapp_form'+skigit)[0].reset()
+             $(".dropdown").removeClass('open');
+             $('#inapp_form_sub').removeAttr('disabled');
+             $('#inapp_flag_can').removeAttr('disabled');
+             $('#flag_msg'+skigit).empty()
+             $('.msg_success').html("<span class='sign1-error'><i class='glyphicon glyphicon-ok-circle ok1-pos'/></span><span class='text1-error'> Your request will be reviewed!</span>").css('color','green');
+             $('.msg_success').show()
+             setTimeout(openPopup, 2500);*/
+
+            $('#inapp_form_sub').removeAttr('disabled')
+            $('#inapp_flag_can').removeAttr('disabled')
+            $('#flag_msg' + skigit).empty()
+            $('#flag_msg' + skigit).html("<span class='sign1-error'><i class='glyphicon glyphicon-ok-circle ok1-pos'/></span><span class='text1-error'> Your request will be reviewed!</span>").css('color', 'green');
+
+            setTimeout(function () {
+              $('#inapp_form' + skigit)[0].reset()
+              $("#flag_msg" + skigit).empty()
+              $('.dropdown').removeClass('open');
+            }, 2000);
+          }
+          else {
+            $('#inapp_form_sub').removeAttr('disabled')
+            $('#inapp_flag_can').removeAttr('disabled')
+            $('#flag_msg' + skigit).empty()
+          }
+        });
+      }
+      else {
+        $('#inapp_form_sub').removeAttr('disabled')
+        $('#inapp_flag_can').removeAttr('disabled')
+        $('#flag_msg' + skigit).empty()
+        $('#flag_msg' + skigit).html("<span class='sign1-error'><i class='glyphicon glyphicon-remove-circle cross1-pos'/></span><span class='text1-error'> Please mark appropriate reason.</span>").css('color', 'red');
+
+        setTimeout(function () {
+          $('#inapp_form' + skigit)[0].reset()
+          $("#flag_msg" + skigit).empty()
+        }, 2000);
+      }
+    }
+
+
+    flagCancel = function (skigit) {
+      $(".dropdown").removeClass('open');
+      $('#inapp_form' + skigit)[0].reset()
+      $("#flag_msg" + skigit).empty()
+    }
+
+    $('#bug_description').on('keydown', function () {
+      $("#bug_msg").empty();
+    });
+
+    $('#id_bug_close').click(function () {
+      $('#bug_report_form')[0].reset()
+    });
+
+    $('#bugModal').on('hidden.bs.modal', function () {
+      $('#bug_report_form')[0].reset()
+    });
+
+    openMessage = function () {
+      $('#smallModal').css('top', '35')
+      $('.modal').css('top', '35')
+      $('.modal-content').css('border', 'none')
+      $('.notify_msg_div').append("<div style='top: 0px; z-index:99999;'  class='info message f_type'>" +
+          "<h3 style='font-family:segoe_print !important;'>" +
+          "You must be a Skigit member to access this feature. <a href='#' style='color:#fff !important; text-decoration:underline !important' data-target='#smallModal' data-toggle='modal' >Join Today!</a></h3></div>")
+      $('.notify_msg_div').find('div').css('top', '0 !important;')
+      setTimeout(function () {
+        $('.notify_msg_div').find('div').animate({'top': "-=52px"}, 1200);
+      }, 5000);
+    }
+
+    get_date = function (video_id) {
+      var currentTimezone = jstz.determine();
+      var timezone = currentTimezone.name();
+      $.ajax({
+        url: "/friends/share-skigit-date/",
+        type: "POST",
+        data: {
+          'video_id': video_id, 'time_zone': timezone,
+          csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        success: function (result) {
+          if (result.is_success) {
+            for (var i = 0; i < (result.share_data).length; i++) {
+              $('#id_date_label' + video_id + result.share_data[i]['id']).text(result.share_data[i]['share_date'])
+            }
+          }
+        }
+      });
+    }
+
+  });
+
+</script>
+
+<script>
+
+  function acceptFrNotofication(user_id) {
+    var $ = jQuery.noConflict()
+    var user = user_id
+    $.ajax({
+      url: "/friends/friends-request-approve/",
+      type: "POST",
+      data: {
+        'to_user': user_id,
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+      },
+      success: function (data) {
+        $('#friend_li' + user).remove()
+        if (data.result) {
+          $('#friend_li' + user).remove()
+          $('li').find('#friend_li' + user).remove()
+          $('#id_internal_friens' + user).attr('style', 'color:gray; font-size:large');
+          $('button[id^="id_invite_btn' + user + '"]').attr('disabled', true, 'title', 'Friend Request Accepted');
+
+          var friend_box = '<div class="box_friend" data-skigt="' + user_id + '"><div class="box_imgcontain">' +
+              '<div class="name_friend"><span class="heade_friend">' + data.username + '</span>' +
+              '<span class="sub_namefriend">' + data.name + '</span><span class="friend_followers">' +
+              'Followers :&nbsp;' + data.count + '</span></div><a href="/profile/' + data.username + '"><div class="img_friend">' +
+              '<img alt="skigit" src="' + data.image + '"></div></a><div class="icon_friend">' +
+              '<a onclick="un_follow_follow(' + user_id + ')" id="follow_' + user_id + '"class = "unfollow"' +
+              'data-cuid = "' + user_id + '" title = "Follow" style = "color: #58D68D; font-weight: 400;">' +
+              '<span class="box_footer" id ="follow_btn' + user_id + '" style = "color: #58D68D; font-weight: 400;"> Follow </span></a>' +
+              '<img width="20" height="20" src="/static/skigit/images/new_icons/close(32x32).png" onclick="removeFriend(' + user_id + ')" class="close-friend"></div></div></div>'
+
+          $('#friendcontent').append(friend_box)
+
+          if ($('#friend_badge').text() > 1) {
+
+            $('#friend_badge').html($('#friend_badge').text() - 1)
+
+          }
+          else {
+            $('#friend_badge').hide()
+            var li = '<li class="f_type" style="color:#bbb9b9; font-size: smaller; text-align: center;">There is no pending Notifications.</li>'
+            $('#frnd_notification').append(li)
+          }
+        }
+      }
+    });
+  }
+
+  function rejectFrNotofication(user_id) {
+    var $ = jQuery.noConflict()
+    $.ajax({
+      url: "/friends/friends-request-rejected/",
+      type: "POST",
+      data: {
+        'to_user': user_id,
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+      },
+      success: function (data) {
+        if (data.result) {
+          $('#friend_li' + user_id).remove()
+          $('li').find('#friend_li' + user_id).remove()
+          $('button[id^="id_accept_btn' + user_id + '"]').remove()
+          $('button[id^="id_declain_btn' + user_id + '"]').remove()
+          var html = '<button id="id_invite_btn' + user_id + '" style="float:right" onclick="inviteFriends(' + user_id + ')"><span style="font-size:large;" title="invite" id="id_internal_friens' + user_id + '" class="glyphicon glyphicon-user">&#43;</span></button>'
+          $('#button_sapn' + user_id).html(html)
+
+          if ($('#friend_badge').text() > 1) {
+            $('#friend_badge').html($('#friend_badge').text() - 1)
+          }
+          else {
+            $('#friend_badge').hide()
+            var li = '<li class="f_type" style="color:#bbb9b9; font-size: smaller; text-align: center;">There is no pending Notifications.</li>'
+            $('#frnd_notification').append(li)
+          }
+        }
+
+      }
+    });
+  }
+
+  notificationCount = function () {
+    var $ = jQuery.noConflict()
+    $.ajax({
+      url: "/friends/friend-count-notification/",
+      type: "GET",
+      success: function (data) {
+        if (data.result) {
+          if (data.count > 0) {
+            $('#friend_badge').show()
+            $('#friend_badge').html(data.count)
+          }
+          else {
+            $('#friend_badge').hide()
+          }
+        }
+      }
+    });
+  }
+
+  rmNotify = function (msg_typ, to_user, from_user, skigit_id) {
+
+    var $ = jQuery.noConflict()
+    $.ajax({
+      url: "/friends/notification-delete/",
+      type: "POST",
+      data: {
+        'msg_type': msg_typ, 'to_user': to_user, 'from_user': from_user, 'skigit_id': skigit_id,
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+      },
+      success: function (data) {
+
+        if (data.is_success) {
+          $('#notify_li_' + msg_typ + '_' + to_user + '_' + from_user + '_' + skigit_id).slideUp('slow')
+        }
+      }
+    })
+  }
+
+  get_notify = function () {
+    var $ = jQuery.noConflict()
+    var currentTimezone = jstz.determine();
+    var timezone = currentTimezone.name();
+    $.ajax({
+      url: "/friends/notification-ski/",
+      type: "POST",
+      data: {'time_zone': timezone, csrfmiddlewaretoken: '{{ csrf_token }}'},
+      success: function (data) {
+
+        if (data.is_success) {
+          if (data.notify_list.length > 0) {
+            $('#notify_ul').empty()
+            for (var n = 0; n < data.notify_list.length; n++) {
+              var li = ''
+
+              if (data.notify_list[n].msg_type == 'like') {
+
+                $('#nf_loader').show()
+
+                li += '<li  class="list-group-item f_type notifylist_li comefromtop" style="border:none !important;" id="notify_li_' + data.notify_list[n].msg_type + '_' + data.notify_list[n].user + '_' + data.notify_list[n].from_user + '_' + data.notify_list[n].skigit_id + '" >'
+                li += '<p class="content_notificationheaderfont"><img src="/static/skigit/images/notify_like.png" style="margin-top:15px;margin-right:4px;"> Congratulations!</p>'
+                li += '<div class="content_notificationnewpost"> <a href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/profile/'
+                li += data.notify_list[n].from_username
+                li += '" target="_blank" style="color:#0386b4">'
+                li += data.notify_list[n].from_username
+                li += '</a>'
+                li += ' likes your skigit</label> '
+                li += ' <p class="f_type" style="color:#0386b4"> '
+                li += '<a style="color:#0386b4" target="_blank" href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/?id=' + data.notify_list[n].play_back_id + '">'
+                li += data.notify_list[n].vid_title
+                li += '</a></p></div>'
+                li += '<span class="notify_date" style="float:right; margin-top: -60;">'
+                li += data.notify_list[n].date
+                li += '<img src="/static/skigit/images/new_icons/close(32x32).png" class="notify_remove" onclick="rmNotify(\'' + data.notify_list[n].msg_type + '\',' + data.notify_list[n].user + ',' + data.notify_list[n].from_user + ',' + data.notify_list[n].skigit_id + ')"  width="20" height="20">'
+                li += '</span>'
+                li += '</li>'
+
+              }
+              else if (data.notify_list[n].msg_type == 'plug') {
+
+                $('#nf_loader').show()
+
+                li += '<li  class="list-group-item f_type notifylist_li comefromtop" style="border:none !important;" id="notify_li_' + data.notify_list[n].msg_type + '_' + data.notify_list[n].user + '_' + data.notify_list[n].from_user + '_' + data.notify_list[n].skigit_id + '" >'
+                li += '<p class="content_notificationheaderfont"><img src="{% static 'skigit/images/notify_plugin.png' %}" style="margin-top:15px;margin-right:4px;" /> Congratulations!</p>'
+                li += '<div class="content_notificationnewpost"><a href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/profile/'
+                li += data.notify_list[n].from_username
+                li += '" target="_blank" style="color:#0386b4 ">'
+                li += data.notify_list[n].from_username
+                li += '</a>'
+                li += ' has plugged into your skigit '
+                li += ' <p class="f_type" style="color:#0386b4"> '
+                li += '<a style="color:#0386b4" target="_blank" href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/?id=' + data.notify_list[n].play_back_id + '">'
+                li += data.notify_list[n].vid_title
+                li += '</a></p></div>'
+                li += '<span class="notify_date" style="float:right; margin-top: -20%;">'
+                li += data.notify_list[n].date
+                li += '<img src="/static/skigit/images/new_icons/close(32x32).png" class="notify_remove" onclick="rmNotify(\'' + data.notify_list[n].msg_type + '\',' + data.notify_list[n].user + ',' + data.notify_list[n].from_user + ',' + data.notify_list[n].skigit_id + ')"  width="20" height="20">'
+                li += '</span>'
+                li += '</li>'
+
+              }
+              else if (data.notify_list[n].msg_type == 'plug-plug') {
+
+                $('#nf_loader').show()
+
+                li += '<li  class="list-group-item f_type notifylist_li comefromtop" style="border:none !important;" id="notify_li_' + data.notify_list[n].msg_type + '_' + data.notify_list[n].user + '_' + data.notify_list[n].from_user + '_' + data.notify_list[n].skigit_id + '" >'
+                li += '<p class="content_notificationheaderfont"><img src="{% static 'skigit/images/notify_pluginplus.png' %}" style="margin-top:15px;margin-right:4px;" /> Coincidence? I think not!</p>'
+                li += '<div class="content_notificationnewpost"><a href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/profile/'
+                li += data.notify_list[n].from_username
+                li += '" target="_blank" style="color:#0386b4 ">'
+                li += data.notify_list[n].from_username
+                li += '</a>'
+                li += ' has plugged into a Skigit that you plugged into'
+                li += ' <span class="f_type" style="color:#0386b4"> '
+                li += '<a style="color:#0386b4" target="_blank" href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/?id=' + data.notify_list[n].play_back_id + '">'
+                li += data.notify_list[n].vid_title
+                li += '</a></span></div>'
+                li += '<span class="notify_date" style="float:right; margin-top: -100;">'
+                li += data.notify_list[n].date
+                li += '<img src="/static/skigit/images/new_icons/close(32x32).png" class="notify_remove" onclick="rmNotify(\'' + data.notify_list[n].msg_type + '\',' + data.notify_list[n].user + ',' + data.notify_list[n].from_user + ',' + data.notify_list[n].skigit_id + ')"  width="20" height="20">'
+                li += '</span>'
+                li += '</li>'
+
+              }
+              else if (data.notify_list[n].msg_type == 'friends') {
+
+                $('#nf_loader').show()
+
+                li += '<li  class="list-group-item f_type notifylist_li comefromtop" style="border:none !important;" id="notify_li_' + data.notify_list[n].msg_type + '_' + data.notify_list[n].user + '_' + data.notify_list[n].from_user + '_' + data.notify_list[n].skigit_id + '" >'
+                li += '<p class="content_notificationheaderfont"><img src="{% static 'skigit/images/notify_follow_img.png' %}" style="margin-top:15px;margin-right:4px;" /> Wanna new friend?</p>'
+                li += '<div class="content_notificationnewpost"><a href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/profile/'
+                li += data.notify_list[n].from_username
+                li += '" target="_blank" style="color:#0386b4 ">'
+                li += data.notify_list[n].from_username
+                li += '</a>'
+                li += ' wants to be friends with you.</div>'
+                li += '<span class="notify_date" class="notify_date" style="float:right; margin-top: -54px;">'
+                li += data.notify_list[n].date
+                li += '<img src="/static/skigit/images/new_icons/close(32x32).png" class="notify_remove" onclick="rmNotify(\'' + data.notify_list[n].msg_type + '\',' + data.notify_list[n].user + ',' + data.notify_list[n].from_user + ',' + data.notify_list[n].skigit_id + ')"  width="20" height="20">'
+                li += '</span>'
+                li += '</li>'
+
+              }
+              else if (data.notify_list[n].msg_type == 'friends_accepted') {
+
+                $('#nf_loader').show()
+
+                li += '<li  class="list-group-item f_type notifylist_li comefromtop" style="border:none !important;" id="notify_li_' + data.notify_list[n].msg_type + '_' + data.notify_list[n].user + '_' + data.notify_list[n].from_user + '_' + data.notify_list[n].skigit_id + '" >'
+                li += '<p class="content_notificationheaderfont"><img src="{% static 'skigit/images/../../../static/images/friends_accept.png' %}" style="margin-top:15px; margin-right:4px;"/> Sure, let’s be friends!</p>'
+                li += '<div class="content_notificationnewpost"><a href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/profile/'
+                li += data.notify_list[n].from_username
+                li += '" target="_blank" style="color:#0386b4 ">'
+                li += data.notify_list[n].from_username
+                li += '</a>'
+                li += ' has accepted your friendship.</div>'
+                li += '<span class="notify_date" style="float:right; margin-top: -35;">'
+                li += data.notify_list[n].date
+                li += '<img src="/static/skigit/images/new_icons/close(32x32).png" class="notify_remove" onclick="rmNotify(\'' + data.notify_list[n].msg_type + '\',' + data.notify_list[n].user + ',' + data.notify_list[n].from_user + ',' + data.notify_list[n].skigit_id + ')"  width="20" height="20">'
+                li += '</span>'
+                li += '</li>'
+
+              }
+              else if (data.notify_list[n].msg_type == 'un_plug') {
+
+                $('#nf_loader').show()
+
+                li += '<li  class="list-group-item f_type notifylist_li comefromtop" style="border:none !important;" id="notify_li_' + data.notify_list[n].msg_type + '_' + data.notify_list[n].user + '_' + data.notify_list[n].from_user + '_' + data.notify_list[n].skigit_id + '" >'
+                li += '<p class="content_notificationheaderfont"><img src="{% static 'skigit/images/unplug_notify.png' %}" style="margin-top:15px;margin-right: 4px;" /> We’re sorry.. your got  unplugged.</p>'
+                li += '<div class="content_notificationnewpost"><a href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/profile/'
+                li += data.notify_list[n].from_username
+                li += '" target="_blank" style="color:#0386b4 ">'
+                li += data.notify_list[n].from_username
+                li += '</a> unplugged from your skigit'
+                li += ' <span class="f_type" style="color:#0386b4"> '
+                li += '<a style="color:#0386b4" target="_blank" href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/?id=' + data.notify_list[n].play_back_id + '">'
+                li += data.notify_list[n].vid_title
+                li += '</a></span></div>'
+                li += '<span class="notify_date" style="float:right; margin-top: -86px;">'
+                li += data.notify_list[n].date
+                li += '<img src="/static/skigit/images/new_icons/close(32x32).png" class="notify_remove" onclick="rmNotify(\'' + data.notify_list[n].msg_type + '\',' + data.notify_list[n].user + ',' + data.notify_list[n].from_user + ',' + data.notify_list[n].skigit_id + ')"  width="17" height="17">'
+                li += '</span>'
+                li += '</li>'
+
+              }
+              else if (data.notify_list[n].msg_type == 'new_post') {
+
+                $('#nf_loader').show()
+
+                li += '<li  class="list-group-item f_type notifylist_li comefromtop" style="border:none !important;" id="notify_li_' + data.notify_list[n].msg_type + '_' + data.notify_list[n].user + '_' + data.notify_list[n].from_user + '_' + data.notify_list[n].skigit_id + '" >'
+                li += '<p class="content_notificationheaderfont"><img src="{% static 'skigit/images/notify_new.png' %}" style="margin-top:15px;margin-right:4px;" /> Congratulations!</p>'
+                li += '<span class="content_notificationnewpost" > Your Skigit '
+                li += ' <a style="color:#0386b4" target="_blank" href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/?id=' + data.notify_list[n].play_back_id + '">'
+                li += data.notify_list[n].vid_title
+                li += '</a>  has been posted to Skigit!</span> '
+                li += '<span class="notify_date" style="float:right; margin-top: -56px;">'
+                li += data.notify_list[n].date
+                li += '<img src="/static/skigit/images/new_icons/close(32x32).png" class="notify_remove" onclick="rmNotify(\'' + data.notify_list[n].msg_type + '\',' + data.notify_list[n].user + ',' + data.notify_list[n].from_user + ',' + data.notify_list[n].skigit_id + ')"  width="17" height="17">'
+                li += '</span>'
+                li += '</li>'
+
+              }
+              else if (data.notify_list[n].msg_type == 'new_post_follow') {
+
+                $('#nf_loader').show()
+
+                li += '<li  class="list-group-item f_type notifylist_li comefromtop" style="border:none !important;" id="notify_li_' + data.notify_list[n].msg_type + '_' + data.notify_list[n].user + '_' + data.notify_list[n].from_user + '_' + data.notify_list[n].skigit_id + '" >'
+                li += '<p class="content_notificationheaderfont"><img src="{% static 'skigit/images/notify_follow_new_post.png' %}" style="margin-top:15px;margin-right:4px;" /> Following Post! </p>'
+                li += '<div class="content_notificationnewpost"><a href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/profile/'
+                li += data.notify_list[n].from_username
+                li += '" target="_blank" style="color:#0386b4 ">'
+                li += data.notify_list[n].from_username
+                li += '</a> has  posted a new skigit '
+                li += ' <a style="color:#0386b4" target="_blank" href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/?id=' + data.notify_list[n].play_back_id + '">'
+                li += data.notify_list[n].vid_title
+                li += '</a>'
+                li += '<span class="notify_date" style="float:right; margin-top: -56px;">'
+                li += data.notify_list[n].date
+                li += '<img src="/static/skigit/images/new_icons/close(32x32).png" class="notify_remove" onclick="rmNotify(\'' + data.notify_list[n].msg_type + '\',' + data.notify_list[n].user + ',' + data.notify_list[n].from_user + ',' + data.notify_list[n].skigit_id + ')"  width="17" height="17">'
+                li += '</span>'
+                li += '</li>'
+
+              }
+              else if (data.notify_list[n].msg_type == 'follow') {
+
+                $('#nf_loader').show()
+
+                li += '<li  class="list-group-item f_type notifylist_li comefromtop" style="border:none !important;" id="notify_li_' + data.notify_list[n].msg_type + '_' + data.notify_list[n].user + '_' + data.notify_list[n].from_user + '_' + data.notify_list[n].skigit_id + '" >'
+                li += '<p class="content_notificationheaderfont"><img src="{% static 'skigit/images/notify_follow_img.png' %}" style="margin-top:15px;margin-right:4px;" /> Congratulations!</p>'
+                li += '<div class="content_notificationnewpost"> User <a href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/profile/'
+                li += data.notify_list[n].from_username
+                li += '" target="_blank" style="color:#0386b4 ">'
+                li += data.notify_list[n].from_username
+                li += '</a>'
+                li += ' started following you. </div>'
+                li += '<span class="notify_date" style="float:right; margin-top: -60;">'
+                li += data.notify_list[n].date
+                li += '<img src="/static/skigit/images/new_icons/close(32x32).png" class="notify_remove" onclick="rmNotify(\'' + data.notify_list[n].msg_type + '\',' + data.notify_list[n].user + ',' + data.notify_list[n].from_user + ',' + data.notify_list[n].skigit_id + ')"  width="20" height="20">'
+                li += '</span>'
+                li += '</li>'
+
+              }
+              else if (data.notify_list[n].msg_type == 'share') {
+
+                $('#nf_loader').show()
+
+                li += '<li class="list-group-item f_type notifylist_li comefromtop" style="border:none !important;" id="notify_li_' + data.notify_list[n].msg_type + '_' + data.notify_list[n].user + '_' + data.notify_list[n].from_user + '_' + data.notify_list[n].skigit_id + '" >'
+                li += '<p class="content_notificationheaderfont"><img src="{% static 'skigit/images/notify_radar.png' %}" style="margin-top:15px;margin-right:4px;" /> You are on the Radar!</p>'
+                li += '<div class="content_notificationnewpost"><a href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/profile/'
+                li += data.notify_list[n].from_username
+                li += '" target="_blank" style="color:#0386b4 ">'
+                li += data.notify_list[n].from_username
+                li += '</a>'
+                li += ' has shared the awesome Skigit</br> '
+                li += '<p> <span class="f_type" style="color:#0386b4"> '
+                li += '<a style="color:#0386b4" target="_blank" href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/?id=' + data.notify_list[n].play_back_id + '">'
+                li += data.notify_list[n].vid_title
+                li += '</a></span>  with you !</p></div>'
+                li += '<span class="notify_date" style="float:right; margin-top: -100;">'
+                li += data.notify_list[n].date
+                li += '<img src="/static/skigit/images/new_icons/close(32x32).png" class="notify_remove" onclick="rmNotify(\'' + data.notify_list[n].msg_type + '\',' + data.notify_list[n].user + ',' + data.notify_list[n].from_user + ',' + data.notify_list[n].skigit_id + ')"  width="20" height="20">'
+                li += '</span>'
+                li += '</li>'
+
+              }
+              else if (data.notify_list[n].msg_type == 'plug_primary') {
+
+                $('#nf_loader').show()
+                if (data.notify_list[n].parent_title) {
+
+                  li += '<li class="list-group-item f_type notifylist_li comefromtop" style="border:none !important;" id="notify_li_' + data.notify_list[n].msg_type + '_' + data.notify_list[n].user + '_' + data.notify_list[n].from_user + '_' + data.notify_list[n].skigit_id + '" >'
+                  li += '<p class="content_notificationheaderfont"><img src="{% static 'skigit/images/notify_primary_delete.png' %}" style="margin-top:15px;margin-right:4px;" /> The Primary skigit</p>'
+                  li += '<div class="content_notificationewpost"><span class="f_type" style="color:#0386b4"> '
+                  li += data.notify_list[n].vid_title
+                  li += '</span> was deleted. You are now connected to the next Plug-in in line '
+                  li += '<span class="f_type" style="color:#0386b4">'
+                  li += '<a style="color:#0386b4" target="_blank" href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/?id=' + data.notify_list[n].parent_skigi_id + '">'
+                  li += data.notify_list[n].parent_title
+                  li += '</a></span> .</div>'
+                  li += '<span class="notify_date" style="float:right; margin-top: -100;">'
+                  li += data.notify_list[n].date
+                  li += '<img src="/static/skigit/images/new_icons/close(32x32).png" class="notify_remove" onclick="rmNotify(\'' + data.notify_list[n].msg_type + '\',' + data.notify_list[n].user + ',' + data.notify_list[n].from_user + ',' + data.notify_list[n].skigit_id + ')"  width="20" height="20">'
+                  li += '</span>'
+                  li += '</li>'
+                }
+                else if (data.notify_list[n].child_title) {
+                  li += '<li class="list-group-item f_type notifylist_li comefromtop" style="border:none !important;" id="notify_li_' + data.notify_list[n].msg_type + '_' + data.notify_list[n].user + '_' + data.notify_list[n].from_user + '_' + data.notify_list[n].skigit_id + '" >'
+                  li += '<p class="content_notificationheaderfont"><img src="{% static 'skigit/images/notify_primary_delete.png' %}" style="margin-top:15px;margin-right:4px;" /> The Primary skigit</p>'
+                  li += '<div class="content_notificationnewpost"><span class="f_type" style="color:#0386b4">'
+                  li += '<a style="color:#0386b4" target="_blank" href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/?id=' + data.notify_list[n].play_back_id + '">'
+                  li += data.notify_list[n].vid_title
+                  li += '</a></span> was deleted. You are now connected to the next Plug- in in line'
+                  li += '<span class="f_type" style="color:#0386b4">'
+                  li += '<a style="color:#0386b4" target="_blank" href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/?id=' + data.notify_list[n].child_skigi_id + '">'
+                  li += data.notify_list[n].child_title
+                  li += '</a></span>.</div>'
+                  li += '<span class="notify_date" style="float:right; margin-top: -100;">'
+                  li += data.notify_list[n].date
+                  li += '<img src="/static/skigit/images/new_icons/close(32x32).png" class="notify_remove" onclick="rmNotify(\'' + data.notify_list[n].msg_type + '\',' + data.notify_list[n].user + ',' + data.notify_list[n].from_user + ',' + data.notify_list[n].skigit_id + ')"  width="20" height="20">'
+                  li += '</span>'
+                  li += '</li>'
+                }
+              }
+
+              $('#nf_loader').hide()
+              $('#notify_ul').prepend($('#notify_ul').append(li)).addClass('pushdown');
+              setTimeout(function () {
+                $('#Trees').removeClass('pushdown');
+              }, 600);
+            }
+
+          }
+        }
+        $('#general_badge').hide()
+        $('#general_badge').text(0)
+      }
+    });
+  }
+
+  function refresh_global_notification() {
+    {#      var $ = jQuery.noConflict()#}
+    jQuery.ajax({
+      url: "/get_notification_count/",
+      success: function (data) {
+        if (data.count > 0) {
+          jQuery('#general_badge').show();
+          jQuery('#general_badge').text(data.count);
+        }
+        else {
+          jQuery('#general_badge').hide();
+          jQuery('#general_badge').text(0);
+        }
+      }
+    });
+    setTimeout(refresh_global_notification, 10000);
+  }
+  {#    $(function(){#}
+  {#      refresh_global_notification();#}
+  {#    });#}
+
+  function refresh_friend_notification() {
+    {#      var $ = jQuery.noConflict()#}
+    jQuery.ajax({
+      url: "/friends/friend-count-notification/",
+      type: "GET",
+      success: function (data) {
+        if (data.result) {
+          if (data.count > 0) {
+            jQuery('#friend_badge').show()
+            jQuery('#friend_badge').text(data.count)
+          }
+          else {
+            jQuery('#friend_badge').hide()
+          }
+        }
+      }
+
+      {#        url: "/friends/friend-notification/",#}
+      {#        success: function(data) {#}
+      {#          if (data.friend_list.length > 0) {#}
+      {#            jQuery('#friend_badge').show();#}
+      {#            jQuery('#friend_badge').text(data.friend_list.length);#}
+      {#          }#}
+      {#          else {#}
+      {#            jQuery('#friend_badge').hide();#}
+      {#            jQuery('#friend_badge').text(0);#}
+      {#          }#}
+      {#        }#}
+    });
+    setTimeout(refresh_friend_notification, 10000);
+  }
+  {#    $(function(){#}
+  {#      refresh_friend_notification();#}
+  {#    });#}
+  jQuery(document).ready(function ($) {
+    refresh_global_notification();
+    refresh_friend_notification();
+  })
+  {#    $(document).ready(function(){#}
+  {#      refresh_global_notification();#}
+  {#      refresh();#}
+  {#    })#}
+  friendsNotificaton = function (e) {
+
+    var $ = jQuery.noConflict()
+    $.ajax({
+      url: "/friends/friend-notification/",
+      type: "GET",
+      success: function (data) {
+        $('#frnd_notification').empty()
+
+        if (data.result) {
+          if (data.friend_list.length > 0) {
+
+            $('#friend_badge').show()
+            $('#friend_badge').html(data.friend_list.length)
+
+            for (var f = 0; f < data.friend_list.length; f++) {
+              if (data.friend_list[f].profile_img) {
+                var l_img = data.friend_list[f].profile_img
+              }
+              else {
+                l_img = '/static/skigit/detube/images/noimage_user.jpg'
+              }
+              var li = '<li class="list-group-item comefromtop" id="friend_li' + data.friend_list[f].to_user + '" >' +
+                  '<img class="avatar" style="top: 0px; margin-top: -10%; !important;" src="' + l_img + '"/>' +
+                  '<label class="f_type" style="margin-left: 10px; margin-top: 2%;"> Wanna new friend? </br> ' + data.friend_list[f].name + ' wants to be friends with you </label> ' +
+                  '<span class="btn_span" id="button_sapn' + data.friend_list[f].to_user + '">' +
+                  '<button id="id_accept_btn' + data.friend_list[f].to_user + '" data-friend="" style="float:right; background: none !important; width: auto !important; height: auto !important;" onclick="acceptFrNotofication(' + data.friend_list[f].to_user + ')" > ' +
+                  '<span title="Accept Request" id="id_accept_friens" class="glyphicon glyphicon-ok-circle"></span></button>' +
+                  '<button id="id_declain_btn' + data.friend_list[f].to_user + '" style="float:right; background: none !important; width: auto !important; height: auto !important;" onclick="rejectFrNotofication(' + data.friend_list[f].to_user + ')">' +
+                  '<span  title="Reject Request" id="id_reject_friens" class="glyphicon glyphicon-remove-circle">' +
+                  '</span></button></span></li>'
+              $('#frnd_notification').append(li)
+            }
+          }
+          else {
+            var li = '<li class="f_type" style="color:#bbb9b9; font-size: smaller; text-align: center;">There is no pending Notifications.</li>'
+            $('#frnd_notification').empty()
+            $('#frnd_notification').append(li)
+            $('#friend_badge').hide()
+          }
+        }
+      }
+    });
+  }
+
+</script>
+
+<script>
+
+  jQuery(function ($) {
+    viewCount = function (video_id) {
+      var skigit_id = video_id
+      $.ajax({
+        url: "/view_count_update/",
+        type: "POST",
+        data: {
+          'skigit_id': skigit_id, csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        success: function (response) {
+          if (response.is_success) {
+            $('#view_count' + skigit_id).text(parseInt(response.view_count))
+          }
+        }
+      });
+    }
+
+    jQuery("#friendPopover").popover({
+      html: true,
+      title: "Friends and Invite Notifications",
+      placement: "bottom",
+      content: jQuery("#friendContent").html(),
+    });
+
+
+    jQuery('body').mouseup(function (e) {
+      jQuery('[data-original-title]').each(function () {
+        //the 'is' for buttons that trigger popups
+        //the 'has' for icons within a button that triggers a popup
+
+        if (!jQuery(this).is(e.target) && jQuery(this).has(e.target).length === 0 &&
+            jQuery('.popover').has(e.target).length === 0) {
+          var popoverElement = jQuery(this).data('bs.popover').tip();
+          var popoverWasVisible = popoverElement.is(':visible');
+
+          if (popoverWasVisible) {
+            jQuery(this).popover('hide');
+            jQuery(this).click();
+          }
+        }
+      });
+    });
+
+
+    shareClose = function (video_id) {
+
+      jQuery('[data-original-title]').each(function (e) {
+        //the 'is' for buttons that trigger popups
+        //the 'has' for icons within a button that triggers a popup
+        if (!jQuery(this).is(e.target) && jQuery(this).has(e.target).length === 0 && jQuery('.popover').has(e.target).length === 0) {
+          var popoverElement = jQuery(this).data('bs.popover').tip();
+          var popoverWasVisible = popoverElement.is(':visible');
+
+          if (popoverWasVisible) {
+            jQuery("#share_overlay" + video_id).removeClass("popupdisplay");
+            jQuery(".overlayview").css("display", "none");
+            jQuery(".skigit_play img").css("display", "block")
+            jQuery(this).popover('hide');
+            jQuery(this).click();
+          }
+        }
+      });
+    }
+
+    logoclick = function (logo_id, url) {
+      var message;
+      jQuery.ajax({
+        url: "/invoice/business-logo/",
+        type: "POST",
+        data: {'logo_id': logo_id},
+        success: function (data) {
+          if (data.is_success) {
+            window.location.href = url
+          }
+          else {
+            message = data.message;
+          }
+        }
+      });
+    }
+
+    plugInClick = function (skigit_id, url) {
+      var message;
+      jQuery.ajax({
+        url: "/invoice/plugin-click/",
+        type: "POST",
+        data: {'skigit_id': skigit_id},
+        success: function (data) {
+          if (data.is_success) {
+            window.location.href = url
+          }
+          else {
+            message = data.message;
+          }
+        }
+      });
+    }
+  });
+
+  jQuery(function () {
+    jQuery("#generalNPopover").popover({
+      html: true,
+      title: "Skigit Notifications",
+      placement: "bottom",
+      content: jQuery('#notifyContaint').html(),
+    });
+  });
+
+</script>
+
+<style>
+
+  #topcontrol {
+    right: 5px !important;
+  }
+
+  .dropzone .dz-preview .dz-remove {
+    z-index: 99 !important;
+  }
+
+  #circle {
+    position: absolute;
+    right: 40px;
+    margin-left: 0 !important;
+    background: rgba(128, 128, 128, 0.7) !important;
+  }
+
+  #header ul.navbar-nav > li > .dropdown-menu, .dropdown-menu {
+    margin: -7px -15% !important;
+    z-index: 99999 !important;
+  }
+
+  .popover-title {
+    text-align: center;
+    font-family: segoe_print !important;
+  }
+
+  li.list-group-item.col-lg-12.col-md-12.col-sm-12 {
+    width: 100% !important;
+  }
+
+  .f_type {
+    font-family: segoe_print !important;
+  }
+
+  .frien_notification .popover > .arrow:after {
+    border-bottom-color: #fff !important;
+  }
+
+  .frien_notification .popover {
+    min-width: 500px;
+    left: inherit !important;
+    right: -105px !important;
+  }
+
+  .frien_notification .arrow {
+    border-bottom: 0 !important; /*top: -21px !important;*/
+    left: 360px !important;
+  }
+
+  /* General Notification */
+
+  .general_notify .popover {
+    /*  border: 10px solid #abd9f2 !important;*/
+    min-width: 500px;
+  }
+
+  .general_notify .arrow {
+    border-bottom: 0 !important;
+    /* top: -21px !important;*/
+  }
+
+  .general_notify .popover > .arrow:after {
+    border-bottom-color: #fff !important;
+  }
+
+  .dropdown .dropdown-menu {
+    width: auto !important;
+  }
+
+  span#id_reject_friens {
+    color: red !important;
+    font-size: xx-large !important;
+    margin-right: auto;
+    margin-top: 16px;
+  }
+
+  span#id_reject_friens:hover {
+    /*color:#f17373 !important;*/
+  }
+
+  span#id_accept_friens {
+    color: green;
+    font-size: xx-large;
+    margin-top: 16px;
+    margin-left: 20%;
+  }
+
+  span#id_accept_friens:hover {
+    /* color:#54cc54 !important; */
+  }
+
+  .navbar-right li {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  #user_action li a .badge {
+    right: -8px !important;
+  }
+
+  sapn#general_badge .badge1 {
+    right: 15px !important;
+  }
+
+  .invite_responce_box {
+    border: 10px solid #abd9f2 !important;
+    max-height: 150px;
+    height: 150px;
+    max-width: 250px;
+    width: 250px;
+    border-radius: 6px;
+  }
+
+  .invite_responce_box .img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 11px;
+  }
+
+  label.invite_responce_box {
+    position: fixed;
+    top: 25%;
+    left: 40%;
+    z-index: 99999;
+    background-color: #fff;
+  }
+
+  .invite_responce_box center {
+    margin-top: 15px;
+    color: #0a80be;
+  }
+
+  .frien_notification .popover-content ul li img {
+    float: left;
+    margin-top: 12px !important;
+    width: 50px;
+  }
+
+  .frien_notification .popover-content ul li label {
+    width: 180px;
+    text-align: left;
+    color: #037bb8;
+  }
+
+  .notification_ul {
+    max-height: 300px !important;
+    overflow-y: scroll;
+    min-height: 30px;
+  }
+
+  .notification_ul li {
+    margin-right: 5px;
+  }
+
+  .notification_ul li a label {
+    width: 178px;
+    text-align: left;
+  }
+
+  .notification_ul::-webkit-scrollbar {
+    width: 10px;
+    background-color: #F5F5F5;
+  }
+
+  .notification_ul::-webkit-scrollbar-thumb {
+    background-color: #0ae;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(.5, rgba(255, 255, 255, .2)), color-stop(.5, transparent), to(transparent));
+  }
+
+  .libnk_skigitshair .popover {
+    min-width: 500px;
+    top: -30px !important;
+  }
+
+  .libnk_skigitshair .popover > .arrow:after {
+    border-left-color: #fff !important;
+  }
+
+  .libnk_skigitshair .popover.left > .arrow {
+    border: 0 !important;
+    right: -11px !important;
+    top: 66px !important;
+  }
+
+  .libnk_skigitshair .popover > .arrow:after {
+    border-right-color: #fff !important;
+  }
+
+  .libnk_skigitshair .popover.right > .arrow {
+    border: 0 !important;
+    left: -11px !important;
+    top: 66px !important;
+  }
+
+  .libnk_skigitshair .popover ul li img {
+    float: left;
+  }
+
+  .libnk_skigitshair .popover ul li {
+    padding: 10px 15px;
+    height: auto;
+  }
+
+  .libnk_skigitshair .popover ul li label {
+    color: #037bb8;
+    font-size: 14px;
+    float: left;
+  }
+
+  .libnk_skigitshair .notification_ul {
+    max-height: 150px !important;
+    overflow-y: scroll;
+    min-height: 30px;
+    padding-right: 5px;
+  }
+
+  .shareCheckBox {
+    float: right !important;
+  }
+
+  .selectall_label {
+    margin-right: 17px;
+    font-size: 13px;
+    float: right;
+    display: flex;
+    padding-top: 6px;
+  }
+
+  .button_share {
+    float: right;
+    margin: 0px 10px 10px 0px;
+  }
+
+  .overlayview {
+    display: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 4;
+  }
+
+  .popupdisplay {
+    display: table;
+  }
+
+  .skigit_play, .skigit_social_option {
+    height: auto !important;
+  }
+
+  .close_skigit_share {
+    position: absolute;
+    top: 6px !important;
+    right: 5px !important;
+    z-index: 1;
+    cursor: pointer;
+  }
+
+  /*Share box tabs*/
+  .libnk_skigitshair .popover .tabbox ul li a:hover {
+    background: none !important;
+    width: inherit !important;
+  }
+
+  .libnk_skigitshair .popover .tabbox ul li a {
+    background: none !important;
+    color: gray !important;
+    width: inherit !important;
+  }
+
+  .libnk_skigitshair .popover .tabbox ul li {
+    float: left;
+    display: table;
+    width: 225px !important;
+  }
+
+  .libnk_skigitshair .popover .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    border: 1px solid #037bb8 !important;
+    border-bottom: none !important;
+    color: grey !important;
+    left: -23px !important;
+  }
+
+  .libnk_skigitshair .popover .tabbox ul {
+    border-bottom: none !important;
+    color: #037bb8 !important;
+  }
+
+  .libnk_skigitshair .popover .nav.nav-tabs {
+    border-bottom: none !important;
+  }
+
+  .libnk_skigitshair .popover .tab.active > a {
+    border: 1px solid #037bb8 !important;
+    border-bottom: none !important;
+    color: grey !important;
+  }
+
+  .libnk_skigitshair .popover .tab a {
+    border-bottom: 1px #037bb8 solid !important;
+  }
+
+  .libnk_skigitshair .popover .tabbox ul li a {
+    color: #006699 !important;
+    font-family: segoe_print !important;
+  }
+
+  .libnk_skigitshair .popover .nav-tabs > li > a {
+    margin-right: -35px !important;
+    right: 23px;
+  }
+
+  .
+  .libnk_skigitshair .popover a {
+    border: none !important;
+  }
+
+  .error {
+    font-family: segoe_print !important;
+  }
+
+  img.share {
+    margin-left: 0px !important;
+  }
+
+  .skigit_creator_title p {
+    margin-bottom: 0px !important;
+  }
+
+  .business_enlarge {
+    position: absolute;
+    display: none;
+    right: -75px;
+    background: transparent;
+    top: -9px;
+    z-index: 999;
+    padding: 10px;
+  }
+
+  .business_enlarge img {
+    max-width: 70px;
+  }
+
+  .profile_enlarge {
+    position: absolute;
+    display: none;
+    left: 15%;
+    background: transparent;
+    top: -9px;
+    z-index: 999;
+    padding: 10px;
+  }
+
+  .profile_enlarge img {
+    max-width: 70px;
+  }
+
+  .libnk_skigitshair input[type="button"][disable] {
+    background: url({% static 'skigit/images/small_logout_btn_hover.png' %}) no-repeat !important;
+    color: black;
+  }
+
+  .form_search .input-group-addon {
+    padding: 4px 12px;
+    background: none;
+    border: 0;
+  }
+
+  .form_search .form-control {
+    border-top-right-radius: 4px !important;
+    border-bottom-right-radius: 4px !important;
+  }
+
+  /* Video Box Statistic Results */
+
+  .views_span, .likes_span, .shares_span, .plugs_span {
+    padding: 0 0 0 10px;
+    font-size: 12px;
+  }
+
+  .spn_videoname {
+    position: relative !important;
+    width: 100%;
+    font-size: 12px !important;
+    display: table;
+  }
+
+  .spn_titlebox p {
+    width: 100%;
+    display: table;
+  }
+
+  .statistics_color {
+    color: #037bb8;
+  }
+
+  .statistics_color span {
+    color: #333;
+  }
+
+  .spn_titlebox {
+    height: 90px;
+    margin-bottom: 7px;
+  }
+
+  .box_contain_viedio {
+    height: 110px !important;
+  }
+
+  .views_span, .likes_span, .shares_span, .plugs_span {
+    padding: 0 10px 0 10px;
+    font-size: 12px;
+    font-weight: bold !important;
+  }
+
+  .views_span label, .likes_span label, .shares_span label, .plugs_span label {
+    font-weight: bold !important;
+  }
+
+  .close-skigit {
+    bottom: -8px !important;
+    right: -8px !important;
+  }
+
+  .modal-content {
+    border: none !important;
+  }
+
+  .message h3 {
+    font-family: segoe_print !important;
+  }
+
+  .share_date {
+    width: 121px;
+    font-size: smaller !important;
+    margin-top: 5px;
+  }
+
+  #circle {
+    width: 15px;
+    height: 15px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    background: #58D68D;
+    margin-top: 3px;
+    margin-left: 15px;
+    float: left;
+  }
+
+  .notify_msg_div .error {
+    background-color: #d9534f !important;
+    border-color: red;
+    color: #fff !important;
+  }
+
+  .notify_msg_div .error .message h3 {
+    color: #fff !important;
+    margin: 0 0 0 0 !important;
+    font: bold 12px/12px "Segoe Print";
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent) !important;
+  }
+
+  span.pluge_skigit {
+    display: table;
+    padding: 3px 15px;
+    text-align: center;
+  }
+
+  span.pluge_skigit a {
+    color: #037bb8 !important;
+    font-weight: bolder !important;
+    display: table;
+  }
+
+  span.pluge_skigit a:hover {
+    color: #3d9aca !important;
+  }
+
+  .notifylist_li label {
+    width: 100%;
+    display: table;
+    line-height: 1 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .notifylist_li label img {
+    float: left;
+    width: 25px;
+    margin-right: 10px;
+    margin-bottom: 3px;
+  }
+
+  .notifylist_li {
+    font-size: small !important;
+  }
+
+  .notify_remove {
+    margin-right: -7px;
+    margin-left: 3px;
+    height: 17px !important;
+    width: 17px !important;
+  }
+
+  .notifylist_li {
+    position: relative;
+  }
+
+  .notifylist_li span.notify_date {
+    position: absolute;
+    right: 10px;
+    top: 4px !important;
+    margin-top: 0 !important;
+    font-size: x-small;
+  }
+
+  .notifylist_li span.notify_datelike {
+    position: absolute;
+    right: 10px;
+    top: 23px !important;
+    margin-top: 0 !important;
+    font-size: x-small;
+  }
+
+  .comefromtop {
+    animation: comefromtop 0.5s;
+  }
+
+  .pushdown {
+    animation: pushdown 0.5s;
+  }
+
+  @-webkit-keyframes comefromtop {
+    0% {
+      opacity: 0;
+      -webkit-transform: translateY(-100%);
+    }
+    100% {
+      opacity: 1;
+      -webkit-transform: translateY(0px);
+    }
+  }
+
+  @-webkit-keyframes pushdown {
+    0% { /*opacity:0;*/
+      -webkit-transform: translateY(-10%);
+    }
+    100% { /*opacity:1;*/
+      -webkit-transform: translateY(0);
+    }
+  }
+
+
+</style>
+
+<div class="overlayview"></div>
+{% if request.user.is_authenticated %}
+  <label class="invite_responce_box" id="invt_msg" hidden>
+    <center>
+      <img class="img" src="{% static 'skigit/images/logo.png' %}"/>
+      <p class='f_type' id="invt_msg_text"></p>
+    </center>
+  </label>
+  <div class="modal fade bugModel" tabindex="-1" role="dialog" aria-labelledby="bugreport" aria-hidden="true"
+       id="bugModal">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content" style="height: 425px;width: 300px;">
+        <div class="modal-header">
+
+          <!--  <a href="#" class="close" data-dismiss="modal">&times;</a> -->
+
+          <a href="#" class="close" data-dismiss="modal">
+            <img src="{% static 'skigit/images/new_icons/close(32x32).png' %}" width="20px;" height="20px;"
+                 style="margin-right: -19px;"/> </a>
+          <center><img src="/static/skigit/images/logo.png" width="65px;" height="50px;"></center>
+          <h4 class="modal-title" style="font-family: Segoe_Print !important;">Report a Bug to the Skigit Team </h4>
+        </div>
+        <div class="modal-body">
+          <form id="bug_report_form">
+            <div class="form-group">
+              <div style="color:#000; font-family: Segoe_Print !important; padding-bottom: 20px; ">
+                <span>Page URL/Skigit ID: {% if request.is_secure %}https://{% else %}
+                  http://{% endif %}{{ request.get_host }}{{ request.get_full_path }} </span>
+              </div>
+              <input type="hidden" id="id_bug_page_url"
+                     value="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ request.get_full_path }}">
+              <input type="hidden" id="id_bug_title" value="{{ request.path }}">
+            </div>
+            <div class="form-group">
+              <div style="color:#000; font-family: Segoe_Print !important;">
+                <span>Please describe the problem in detail:</span>
+              </div>
+              <textarea id="bug_description" placeholder="Bug description" rows=5 style="width: 100%;"></textarea>
+            </div>
+            <div class="form-group">
+              <div style="color:#000; font-family: Segoe_Print !important; margin-top: -8px !important;">
+                <div style="display: block">
+                  <span style="max-width: 60%;">Have you been able to repeat this? </span>
+                  <p>
+                    <label for="id_repeat_yes"><input id="id_repeat_yes" class="bugpopupradio" name="repeat"
+                                                      required="True" type="radio" value="1">&nbsp;Yes</label>
+                    <label for="id_repeat_no"><input id="id_repeat_no" class="bugpopupradio" name="repeat"
+                                                     required="True" type="radio" value="0">&nbsp;No</label>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div style="font-family: Segoe_Print !important;"></div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <center>
+
+            <button type="button" id='id_bug_submit' tabindex="3" class="btn btn-default btn-sm">Submit</button>
+            <button type="button" id='id_bug_close' class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
+          </center>
+        </div>
+        <center><label class="form-group" style='font-family: Segoe_Print; text-align: center' id="bug_msg"/></center>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+
+      <header id="header">
+
+        <div class="logo center-align pull-left">
+          <a href="/"><img src="/static/skigit/images/logo.png" alt=""/></a>
+        </div>
+
+        <div class="socialIcons horz pull-right">
+
+          <div class="social-box"><a target="_blank" title="facebook" href="#"><img
+              src="{% static 'skigit/images/facebook.png' %}" border="0" width="28" height="28" alt="facebook"/></a>
+          </div>
+          <div class="social-box"><a target="_blank" title="twitter" href="#"><img
+              src="{% static 'skigit/images/twitter.png' %}" border="0" width="28" height="28" alt="twitter"/></a></div>
+          <div class="social-box"><a target="_blank" title="MySpace" href="#"><img
+              src="{% static 'skigit/images/myspace.png' %}" border="0" width="28" height="28" alt="MySpace"/></a></div>
+          <div class="social-box"><a target="_blank" title="youtube" href="#"><img
+              src="{% static 'skigit/images/youtube.png' %}" border="0" width="28" height="28" alt="youtube"/></a></div>
+          <div class="social-box"><a target="_blank" title="Google+" href="#"><img
+              src="{% static 'skigit/images/google.png' %}" border="0" width="28" height="28" alt="Google+"/></a></div>
+          <div class="social-box"><a target="_blank" title="Vimeo" href="#"><img
+              src="{% static 'skigit/images/vimeo.png' %}" border="0" width="28" height="28" alt="Vimeo"/></a></div>
+          <div class="social-box"><a target="_blank" title="Tumblr" href="#"><img
+              src="{% static 'skigit/images/tumblr.png' %}" border="0" width="28" height="28" alt="Tumblr"/></a></div>
+
+        </div>
+
+        <div class="clearfix"></div>
+        <nav class="navbar navbar-default"> <!-- !important; -->
+          <div class="container-fluid">
+            <div class="navbar-header">
+              <button type="button" id="menu_list" class="navbar-toggle collapsed pull-left" data-toggle="collapse"
+                      data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar top-bar"></span>
+                <span class="icon-bar middle-bar"></span>
+                <span class="icon-bar bottom-bar"></span>
+              </button>
+              <a href="{% url 'user_profile' %}" id="profile"
+                 class="hidden-lg hidden-md hidden-sm navbar-toggle pull-right" aria-controls="navbar">
+                {% if user_profile.profile_img %}
+                  <img class="img-thumbnail" height="32" width="32" alt="{{ user.username }}"
+                       src="{% thumbnail user_profile.profile_img "50x50" crop="center" %}">
+                {% else %}
+                  <img src="{% static 'skigit/detube/images/noimage_user.jpg' %}" height="25" width="25"
+                       class="img-thumbnail"/>
+                {% endif %}
+              </a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse padd_zero"> <!-- navbar-collapse -->
+              <ul class="nav navbar-nav list-inline">
+                {% if category_list %}
+                  {% for cat in category_list %}
+
+                    {% if cat.cat_name == 'Dramaskigit' %}
+                      <li>
+                        <a title="Dramaskigit" href="{{ cat.get_absolute_url }}" class="text-center">
+                          <img src="{% static 'skigit/images/animation/50/PNG/Drama(50x50).png' %}" height="32"
+                               width="32" class="img1"/>
+                          <img src="{% static 'skigit/images/animation/50/Drama(50x50).gif' %}" height="32" width="32"
+                               class="img2"/>
+                          <p>Dramaskigit</p>
+                        </a>
+                      </li>
+                    {% elif cat.cat_name == 'Vibraskigit' %}
+                      <li>
+                        <a title="Vibraskigit" href="{{ cat.get_absolute_url }}" class="text-center">
+                          <img src="{% static 'skigit/images/animation/50/PNG/Earphone(50x50).png' %}" height="32"
+                               width="32" class="img1"/>
+                          <img src="{% static 'skigit/images/animation/50/Earphone(60x47).gif' %}" height="32"
+                               width="32" class="img2"/>
+                          <p>Vibraskigit</p></a>
+                      </li>
+                    {% elif cat.cat_name == 'Demoskigit' %}
+                      <li>
+                        <a title="Demoskigit" href="{{ cat.get_absolute_url }}" class="text-center">
+                          <img src="{% static 'skigit/images/animation/50/PNG/Demo(50x50).png' %}" height="32"
+                               width="32" class="img1"/>
+                          <img src="{% static 'skigit/images/animation/50/Demo(50x50).gif' %}" height="32" width="32"
+                               class="img2"/>
+                          <p>Demoskigit</p>
+                        </a>
+                      </li>
+                    {% elif cat.cat_name == 'Wackiskigit' %}
+                      <li>
+                        <a title="Wackiskigit" href="{{ cat.get_absolute_url }}" class="text-center">
+                          <img src="{% static 'skigit/images/animation/50/PNG/Wack(Face)_(50x50) (2).png' %}"
+                               height="32" width="32" class="img1"/>
+                          <img src="{% static 'skigit/images/animation/50/Wack(Face)_(50x50).gif' %}" height="32"
+                               width="32" class="img2"/>
+                          <p>Wackiskigit</p>
+                        </a>
+                      </li>
+                    {% elif cat.cat_name == 'Selfieskigit' %}
+                      <li>
+                        <a title="Selfieskigit" href="{{ cat.get_absolute_url }}" class="text-center">
+                          <img src="{% static 'skigit/images/animation/50/PNG/Selfie(50x50).png' %}" height="32"
+                               width="32" class="img1"/>
+                          <img src="{% static 'skigit/images/animation/50/Selfie(50x50).gif' %}" height="32" width="32"
+                               class="img2"/>
+                          <p>Selfieskigit</p>
+                        </a>
+                      </li>
+                    {% else %}
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+                <li>
+                  <a title="Your Awesome Things" href="{% url 'awesome_things' %}" class="text-center dropdown-toggle">
+                    <img src="{% static 'skigit/images/animation/50/PNG/Chest(50x50).png' %}" height="32" width="32"
+                         class="img1"/>
+                    <img src="{% static 'skigit/images/animation/50/Chest(50x50).gif' %}" height="32" width="32"
+                         class="img2"/>
+                    <p>Your Things</p>
+                  </a>
+                </li>
+
+                <li class="dropdown">
+                  <a title="Guideline" href="#" class="text-center dropdown-toggle" data-toggle="dropdown">
+                    <img src="{% static 'skigit/images/animation/50/PNG/Guideline(50x50).png' %}" height="32" width="32"
+                         class="img1"/>
+                    <img src="{% static 'skigit/images/animation/50/Guideline(50x50).gif' %}" height="32" width="32"
+                         class="img2"/>
+                    <p>Guidelines</p>
+                  </a>
+                  <ul class="dropdown-menu" id="guidline_menu">
+                    <li class="dropdown-header">Guidelines</li>
+                    <li><a href="/guidelines/">Guideline</a></li>
+                    <li><a href="{% url 'guidelines_url:skigitology_view' %}">Skigitology</a></li>
+                    <li><a href="{% url 'guidelines_url:making_your_skigit_view' %}">Making Your Skigit</a></li>
+                    <li><a href="{% url 'guidelines_url:skigit_length_view' %}">Skigit Length</a></li>
+                    <li><a href="{% url 'guidelines_url:allowed_video_formats_view' %}">Video Formats</a></li>
+                    <li class="dropdown-header">Who We Are?</li>
+                    <li><a href="{% url 'about_us_url:aboust_us_view' %}">About Us</a></li>
+                    <li><a href="{% url 'about_us_url:faq_view' %}">FAQ</a></li>
+                    <li><a href="{% url 'about_us_url:privacy_policy_view' %}">Privacy Policy</a></li>
+                    <li><a href="{% url 'about_us_url:t_and_c_view' %}">Terms Of Service</a></li>
+                    <li><a href="{% url 'about_us_url:acceptable_use_policy_view' %}">Acceptable Use Policy</a></li>
+                    <li><a href="{% url 'about_us_url:copyright_policy' %}">Copyright Policy</a></li>
+                    <li><a href="{% url 'about_us_url:skigit_for_business_view' %}">Skigit For Your Business</a></li>
+                  </ul>
+                </li>
+              </ul>
+              <ul id="user_action" class="nav navbar-nav navbar-right">
+
+                <li>
+                  <a href="{% url 'sperks' %}" class="text-center" title="Sperks">
+                    <img src="{% static 'skigit/images/animation/50/PNG/Sperk.gif' %}" class="img1"
+                         style="margin-top: -14px; width: 94px; height: auto;"/>
+                    <img src="{% static 'skigit/images/animation/50/Sperk.gif' %}" class="img2"
+                         style="margin-top: -14px;  width: 94px; height: auto;"/>
+                  </a>
+                </li>
+
+                <li>
+                  <a href="{% url 'direct_upload' %}" class="text-center" title="Upload New Skigit">
+                    <img src="{% static 'skigit/images/animation/50/PNG/Upload.png' %}" class="img1" height="24"
+                         width="32"/>
+                    <img src="{% static 'skigit/images/animation/50/Upload.gif' %}" class="img2" height="24"
+                         width="32"/>
+                    <p>Upload</p>
+                  </a>
+                </li>
+
+                <li class="general_notify">
+                  <a href="#" onclick="get_notify()" id="generalNPopover" class="text-center">
+                    <img src="{% static 'skigit/images/animation/50/PNG/Notifications.png' %}" height="24" width="24"
+                         class="img1"/>
+                    <img src="{% static 'skigit/images/animation/50/Notifications.gif' %}" height="24" width="24"
+                         class="img2"/>
+                    <p>Notifications</p>
+                                        <span id="general_badge"
+                                              style="right: 15px !important; {% if general_notify_count %}
+                                                visibility: visible !important; {% else %} display: none
+                                                !important;{% endif %}" class="badge badge-warning">
+                                            {% if general_notify_count %}{{ general_notify_count }}{% else %}
+                                              0{% endif %}
+                                        </span>
+                  </a>
+                  <div class="tabbable hide custom_popup" id="notifyContaint">
+                    <ul class="list-group notification_ul" id="notify_ul">
+                      <li class="f_type" style="color:#bbb9b9; font-size: smaller; text-align: center;">
+                        <center><img src="{% static 'skigit/images/inf_loading.gif' %} " id="nf_loader"
+                                     style="display: none"></center>
+                        There is no pending Notifications.
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+
+                <li class="frien_notification" style="margin-right: 5px;">
+                  <a href="#" onclick="friendsNotificaton()" id="friendPopover" class="text-center">
+                    <img src="{% static 'skigit/images/animation/50/PNG/Friends_Invites.png' %}" title="Friend & Invite"
+                         height="24" width="24" class="img1"/>
+                    <img src="{% static 'skigit/images/animation/50/Friends_Invites.gif' %}" title="Friend & Invite"
+                         height="24" width="24" class="img2"/>
+                    <p>Friends</p>
+
+                    <span id="friend_badge"
+                          style="{% if friend_request_notification %}visibility:visible !important;{% else %}display: none !important;{% endif %}"
+                          class="badge badge-danger">{% if friend_request_notification %}
+                      {{ friend_request_notification }}{% else %}0{% endif %}</span>
+                    <div class="tabbable hide custom_popup" id="friendContent">
+                      <ul class="list-group notification_ul" id="frnd_notification">
+                        <li class="f_type" style="color:#bbb9b9; font-size: smaller; text-align: center;">
+                          There is no pending Notifications.
+                        </li>
+                      </ul>
+
+                      <center><a class="f_type" href="/friends/friends-&-invite" style="color:#0a80be"> Go to my Friends
+                        & Invites page </a></center>
+                    </div>
+                  </a>
+                </li>
+
+                <li>
+                  <a href="/search_skigit/" class="text-center">
+                    <img src="{% static 'skigit/images/animation/50/PNG/Search.png' %}" height="24" width="24"
+                         class="img1"/>
+                    <img src="{% static 'skigit/images/animation/50/Search.gif' %}" height="24" width="24"
+                         class="img2"/>
+                    <p>Search</p>
+                  </a>
+                </li>
+
+                <li class="hidden-xs dropdown" style="top: -26px;">
+                  <a href="{% url 'user_profile' %}" class="text-center dropdown-toggle" data-toggle="dropdown">
+                    {% if user_profile.profile_img %}
+                      <img class="avatar" height="50" width="auto" alt="{{ user.username }}" src=
+                          "{{ user_profile.profile_img.url }}" style="border-radius: 5px;"/>
+                    {% else %}
+                      <img src="{% static 'skigit/detube/images/noimage_user.jpg' %}" height="25" width="25"
+                           class="avtar"/>
+                    {% endif %}
+
+                    <p>{{ user.username }}</p>
+                  </a>
+                  <ul class="dropdown-menu" id="guidline_menu">
+                    <li>
+                      <a href="/profile/">Profile and Settings</a>
+                    </li>
+                    <li>
+                      <a href="/my_skigits/">My Skigits</a>
+                    </li>
+                    <li>
+                      <a href="/plugged_in_skigits/">Skigits I Plugged Into</a>
+                    </li>
+                    <li>
+                      <a href="/like/">Skigits I like</a>
+                    </li>
+                    <li>
+                      <a href="/favorite/">My Favorites</a>
+                    </li>
+                    <li>
+                      <a href="/following/">I'm Following</a>
+                    </li>
+                    <li>
+                      <a href="/friends/friends-&-invite">Friends and Invites</a>
+                    </li>
+                    <li>
+                      <a href="/skigistats/">My Skigistats</a>
+                    </li>
+                    <li>
+                      <a id="bug_report" data-toggle="model" data-target=".bugModal">Bug Report</a>
+                    </li>
+                    <li>
+                      <a href="#logout" onclick="logoutCnfm()">Logout</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div><!--/.nav-collapse -->
+          </div><!--/.container-fluid -->
+        </nav>
+      </header>
+    </div>
+  </div>
+  <div class="overlay"></div>
+  <div id="confirmLogoutBox" style="border: none !important;">
+    <div style="text-align: center !important; font-family: segoe_print !important;">
+      <p><img src="{% static 'skigit/images/logo.png' %}" width="65px;" height="50px;"/></p>
+
+      <p id="confirm_logout_text" style="padding: 30px 0;">Do you really want to leave us?</p>
+
+      <div class="del-bott" style="padding-bottom: 20px;">
+        <button type="button" onclick="ok_logout_click()" id="ok_logout_logo">Ok</button>
+        <button type="button" onclick="cancel_logout()" id="cancel_logout">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    logoutCnfm = function (e) {
+      jQuery('#confirmLogoutBox').addClass('open')
+      jQuery('.overlay').addClass('open')
+    }
+    cancel_logout = function (e) {
+      jQuery('#confirmLogoutBox').removeClass('open')
+      jQuery('.overlay').removeClass('open')
+    }
+    ok_logout_click = function (e) {
+      window.location = '{% url 'logout_user' %}'
+    }
+  </script>
+
+{% else %}
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <header id="header">
+        <div class="logo center-align pull-left"><a href="/"><img src="/static/skigit/images/logo.png" alt=""/></a>
+        </div>
+
+
+        <div class="socialIcons horz pull-right">
+
+          <div class="social-box"><a target="_blank" title="facebook" href="#"><img
+              src="{% static 'skigit/images/facebook.png' %}" border="0" width="28" height="28" alt="facebook"/></a>
+          </div>
+          <div class="social-box"><a target="_blank" title="twitter" href="#"><img
+              src="{% static 'skigit/images/twitter.png' %}" border="0" width="28" height="28" alt="twitter"/></a></div>
+          <div class="social-box"><a target="_blank" title="MySpace" href="#"><img
+              src="{% static 'skigit/images/myspace.png' %}" border="0" width="28" height="28" alt="MySpace"/></a></div>
+          <div class="social-box"><a target="_blank" title="youtube" href="#"><img
+              src="{% static 'skigit/images/youtube.png' %}" border="0" width="28" height="28" alt="youtube"/></a></div>
+          <div class="social-box"><a target="_blank" title="Google+" href="#"><img
+              src="{% static 'skigit/images/google.png' %}" border="0" width="28" height="28" alt="Google+"/></a></div>
+          <div class="social-box"><a target="_blank" title="Vimeo" href="#"><img
+              src="{% static 'skigit/images/vimeo.png' %}" border="0" width="28" height="28" alt="Vimeo"/></a></div>
+          <div class="social-box"><a target="_blank" title="Tumblr" href="#"><img
+              src="{% static 'skigit/images/tumblr.png' %}" border="0" width="28" height="28" alt="Tumblr"/></a></div>
+
+        </div>
+
+        <div class="clearfix"></div>
+
+        <nav class="navbar navbar-default"> <!-- !important; -->
+
+          <div class="container-fluid">
+
+            <div class="navbar-header">
+              <button type="button" id="menu_list" class="navbar-toggle collapsed pull-left" data-toggle="collapse"
+                      data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar top-bar"></span>
+                <span class="icon-bar middle-bar"></span>
+                <span class="icon-bar bottom-bar"></span>
+              </button>
+            </div>
+
+            <div id="navbar" class="navbar-collapse collapse padd_zero"> <!-- navbar-collapse -->
+
+              <ul class="nav navbar-nav list-inline">
+                {% if category_list %}
+                  {% for cat in category_list %}
+
+                    {% if cat.cat_name == 'Dramaskigit' %}
+                      <li>
+                        <a title="Dramaskigit" href="{{ cat.get_absolute_url }}" class="text-center">
+                          <img src="{% static 'skigit/images/animation/50/PNG/Drama(50x50).png' %}" height="32"
+                               width="32" class="img1"/>
+                          <img src="{% static 'skigit/images/animation/50/Drama(50x50).gif' %}" height="32" width="32"
+                               class="img2"/>
+                          <p>Dramaskigit</p>
+                        </a>
+                      </li>
+                    {% elif cat.cat_name == 'Vibraskigit' %}
+                      <li>
+                        <a title="Vibraskigit" href="{{ cat.get_absolute_url }}" class="text-center">
+                          <img src="{% static 'skigit/images/animation/50/PNG/Earphone(50x50).png' %}" height="32"
+                               width="32" class="img1"/>
+                          <img src="{% static 'skigit/images/animation/50/Earphone(60x47).gif' %}" height="32"
+                               width="32" class="img2"/>
+                          <p>Vibraskigit</p></a>
+                      </li>
+                    {% elif cat.cat_name == 'Demoskigit' %}
+                      <li>
+                        <a title="Demoskigit" href="{{ cat.get_absolute_url }}" class="text-center">
+                          <img src="{% static 'skigit/images/animation/50/PNG/Demo(50x50).png' %}" height="32"
+                               width="32" class="img1"/>
+                          <img src="{% static 'skigit/images/animation/50/Demo(50x50).gif' %}" height="32" width="32"
+                               class="img2"/>
+                          <p>Demoskigit</p>
+                        </a>
+                      </li>
+                    {% elif cat.cat_name == 'Wackiskigit' %}
+                      <li>
+                        <a title="Wackiskigit" href="{{ cat.get_absolute_url }}" class="text-center">
+                          <img src="{% static 'skigit/images/animation/50/PNG/Wack(Face)_(50x50) (2).png' %}"
+                               height="32" width="32" class="img1"/>
+                          <img src="{% static 'skigit/images/animation/50/Wack(Face)_(50x50).gif' %}" height="32"
+                               width="32" class="img2"/>
+                          <p>Wackiskigit</p>
+                        </a>
+                      </li>
+                    {% elif cat.cat_name == 'Selfieskigit' %}
+                      <li>
+                        <a title="Selfieskigit" href="{{ cat.get_absolute_url }}" class="text-center">
+                          <img src="{% static 'skigit/images/animation/50/PNG/Selfie(50x50).png' %}" height="32"
+                               width="32" class="img1"/>
+                          <img src="{% static 'skigit/images/animation/50/Selfie(50x50).gif' %}" height="32" width="32"
+                               class="img2"/>
+                          <p>Selfieskigit</p>
+                        </a>
+                      </li>
+                    {% else %}
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+                <li>
+                  <a title="Your Awesome Things" href="{% url 'awesome_things' %}" class="text-center dropdown-toggle">
+                    <img src="{% static 'skigit/images/animation/50/PNG/Chest(50x50).png' %}" height="32" width="32"
+                         class="img1"/>
+                    <img src="{% static 'skigit/images/animation/50/Chest(50x50).gif' %}" height="32" width="32"
+                         class="img2"/>
+                    <p>Your Things</p>
+                  </a>
+                </li>
+
+                <li class="dropdown">
+                  <a title="Guideline" href="#" class="text-center dropdown-toggle" data-toggle="dropdown">
+                    <img src="{% static 'skigit/images/animation/50/PNG/Guideline(50x50).png' %}" height="32" width="32"
+                         class="img1"/>
+                    <img src="{% static 'skigit/images/animation/50/Guideline(50x50).gif' %}" height="32" width="32"
+                         class="img2"/>
+                    <p>Guidelines</p>
+                  </a>
+                  <ul class="dropdown-menu" id="guidline_menu">
+                    <li class="dropdown-header">Guidelines</li>
+                    <li><a href="/guidelines/">Guideline</a></li>
+                    <li><a href="{% url 'guidelines_url:skigitology_view' %}">Skigitology</a></li>
+                    <li><a href="{% url 'guidelines_url:making_your_skigit_view' %}">Making Your Skigit</a></li>
+                    <li><a href="{% url 'guidelines_url:skigit_length_view' %}">Skigit Length</a></li>
+                    <li><a href="{% url 'guidelines_url:allowed_video_formats_view' %}">Video Formats</a></li>
+                    <li class="dropdown-header">Who We Are?</li>
+                    <li><a href="{% url 'about_us_url:aboust_us_view' %}">About Us</a></li>
+                    <li><a href="{% url 'about_us_url:faq_view' %}">FAQ</a></li>
+                    <li><a href="{% url 'about_us_url:privacy_policy_view' %}">Privacy Policy</a></li>
+                    <li><a href="{% url 'about_us_url:t_and_c_view' %}">Terms Of Service</a></li>
+                    <li><a href="{% url 'about_us_url:acceptable_use_policy_view' %}">Acceptable Policy</a></li>
+                    <li><a href="{% url 'about_us_url:copyright_policy' %}">Copyright Policy</a></li>
+                    <li><a href="{% url 'about_us_url:skigit_for_business_view' %}">Skigit For Your Business</a></li>
+                  </ul>
+                </li>
+              </ul>
+
+              <ul id="user_action" class="nav navbar-nav navbar-right list-inline">
+                <li>
+                  <a href="#" title="Log In" class="text-center" data-target="#smallModal" data-toggle="modal">
+                    <img src="{% static 'skigit/images/animation/50/PNG/Star(50x50).png' %}" height="24" width="24"
+                         class="img1"/>
+                    <img src="{% static 'skigit/images/animation/50/Star(50x50).gif' %}" height="24" width="24"
+                         class="img2"/>
+                    <p>Log In</p>
+                  </a>
+                </li>
+                <li>
+                  <a href="/search_skigit/" class="text-center">
+                    <img src="{% static 'skigit/images/animation/50/PNG/Search.png' %}" height="24" width="24"
+                         class="img1"/>
+                    <img src="{% static 'skigit/images/animation/50/Search.gif' %}" height="24" width="24"
+                         class="img2"/>
+                    <p>Search</p>
+                  </a>
+                </li>
+              </ul>
+
+            </div><!--/.nav-collapse -->
+          </div><!--/.container-fluid -->
+        </nav>
+      </header>
+    </div>
+  </div>
+{% endif %}
+
+

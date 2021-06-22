@@ -1,0 +1,334 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block main_video_block %}
+{% endblock %}
+
+{% block window_page_title_block %}
+    Upload - Skigit
+{% endblock %}
+
+{% block window_page_meta_block %}
+    <meta property="og:site_name" content="Skigit" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Login - Skigit" />
+{% endblock %}
+
+{% block head_inline_css_block %}
+{% endblock %}
+
+{% block main_nav_under_css_block %}
+{% endblock %}
+
+{% block main_div_block %}
+    <div id="main">
+        <div class="wrap cf">
+            <div id="content" role="main">
+                <div class="post-2110 page type-page status-publish hentry" id="post-2110">
+                    <h1 class="page-title">Upload your Primary skigit</h1>
+                    <div class="page-content rich-content">
+                        <form action="{{ post_url }}{{ next_url }}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <style>
+                                body{
+                                    list-style: none
+                                }
+                                .login input[type="password"]{
+                                    background: none repeat scroll 0 0 #F9F9F9;
+                                    border: 1px solid #CCCCCC;
+                                    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1) inset;
+                                    padding: 5px;
+                                    float: left;
+                                    margin: 5px 0;
+                                    width: 200px;
+                                    margin: 5px 0px 0 20px;
+                                    width: 85%;
+                                }
+                                .login input[type="text"]{
+                                    background: none repeat scroll 0 0 #F9F9F9;
+                                    border: 1px solid #CCCCCC;
+                                    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1) inset;
+                                    padding: 5px;
+                                    float: left;
+                                    margin: 5px 0;
+                                    width: 200px;
+                                    margin: 5px 0px 0 20px;
+                                    width: 85%;
+                                }
+                                .forgetmenot span{float:none;}
+                                .login input[type="checkbox"]{margin:0;}
+                                .span5 input[type="file"] {
+                                //margin-left: 22.2%;
+                                    width: 239px;
+                                    height: 39px;
+                                //margin-top: 4%;
+                                //margin-left: 5%;
+                                }
+                                #id_gender{
+                                    width: 252px;
+                                }
+                                #profile_img_div a,#profile_img_div label,#profile_img_div input[type="checkbox"]{
+                                    display: none;
+                                }
+                                .upload_btn_main {
+                                    margin: 25px auto auto 280px;
+                                    padding-bottom: 25px;
+                                    width: 50%;
+                                }
+                            </style>
+
+                            <div class="title">
+                                <h1>Upload your Primary skigit</h1>
+                            </div>
+                            <div class="upload_icon"><img src="{% static 'skigit/detube/images/upload_icon.png' %}"></div>
+
+                            <div class="upload_skig_main">
+                                <div class="skigt_mid">
+                                    <div class="skigt_mid_box">
+                                        <div style="display:none" class="span5">
+                                            <input type="radio" disabled="" value="yes" name="join">
+                                            <span>Yes</span>
+                                            <input type="radio" checked="checked" value="no" name="join">
+                                            <span>No</span>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <input type="hidden" value="0" name="wpvp_join" id="wpvp_join">
+                                        <div class="clearfix"></div>
+                                        <div style="display:block;" id="child">
+                                            <div class="clearfix"></div>
+                                            <div class="upload_icon"><img src="/static/skigit/detube/images/big_upload_icon.png"></div>
+                                            <div id="abc">
+                                                <div class="span5">
+                                                    <label>
+                                                        My Skigit Title                <span class="red">*</span></label>
+                                                    <span class="notifi_icon2"></span>
+                                                    <div style="display:none;" id="tooltip_note2">
+                                                        <div class="logout_box">
+                                                            <div class="logout_box_head">My Skigit Title</div>
+                                                            <p>Enter the name that best describes your skigit. The title will display at the top of your skigit thumbnail.</p>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        {{secondary_form.title}}
+                                                        <p>Limit 40 Characters</p>
+                                                        <div class="wpvp_title_error wpvp_error"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <div class="span5">
+                                                    <label>
+                                                        My Skigit Category                <span class="red">*</span> </label>
+                                                    <span class="notifi_icon3"></span>
+                                                    <div style="display:none;" id="tooltip_note3">
+                                                        <div class="logout_box">
+                                                            <div class="logout_box_head">My Skigit Category</div>
+                                                            <p>Enter or select the category that best describes the presentation style of you skigit. Refer to Guidelines.</p>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        {{secondary_form.category}}
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <div style="display:visible" id="subdiv">
+                                                    <div class="span5">
+                                                        <label>My Subject Category <span class="red">*</span> </label>
+                                                        <span class="notifi_icon4"></span>
+                                                        <div style="display:none;" id="tooltip_note4">
+                                                            <div class="logout_box">
+                                                                <div class="logout_box_head">My Subject Category</div>
+                                                                <p>Enter or select the category that best classifies the awesome thing in your skigit.</p>
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            {{secondary_form.subject_category}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <div id="ajax_page"></div>
+                                                <div style="display:block" id="default_div">
+                                                    <div class="span5">
+                                                        <label>
+                                                            My awesome thing was made by <span class="red">*</span>                </label>
+                                                        <span class="notifi_icon5"></span>
+                                                        <div style="display:none;" id="tooltip_note5">
+                                                            <div class="logout_box">
+                                                                <div class="logout_box_head">My awesome thing was made by</div>
+                                                                <p>Enter or select the name of the manufacturer or creator of your awesome thing.
+                                                                    Add maker, proprietor, establishment or organization name. For people,places, ideas or other, simply add a cool or fun name that best fits the originator of your awesome thing.<br><br>
+                                                                    e.g. Awesome Idea; "E=mc2", maker: "Albert Einstein"
+                                                                    Awesome Person: "Michael Jordan", maker: "Deloris and James"
+                                                                </p>
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            {{secondary_form.made_by}}
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    <div class="span5">
+                                                        <label> <span class="red"></span></label>
+                                                        <div style="display:none;" id="tooltip_note2">
+                                                            <div class="logout_box">
+                                                                <div class="logout_box_head"></div>
+                                                                <p> </p>
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="or_div"> or
+                                                            <div class="wpvp_title_error wpvp_error"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    <div class="span5">
+                                                        <label>
+                                                            If not found in the list above, add maker <br>or proprietor name
+                                                        </label>
+                                                        {{secondary_form.made_by_option}}
+                                                        <p style="margin-top:-85px;"><br>
+                                                            Add maker,proprietor,establishment or organization name. &nbsp;For people, ideas or other, simply add a cool or fun name that best fits the originator of your awesome thing.
+                                                        <span class="maker_ex">eg.Awesome idea:E=MC<sup>2</sup>, maker "Albert Einstein"
+                                                            Awesome person:Michael Jordan, maker "Deloris and James"
+                                                        </span>
+                                                        </p>
+                                                        <div class="wpvp_title_error wpvp_error"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <div style="display:block" id="getnewlogodiv_default">
+                                                    <div class="span5">
+                                                        <label for="myurl">I bought my awesome thing at <span class="red">*</span></label>
+                                                        <span class="notifi_icon7"></span>
+                                                        <div style="display:none;" id="tooltip_note7">
+                                                            <div class="logout_box">
+                                                                <div class="logout_box_head">I bought my awesome thing at</div>
+                                                                <p>Enter the name of the internet URL of the retailer or website where you purchased your awesome thing. If not a purchased item, enter the item home page or information page where viewers can learn more about your awesome thing.<br>
+                                                                    e.g.  https//www.amazon.com,  <br>
+                                                                    Only enter the URL suffix: amazon.com
+                                                                </p>
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            {{secondary_form.bought_at}}
+
+                                                            <p>Enter item or retail website where item can be found e.g. amazon.com, ebay.com,etc</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    <div class="span5">
+                                                        <label>Spice up your Skigit thumbnail by adding your item logo</label>
+                                                        <span class="notifi_icon8"></span>
+                                                        <div style="display:none;" id="tooltip_note8">
+                                                            <div class="logout_box">
+                                                                <div class="logout_box_head spiceup_lnt">Spice up your Skigit thumbnail by adding your item logo</div>
+                                                                <p> We recommend add the manufacturer or creators logo to your skigit to spice up your thumbnail. Let others know who made your awesome thing. The logo will be displayed in your thumbnail for the whole world to see!</p>
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            {{secondary_form.add_logo}}
+                                                            <span class="incentivediv"><span style="color:red;">*</span>Check for <a class="cmpny_incentive" href="javascript:void(0)">company reward</a> offer for logo display</span>
+                                                            <div style="display:none;" class="cmpny_arrow_data">
+                                                                <span style="display:none;" class="cmpny_up_arrow" id="cmpny_up_arrow"></span>
+                                                                <div style="display:none;" id="cmpny_inc_data" class="cmpny_inc_data">Please wait..</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="myAnchor" style="display:none;" id="myAnchor">Oops! The logo for your awesome thing is not available at this time. We recommend that you select to display the logo so that it can be added to your Skigit at a later date.</div>
+
+                                                        <div class="span5">
+                                                            <label>
+                                                                Why my awesome thing rocks!            </label>
+                                                            <span class="notifi_icon9"></span>
+                                                            <div style="display: none;" id="tooltip_note9">
+                                                                <div class="logout_box">
+                                                                    <div class="logout_box_head">Why my awesome thing rocks!</div>
+                                                                    <p>Let others know why your awesome thing is so glorious in its awesomeness by adding your personal insights, story and feelings in your own words. Trust us...others want to know! </p>
+                                                                    <div class="clearfix"></div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div>
+                                                                {{secondary_form.why_rocks}}
+                                                                <p>Limit 200 characters</p>
+                                                                <div class="wpvp_desc_error wpvp_error"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="span5">
+                                                            <label>Upload your video (max = 30MB):<span class="red">*</span></label>
+                                                            {{ primary_form.file }}
+                                                            <!--    {{ primary_form.title }}-->
+
+
+                                                            {{ primary_form.token.as_hidden }}                                    <!--                                    <p>If a file is uploaded, it will be
+                                                                                        posted in your skigit.Otherwise, you must enter a valid URL for your
+                                                                                        video in order to link to it.
+                                                                                        <br><br>Drop files for Chrome 7+, Firefox 4+, IE10+, Opera 13+ and Safari 6+<br/></p>-->
+                                                            <p>Upload your video here</p>
+                                                            <div class="wpvp_title_error wpvp_error"></div>
+                                                        </div>
+
+                                                        <div class="clearfix"></div>
+                                                        <div class="upload_btn_main">
+                                                            <input name="skigit_submit" type="submit" name="wp-submit"  class="btn" id="wp-submit" value="Post Skigit" />
+                                                            <input name="cancel" type="button" value="Cancel"  class="btn" onclick="location.href = '/'"/>
+                                                            <input type="hidden" name="redirect_to" value="" />
+                                                            <input type="hidden" name="instance" value="" />
+                                                            <input type="hidden" name="action" value="login" />
+
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                    <div id="getnewlogodiv"> </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <!--                                <div class="span5">
+                                                                            <label> Link video from other website<span class="red">*</span></label>
+                                                                            <input type="text" onkeyup="checkspace(this);" value="" id="wpvp_linkvideo" name="wpvp_linkvideo">
+                                                                            <p>Enter the complete URL.<br>e.g.http//youtube.com/123456.mp4</p>
+                                                                            <div class="wpvp_title_error wpvp_error"></div>
+                                                                        </div>
+                                                                        <div class="clearfix"></div>-->
+                                    </div>
+                                </div>
+
+
+                                {% if login_error %}
+                                    <div class="Reg_Error" id="homelogin2_Error">
+                                        <p>{{login_error}} </p>
+                                    </div>
+                                {% else %}
+                                    <div class="Reg_Error" id="homelogin2_Error" style="display:none;">
+                                        <div id="resetpass_msg">
+                                            <!--<span style="color:#008000; font-weight:bold; text-align:center;">
+                                            </span>-->
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                            </div>
+                        </form>
+                    </div><!--end .hentry-->
+
+                </div><!--end #content-->
+
+
+                <div id="sidebar" role="complementary">
+                </div><!--end #sidebar-->
+            </div>
+        </div>
+    </div><!-- end #main -->
+
+{% endblock %}
+
+
+{% load i18n %}

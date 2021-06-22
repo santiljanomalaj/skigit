@@ -1,0 +1,317 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+from django.contrib import messages
+
+{% block main_video_block %}
+{% endblock %}
+
+{% block window_page_title_block %}
+    Sperk - Profile - Skigit
+{% endblock %}
+
+{% block window_page_meta_block %}
+    <meta property="og:site_name" content="Skigit" xmlns="http://www.w3.org/1999/html"/>
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+    <meta property="og:title" content="Sperk - Profile - Skigit" />
+{% endblock %}
+
+{% block head_inline_css_block %}
+{% endblock %}
+
+{% block main_nav_under_css_block %}
+
+    <style type="text/css">
+
+        form li{
+            list-style: none !important;
+        }
+        .errorlist{
+            color: red;
+        }
+        .errorlist li{
+            text-align: center;
+        }
+
+    </style>
+
+{% endblock %}
+
+
+{% block main_div_block %}
+
+    <style>
+        .potfolio_box li img {
+            display: table;
+            margin: 0 auto !important;
+            width: 90% !important;
+            height: auto !important;
+        }
+
+        .potfolio_box li {
+            display: table;
+            float: left;
+            width: 20%;
+            margin-bottom: 30px;
+        }
+
+        .business_box {
+            display: table;
+            width: 100%;
+        }
+
+        .business_box ul {
+            display: table;
+            margin: 0 auto;
+        }
+
+        .business_box li img {
+            display: table;
+            margin: 0 auto !important;
+            height: auto !important;
+        }
+
+        .business_box li {
+            display: table;
+            float: left;
+            width: 220px;
+            margin-bottom: 30px;
+        }
+
+        @media screen and (max-width:767px){
+            .business_box ul, .potfolio_box ul{
+                width: 220px;
+            }
+
+        }
+    </style>
+
+    <script>
+
+        $(document).ready(function(){
+            $(document)[0].oncontextmenu = function() { return false; }
+            $(document).keydown(function(event) {
+                if (event.ctrlKey==true && (event.which == '118' || event.which == '86')) {
+                    event.preventDefault();
+                }
+                if( event.button == 2 ) {
+                    alert('Sorry, this functionality is disabled!');
+                    return false;
+                } else {
+                    return true;
+                }
+                if(event.which === 123){
+                    return false;
+                }
+            });
+        });
+
+    </script>
+
+    <script>
+
+        $(document).ready(function(){
+            $("body").css("-webkit-user-select","none");
+            $("body").css("-moz-user-select","none");
+            $("body").css("-ms-user-select","none");
+            $("body").css("-o-user-select","none");
+            $("body").css("user-select","none");
+        });
+
+    </script>
+
+    <script>
+        $('body').bind('copy paste',function(e) {
+            e.preventDefault(); return false;
+        });
+
+        webLink = function(link_user ,web_url){
+
+            var message;
+            jQuery.ajax({
+                url: "/invoice/web-link/",
+                type: "POST",
+                data: {'link_user':link_user, 'web_link': web_url},
+                success: function(data) {
+                    if(data.is_success) {
+                        window.open(web_url)
+                    }
+                    else{
+                        message = data.message;
+                    }
+                }
+            });
+        }
+
+    </script>
+
+    <div class="row" id="main">
+        <div id="content">
+		<img style="height:45px; width:60px;" src={% static 'skigit/images/logo.png' %}>
+            <div class="padder">
+                <div role="complementary" id="item-header">
+                    <div style="display:none;" class="bp-template-notice error" id="ErrorProfile"></div>
+                </div>
+                <div class="clearfix"></div>
+                <div id="item-body">
+                    <div role="main" class="profile_list gen">
+                        <div class="bus_photos business_box">
+                            <ul>
+                                {% for bextra_img in  busniess_logo %}
+                                    <li>
+                                        <a href="{{ bextra_img.l_img }}" data-lightbox="example-set" >
+                                            <img src="{{ bextra_img.l_img }}" style="margin-right: 10px; " class="comLogoImg">
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        {% for bsperk in profile_list %}
+                            <div class="bus_photos potfolio_box">
+                                <ul>
+                                    {% for extra_img in  bsperk.extra_profile_img.all %}
+                                        <li>
+                                            <a href="{{ extra_img.profile_img.url }}" data-lightbox="example-set" >
+                                                <img src="{{ extra_img.profile_img.url }}" style="margin-right: 10px" weight="100px" >
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                            <div class="gen-user-prof">
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="col-sm-6" style="margin-bottom: 10px;">
+                                        <div class="main-wrap">
+                                            <div class="bl-text"><b>Company Name</b></div>
+                                            <div class="blck-text">{{ bsperk.company_title| default:bsperk.user.get_full_name | default:bsperk.user.username }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6" style="margin-bottom: 10px;">
+                                        <div class="main-wrap">
+                                            <div class="bl-text"><b>Skigit Incentive</b></div>
+                                            <div class="blck-text"><p style="text-align: justify;">{{ bsperk.skigit_incentive }}</p></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6" style="margin-bottom: 10px;">
+                                        <div class="main-wrap">
+                                            <div class="bl-text"><b>Incentive Value &#36;(USD) :</b>
+                                                <span class="blck-text">&#36;{{ bsperk.incetive_val }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12" style="margin-top: 15px;">
+                                <div class="main-wrap" >
+                                    <div class=" bl-text"><b>About Us</b></div>
+                                    <div class="blck-text"><p style="text-align: justify;">{{ bsperk.about_me }}</p></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+
+                            <div class="col-md-12">
+
+                            <div  class="col-md-12" style="margin-top: 15px;">
+
+                                <div class="main-wrap">
+
+                                    <div class=" bl-text" style="margin-bottom:10px;">
+                                        <b> Awesome Company Links </b>
+                                    </div>
+
+                                    <div>
+                                        <p style="text-align: justify;">
+                                            {% for links in company_url %}
+                                                {% if links.disc1 %}
+                                                    <div>{{links.disc1|safe|capfirst}}<span> <a oncopy="return false" oncut="return false" onpaste="return false" onclick="webLink({{ links.user.id }}, '{{links.url1}}')">{{links.url1|safe}}</a></span></div>
+                                                {% endif %}
+                                                {% if links.disc2 %}
+                                                    <div>{{links.disc2|safe|capfirst}}<span> <a oncopy="return false" oncut="return false" onpaste="return false" onclick="webLink({{ links.user.id }}, '{{links.url1}}')">{{links.url2|safe}}</a></span></div>
+                                                {% endif %}
+                                                {% if links.disc3 %}
+                                                    <div>{{links.disc3|safe|capfirst}}<span> <a oncopy="return false" oncut="return false" onpaste="return false" onclick="webLink({{ links.user.id }}, '{{links.url1}}')">{{links.url3|safe}}</a></span></div>
+                                                {% endif %}
+                                                {% if links.disc4 %}
+                                                    <div>{{links.disc4|safe|capfirst}}<span> <a oncopy="return false" oncut="return false" onpaste="return false" onclick="webLink({{ links.user.id }}, '{{links.url1}}')">{{links.url4|safe}}</a></span></div>
+                                                {% endif %}
+                                                {% if links.disc5 %}
+                                                    <div>{{links.disc5|safe|capfirst}}<span> <a oncopy="return false" oncut="return false" onpaste="return false" onclick="webLink({{ links.user.id }}, '{{links.url1}}')">{{links.url5|safe}}</a></span></div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-sm-6" style="margin-bottom: 10px;">
+
+                                <div class="main-wrap">
+
+                                    <div class="bl-text">
+                                        <b>Contact Information</b>
+                                    </div>
+
+                                    <div class="blck-text" >
+                                        <span>Name: {{ bsperk.contact_name }}</span>
+                                        <span>Email: {{ bsperk.contact_email }}</span>
+                                        {% if bsperk.contact_phone %}
+                                            <span>Phone: {{ bsperk.contact_phone}}</span>
+                                        {% endif %}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-6" style="margin-bottom: 10px;">
+                                <div class="main-wrap">
+
+                                    <div class="bl-text">
+                                        <b>Corporate location</b>
+                                    </div>
+
+                                    <div class="blck-text">
+                                        <span>{{ bsperk.city }}, {{ bsperk.state }}, {{ bsperk.country }}</span>
+                                        {%if bsperk.zip_code%}
+                                            <span>Area pin:{{ bsperk.zip_code }}</span>
+                                        {% endif %}
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        {% endfor %}
+
+                        </div>
+
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if video_detail and request.user %}
+            <hr>
+            {% include 'pages/../../../templates/includes/embed_skigit.html' %}
+        {% endif %}
+
+    <script type="text/javascript" src="{% static 'skigit/js/lightbox-plus-jquery.min.js' %}"></script>
+
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+
+{% endblock %}

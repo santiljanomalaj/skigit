@@ -1,0 +1,58 @@
+{% load staticfiles %}
+
+<div class="broshar_main">
+          <div class="broshar_head">
+            <div class="head_1broshar" style="width: 83%;">
+                <span class="f_type box">
+                    Download The <strong class="highlight">Skigit</strong> App today !
+                </span>
+              <img src="{{ skigit_logo }}" alt=""/>
+              <a href="#" class="f_type linkbox">
+                {{ wall_post.content4 }}
+              </a>
+            </div>
+              <div class="logo_right">
+                <img class="b_logo_poster_dynamic" src="{{ poster_obj.b_logo }}"/>
+              </div><!--logo_right-->
+          </div><!--broshar_head-->
+          <div class="contain_broshar1">
+            <div class="contain_01">
+              <div class="head_2broshar">
+                <div class="logo_funbox">
+                  <img src="{% static 'skigit/images/logo_glow_3.png' %}"/>
+                </div>
+                <div class="box_rightfun">
+                    <span class="f_type fun_box">{{ wall_post.header_text }}</span>
+                    <p class="f_type createbox">{{ wall_post.content1 }}</p>
+                </div>
+              </div><!--head_1broshar-->
+            </div><!--contain_01-->
+            <div class="contain_02">
+              <p class="f_type">{{ wall_post.content2 }}</p>
+            </div><!--contain_02-->
+            <div class="f_type box_spon">
+              <p class="favorite-text">
+                Your face in our place starring you and your favorite cast!<br/>
+                <img style="margin-top:25px;" src="{% static 'skigit/all_cat.png' %}"/>
+              </p>
+              <p style="font-family: segoe print !important;">{{ wall_post.content3 }}</p>
+              <p class="social-networks-highlight">
+                Post it from <span class="highlight">Skigit</span> to your favorite social
+                networks!
+                <img style="margin-left:5px;" src="{% static 'skigit/images/facebook.png' %}">
+                <img style="margin-left:3px;" src="{% static 'skigit/images/twitter.png' %}">
+                <img style="margin-left:3px;" src="{% static 'skigit/images/instagram.png' %}">
+                <img style="margin-left:3px;" src="{% static 'skigit/images/linkedin.png' %}">
+                <img style="margin-left:3px;" src="{% static 'skigit/images/pinterest.png' %}">
+              </p>
+            </div>
+          </div><!--contain_broshar1 -->
+          <!--<div style="margin-left:70%;margin-top:-27px;margin-bottom:-27px;">
+            <img src="{{ header_image }}" style="width: 50px;"/>-->
+
+          <div class="contain_03 f_type footerpara_print">
+            <p style="color: #e573ee;font-weight: bold;">
+              Live, Share ...make a Difference!<img src="https://media.skigit.com/media/skigit/brochure/giving_heart.png" style="width: 50px;margin-left:10px; margin-bottom:20px;">
+            </p>
+          </div><!--contain_03-->
+      </div>

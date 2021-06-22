@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block main_video_block %}
+{% endblock %}
+
+{% block window_page_title_block %}
+    Copyright Policy - Skigit
+{% endblock %}
+
+{% block window_page_meta_block %}
+    <meta property="og:site_name" content="Skigit" xmlns="http://www.w3.org/1999/html"/>
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="http://skigit.com/step-1/" />
+    <meta property="og:title" content="Business Value Services and Fees - Skigit" />
+{% endblock %}
+
+{% block head_inline_css_block %}
+    <style>
+        .head_rules{
+            font-size:18px;
+            text-align:center;
+        }
+
+        .img_rules{
+            width: 100%;
+            display: table;
+            text-align: center;
+            margin: 50px 0;
+        }
+
+    .head_rules {
+    font-size: 28px;
+    text-align: center;
+    font-family: "segoe_print" !important;
+    color: #037bb8 !important;
+    }
+
+    .headpara_rules {
+    font-size: 19px;
+    text-align: center;
+    font-family: "segoe_print" !important;
+    color: #037bb8 !important;
+    }
+    .headpara_rules {
+    padding-bottom: 25px;
+    }
+    .main_rules{
+        padding: 0px 161px;
+    }
+    .main_rules p {
+        text-align: justify;
+    }
+
+    @media screen and (max-width: 767px){
+        .main_rules {
+          padding: 0px 80px;
+        }
+    }
+
+    @media screen and (max-width: 420px){
+        .main_rules {
+          padding: 0px 20px;
+        }
+    }
+
+    </style>
+{% endblock %}
+{% block main_div_block %}
+    <div id="main">
+        <div class="wrap cf">
+
+            <div role="main" id="content">
+
+                <div class="main_rules">
+                      <div class="head_rules">
+                          Our Rule for your Company Skigit
+                        </div>
+
+                        <div class="img_rules">
+                            <img src="{% static 'skigit/images/rules.png' %}"/>
+                        </div>
+                        <div class="headpara_rules">
+                            Create your Skigit to resemble those of General Users
+	                    </div>
+
+                        <p>
+                            Make skigits that contain fun, spontaneous and engaging video content.Do not create skigitsthat resemble professionally directed and produced television commercials. We reserve the right to remove your skigit if we feel that you’re simply using the site to promote your company through professionally-scripted advertisements.
+                        </p>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

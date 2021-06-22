@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block main_video_block %}
+{% endblock %}
+
+{% block window_page_title_block %}
+{{ flatpage.title }}
+{% endblock %}
+
+{% block window_page_meta_block %}
+<meta property="og:site_name" content="Skigit" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="{{ request.build_absolute_uri }}" />
+<meta property="og:title" content="{{ flatpage.title }} - Skigit" />
+{% endblock %}
+
+{% block head_inline_css_block %}
+{% endblock %}
+
+{% block main_nav_under_css_block %}
+<style type="text/css">
+    form li{
+        list-style: none !important;
+    }
+    .errorlist{
+        color: red;   
+    }
+    .errorlist li{
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block main_div_block %}
+ {{ flatpage.content }}
+{% endblock %}
+
+

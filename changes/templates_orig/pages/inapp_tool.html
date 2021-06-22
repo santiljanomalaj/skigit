@@ -1,0 +1,186 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+{#<html lang="en">#}
+<head>
+
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="{%static 'skigit/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'skigit/css/bootstrap-theme.min.css' %}">
+    <link rel="stylesheet"  href="{% static 'skigit/css/app.css' %}">
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script>
+$( document ).ready(function() {
+    $("a.investigation-pop").click(function(){
+    $("div#investigation-pop-content").addClass('open');
+	 return false;
+    });
+
+	$("#cancel-butt").click(function(){
+    $("div#investigation-pop-content").removeClass('open');
+
+    });
+});
+
+</script></head>
+<body>
+<div class=" container ">
+  <form>
+  <table  class="table table-bordered " >
+    <thead>
+      <tr>
+        <th>Investigation ID</th>
+        <th>Submitted By</th>
+        <th>Skigit Title</th>
+        <th>Skigit ID</th>
+        <th>Submited Phone No</th>
+        <th>Submitter Email</th>
+        <th>Complain Date</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+       {% for inapp in all_inapp%}
+      <tr>
+
+        <td><a href="" class="investigation-pop">{{ inapp.id }}  </a> <div id="investigation-pop-content">
+        <h2>Inappropriate Skigit Investigation</h2>
+        <div class="main-box">
+       <div class="col-md-5 col-sm-5 col-xs-12 padd-right">Inappropriate id :</div>
+        <div class="col-md-7 col-sm-7 col-xs-12"> <input type="text" value=" {{ inapp.id }}"></div>
+       </div>
+       <div class="main-box">
+       <div class="col-md-5 col-sm-5 col-xs-12 padd-right">Use Identified Work :</div>
+        <div class="col-md-7 col-sm-7 col-xs-12 "><textarea>  </textarea></div>
+       </div>
+
+       <div class="main-box">
+       <div class="col-md-5 col-sm-5 col-xs-12 padd-right col-text">Inappropriate Skigit Work :</div>
+        <div class="col-md-7 col-sm-7 col-xs-12 text-left blue-text"> {{inapp.skigit.id}}</div>
+       </div>
+
+       <div class="main-box">
+       <div class="col-md-5 col-sm-5 col-xs-12 padd-right">Submitter Request :</div>
+        <div class="col-md-7 col-sm-7 col-xs-12" style="text-align:left;">
+        Remove all <input type="radio" name="remove-all">
+        Yes <input type="radio" name="yes">
+        No <input type="radio" name="no"><br>
+
+        Strike <input type="radio" name="remove-all">
+        Yes <input type="radio" name="yes-strike">
+        No <input type="radio" name="no-strike">
+
+        </div>
+       </div>
+       <div class="main-box">
+       <div class="col-md-5 col-sm-5 col-xs-12 padd-right">Submitter Reason for Removal</div>
+        <div class="col-md-7 col-sm-7 col-xs-12"> <input type="text" value = "{{ inapp.reason }}"></div>
+       </div>
+       <div class="main-box">
+       <div class="col-md-5 col-sm-5 col-xs-12 padd-right">Submitter Name :</div>
+        <div class="col-md-7 col-sm-7 col-xs-12"> <input type="text" value="{{inapp.reported_user.username}}"></div>
+       </div>
+       <div class="main-box">
+       <div class="col-md-5 col-sm-5 col-xs-12 padd-right">Street Address :</div>
+        <div class="col-md-7 col-sm-7 col-xs-12"> <input type="text" value="Address is not in user table"></div>
+       </div>
+       <div class="main-box">
+       <div class="col-md-5 col-sm-5 col-xs-12 padd-right">City :</div>
+        <div class="col-md-7 col-sm-7 col-xs-12"> <input type="text" value="{{inapp.reported_user.profile.city}}"></div>
+       </div>
+       <div class="main-box">
+       <div class="col-md-5 col-sm-5 col-xs-12 padd-right">State Province :</div>
+        <div class="col-md-7 col-sm-7 col-xs-12"> <input type="text" value="{{inapp.reported_user.profile.state}}"></div>
+       </div>
+       <div class="main-box">
+       <div class="col-md-5 col-sm-5 col-xs-12 padd-right">Zip Postal Code :</div>
+        <div class="col-md-7 col-sm-7 col-xs-12"> <input type="text" value="{{inapp.reported_user.profile.zip_code}}"></div>
+       </div>
+       <div class="main-box">
+       <div class="col-md-5 col-sm-5 col-xs-12 padd-right">Country :</div>
+        <div class="col-md-7 col-sm-7 col-xs-12"> <input type="text" value="{{inapp.reported_user.profile.country}}"></div>
+       </div>
+       <div class="main-box">
+       <div class="col-md-5 col-sm-5 col-xs-12 padd-right">Phone No :</div>
+        <div class="col-md-7 col-sm-7 col-xs-12"> <input type="text" value="{{inapp.reported_user.profile.phone_num}}"></div>
+       </div>
+       <div class="main-box">
+       <div class="col-md-5 col-sm-5 col-xs-12 padd-right">Email Address :</div>
+        <div class="col-md-7 col-sm-7 col-xs-12"> <input type="text" value="{{inapp.reported_user.email}}"></div>
+       </div>
+
+       <div class="main-box"> <h3> Inappropriate Skigit Investigation Result</h3></div>
+
+       <div class="main-box">
+       <div class="col-md-5 col-sm-5 col-xs-12 padd-right">Investigation Name :</div>
+        <div class="col-md-7 col-sm-7 col-xs-12"> <input type="text" value="{{inapp.inappropriate_skigit_investigator.investigating_user.username}}"></div>
+       </div>
+
+       <div class="main-box">
+       <div class="col-md-5 col-sm-5 col-xs-12 padd-right">Result :</div>
+        <div class="col-md-7 col-sm-7 col-xs-12" style="text-align:left;">
+        Remove all <input type="radio" name="remove-all">
+        Yes <input type="radio" name="yes">
+        No <input type="radio" name="no"><br>
+
+        Strike <input type="radio" name="remove-all">
+        Yes <input type="radio" name="yes-strike">
+        No <input type="radio" name="no-strike">
+
+        </div>
+       </div>
+
+       <div class="main-box">
+       <div class="col-md-5 col-sm-5 col-xs-12 padd-right">Investigation Description and Conclusion :</div>
+        <div class="col-md-7 col-sm-7 col-xs-12"> <textarea></textarea></div>
+       </div>
+
+       <div class="main-box">
+       <div class="col-md-5 col-sm-5 col-xs-12 padd-right">Action Taken :</div>
+        <div class="col-md-7 col-sm-7 col-xs-12"> <textarea></textarea></div>
+       </div>
+
+       <div class="main-box">
+       <div class="col-md-5 col-sm-5 col-xs-12 padd-right">Investigation Status :</div>
+        <div class="col-md-7 col-sm-7 col-xs-12" style="text-align:left;">
+        <select>
+        <option selected>Under Investigation</option>
+
+        </select></div>
+       </div>
+
+        <div class="main-box">
+        <div class="col-md-5 col-sm-5 col-xs-12 padd-right">&nbsp;</div>
+         <div class="col-md-7 col-sm-7 col-xs-12" style="text-align:left;">
+         <input type="button" value="submit" id="submit-butt">
+         <input type="button" value="cancel" id="cancel-butt">
+          </div>
+
+        </div>
+        </div>  </td>
+
+        <td>{{ inapp.reported_user.username }}</td>
+        <td>{{ inapp.skigit }} </td>
+        <td>{{ inapp.skigit.id }}</td>
+        <td>{{inapp.reported_user.profile.phone_num}}</td>
+        <td>{{ inapp.reported_user.email }}</td>
+        <td>{{ inapp.created_date }}</td>
+        <td><select>
+        <option selected>{{ inapp.status }}</option>
+        <option>Under Investigation</option>
+        <option>Close </option>
+        <option>Remove Skigit</option>
+        </select>  </td>
+        <td><input type="button" value="update"></td>
+      </tr>
+    {% endfor %}
+
+
+
+    </tbody>
+  </table></form>
+</div>
+</body>
+</html>

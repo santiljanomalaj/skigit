@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block window_page_title_block %}
+    Search Skigit
+{% endblock %}
+{% block main_div_block_middel_content %}
+{% endblock%}
+
+{% block main_video_block %}
+
+{% endblock %}
+
+{% block main_div_block_video_list_content %}
+
+    <style>
+
+        .endless_more { font-size: x-large;}
+        .endless_more { display: table; margin: 0 auto; clear: both; }
+        .endless_loading { display: table; width: 100%; }
+        .close-skigit { z-index: 1 !important; }
+
+    </style>
+
+    <div class="section-box">
+
+        <div class="section-content grid-small">
+
+            <div class="endless_page_template" id="skigit_content_list">
+                <div class="row">
+                    <div class="col-lg-12" >
+                        <form method='POST' class="form_search" action='.'>
+                            {% csrf_token %}
+                            <div class="col-lg-3 col-md-3 col-sm-3">
+
+                                <select class="form-control" help_text="" id="search_ordering" name="search_ordering"
+                                        style="padding: inherit;" >
+                                    <option value="" {% if order_value != '1' or order_value != '2' %} selected="selected" {% endif %}>Order by</option>
+                                    <option  value="1" {% if order_value == '1' %}selected="selected"{% endif %}>Latest Skigit first</option>
+                                    <option value="2" {% if order_value == '2' %}selected="selected"{% endif %}>Oldest Skigit first</option>
+                                </select>
+
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-sm-7" >
+                                <div class="input-group">
+                                    <input type="text" autofocus="on" spellcheck="false" autocomplete="off" id="searchBox" name='searchBox' class="form-control f_type" {% if search_text %}value="{{ search_text }}"{% endif %} placeholder="Search Skigit by Skigit Title / Username / Company Name" >
+                                    <span class="input-group-addon" id="basic-addon1"><input type="submit" value="Search"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-2 col-md-2 col-sm-2">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="nag cf" id="likedcontent">
+                    {% include 'sk_cat/my_skigits_body.html' %}
+                </div>
+            </div>
+
+        </div><!-- end .section-content -->
+        <script type="text/javascript" src="{% static 'skigit/js/pageUp.js' %}"></script>
+    </div>
+
+    <!-- end .section-box -->
+    <a id="latestinifiniteLoader" style="float:left;display:none;margin:5px 425px"><img src="{% static 'skigit/detube/images/inf_loading.gif' %}" /></a>
+    <script>
+        like_unlike_my_skigit = function(like_class, like_id) {
+            var skigit_id = like_id
+            var  post_clas= $("#"+like_class).attr('class');
+            var  post_id= like_class
+            {% if video_type == "liked" %}
+                $("[data-skigt="+skigit_id+"]").css("display", "none");
+                $(".overlay").removeClass('open');
+            {% endif %}
+            if(post_clas == 'unlike') {
+                $.ajax({
+                    type: "POST",
+                    url: "/skigit_i_like/",
+                    data: {'skigit_id': skigit_id, 'csrfmiddlewaretoken': '{{csrf_token}}' },
+                    success: function (response) {
+                        if (response.is_success)
+                        {
+                            if (response.like == 1 || response.like == '1')
+                            {
+                                $("#" + post_id).attr("title", "Unlike");
+                                $("#" + post_id).removeClass("unlike");
+                                $("#" + post_id).addClass("like");
+                                $("#" + post_id + "> img").attr("src", "/static/skigit/images/heart_liked(22x22).png");
+                            }
+                        }
+                    },
+                    error: function (rs, e) {
+                        $("#popup_msg").text("Error into like the Skigit...! Please try again");
+                        $("#popScreen").show();
+                    }
+                });
+            }
+            else if(post_clas == 'like'){
+                $.ajax({
+                    type: "POST",
+                    url: "/skigit_i_unlike/",
+                    data: {'skigit_id': skigit_id, 'csrfmiddlewaretoken': '{{csrf_token}}' },
+                    success: function (response) {
+                        if (response.is_success)
+                        {
+                            if (response.unlike == 1 || response.unlike == '1')
+                            {
+                                $("#" + post_id).attr("title", "Like");
+                                $("#" + post_id).removeClass("like");
+                                $("#" + post_id).addClass("unlike");
+                                $("#" + post_id + "> img").attr("src", "/static/skigit/images/heart(22x22).png");
+                            }
+                        }
+                    },
+                    error: function (rs, e) {
+                        $("#popup_msg").text("Error into like the Skigit...! Please try again");
+                        $("#popScreen").show();
+                    }
+                });
+            }
+        }
+    </script>
+
+{% endblock %}

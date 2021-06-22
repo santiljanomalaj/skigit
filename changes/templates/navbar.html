@@ -1,0 +1,302 @@
+{% load staticfiles %}
+{% load i18n %}
+{% load thumbnail %}
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button class="navbar-toggle collapsed float-left"
+              type="button"
+              data-toggle="collapse"
+              data-target="#navbar"
+              aria-controls="navbar"
+              aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse padd_zero" id="navbar">
+      <ul class="nav navbar-nav list-inline">
+        {% if category_list %}
+          {% for cat in category_list %}
+
+            {% if cat.cat_name == 'Dramaskigit' %}
+              <li class="nav-item">
+                <a class="nav-link text-center" title="Dramaskigit" href="{{ cat.get_absolute_url }}">
+                  <img src="{% static 'images/animation/50/PNG/Drama-Wacki_4x4.png' %}" height="60"
+                       width="60" class="img1"/>
+                  <img src="{% static 'images/animation/50/Drama-Wacki_4x4.gif' %}" height="60" width="60"
+                       class="img2"/>
+                  <p>Dramaskigit</p>
+                </a>
+              </li>
+            {% elif cat.cat_name == 'Vibraskigit' %}
+              <li class="nav-item">
+                <a class="nav-link text-center" title="Vibraskigit" href="{{ cat.get_absolute_url }}">
+                  <img src="{% static 'images/animation/50/PNG/Vibraskigit_4x4.png' %}" height="60"
+                       width="60" class="img1"/>
+                  <img src="{% static 'images/animation/50/Vibraskigit_4x4.gif' %}" height="60"
+                       width="60" class="img2"/>
+                  <p>Vibraskigit</p></a>
+              </li>
+            {% elif cat.cat_name == 'Demoskigit' %}
+              <li class="nav-item">
+                <a class="nav-link text-center" title="Demoskigit" href="{{ cat.get_absolute_url }}">
+                  <img src="{% static 'images/animation/50/PNG/Demo_4x4.png' %}" height="60"
+                       width="60" class="img1"/>
+                  <img src="{% static 'images/animation/50/Demo_4x4.gif' %}" height="60" width="60"
+                       class="img2"/>
+                  <p>Demoskigit</p>
+                </a>
+              </li>
+            {% elif cat.cat_name == 'Wackiskigit' %}
+              <li class="nav-item">
+                <a class="nav-link text-center" title="Wackiskigit" href="{{ cat.get_absolute_url }}">
+                  <img src="{% static 'images/animation/50/PNG/Wacki_4x4.png' %}"
+                       height="60" width="60" class="img1"/>
+                  <img src="{% static 'images/animation/50/Wacki_4x4.gif' %}" height="60"
+                       width="37" class="img2"/>
+                  <p>Wackiskigit</p>
+                </a>
+              </li>
+            {% elif cat.cat_name == 'Selfieskigit' %}
+              <li class="nav-item text-center">
+                <a class="nav-link" title="Selfieskigit" href="{{ cat.get_absolute_url }}">
+                  <img src="{% static 'images/animation/50/PNG/Selfie_4x4.png' %}" height="60"
+                       width="60" class="img1"/>
+                  <img src="{% static 'images/animation/50/Selfie_4x4.gif' %}" height="60" width="60"
+                       class="img2"/>
+                  <p>Selfieskigit</p>
+                </a>
+              </li>
+            {% else %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link text-center" title="Your Awesome Things" href="{% url 'awesome_things' %}">
+            <img src="{% static 'images/animation/50/PNG/Chest_4x4.png' %}" height="60" width="60"
+                 class="img1"/>
+            <img src="{% static 'images/animation/50/Chest_4x4.gif' %}" height="60" width="60"
+                 class="img2"/>
+            <p>Your Things</p>
+          </a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link text-center dropdown-toggle" title="Guideline" href="#" aria-haspopup="true"
+             aria-expanded="false" data-toggle="dropdown" id="navbarDropdownMenuLink">
+            <img src="{% static 'images/animation/50/PNG/Guidelines_4x4.png' %}" height="60" width="60"
+                 class="img1"/>
+            <img src="{% static 'images/animation/50/Guidelines_4x4.gif' %}" height="60" width="60"
+                 class="img2"/>
+            <p>Guidelines</p>
+          </a>
+          <ul class="dropdown-menu" id="guideline_menu" aria-labelledby="navbarDropdownMenuLink">
+            <li class="dropdown-header">Guidelines</li>
+            <li><a href="/guidelines/">Guideline</a></li>
+            <li><a href="{% url 'guidelines_url:skigitology_view' %}">Skigitology</a></li>
+            <li><a href="{% url 'guidelines_url:making_your_skigit_view' %}">Making Your Skigit</a></li>
+            <li><a href="{% url 'guidelines_url:skigit_length_view' %}">Skigit Length</a></li>
+            <li><a href="{% url 'guidelines_url:allowed_video_formats_view' %}">Video Formats</a></li>
+            <li class="dropdown-header">Who We Are?</li>
+            <li><a href="{% url 'about_us_url:aboust_us_view' %}">About Us</a></li>
+            <li><a href="{% url 'about_us_url:faq_view' %}">FAQ</a></li>
+            <li><a href="{% url 'about_us_url:privacy_policy_view' %}">Privacy Policy</a></li>
+            <li><a href="{% url 'about_us_url:t_and_c_view' %}">Terms Of Service</a></li>
+            <li><a href="{% url 'about_us_url:acceptable_use_policy_view' %}">Acceptable Policy</a></li>
+            <li><a href="{% url 'about_us_url:copyright_policy' %}">Copyright Policy</a></li>
+            <li><a href="{% url 'about_us_url:skigit_for_business_view' %}">Skigit For Your Business</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% if request.user.is_authenticated %}
+        <ul id="user_action" class="nav navbar-nav navbar-right">
+
+          <li>
+            <a href="{% url 'sperks' %}" class="text-center" title="Sperks">
+              <img src="{% static 'images/animation/50/PNG/Sperk.png' %}" class="img1"
+                   style="margin: 0; width: 84px; height: auto;"/>
+              <img src="{% static 'images/animation/50/Sperk.gif' %}" class="img2"
+                   style="margin: 0;  width: 84px; height: auto;"/>
+            </a>
+          </li>
+
+          <li>
+            <a href="{% url 'direct_upload' %}" class="text-center" title="Upload New Skigit">
+              <img src="{% static 'images/animation/50/PNG/Upload_4x4.png' %}" class="img1" height="60"
+                   width="60"/>
+              <img src="{% static 'images/animation/50/Upload_4x4.gif' %}" class="img2" height="60"
+                   width="60"/>
+              <p>Upload</p>
+            </a>
+          </li>
+
+          <li class="general_notify">
+            <a href="#" onclick="get_notify()" id="generalNPopover" class="text-center">
+              <img src="{% static 'images/animation/50/PNG/Notifications_4x4.png' %}" height="60" width="60"
+                   class="img1"/>
+              <img src="{% static 'images/animation/50/Notifications_4x4.gif' %}" height="60" width="60"
+                   class="img2"/>
+              <p>Notifications</p>
+                                        <span id="general_badge"
+                                              style="right: 15px !important; {% if general_notify_count %}
+                                                visibility: visible !important; {% else %} display: none
+                                                !important;{% endif %}" class="badge badge-warning">
+                                            {% if general_notify_count %}{{ general_notify_count }}{% else %}
+                                              0{% endif %}
+                                        </span>
+            </a>
+            <div class="tabbable hide custom_popup" id="notifyContaint">
+              <ul class="list-group notification_ul" id="notify_ul">
+                <li class="f_type" style="color:#bbb9b9; font-size: smaller; text-align: center;">
+                  <center><img src="{% static 'images/inf_loading.gif' %} " id="nf_loader"
+                               style="display: none"></center>
+                  There is no pending Notifications.
+                </li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="frien_notification" style="margin-right: 5px;">
+            <a href="#" onclick="friendsNotificaton()" id="friendPopover" class="text-center">
+              <img src="{% static 'images/animation/50/PNG/Friends_4x4.png' %}" title="Friend & Invite"
+                   height="60" width="60" class="img1"/>
+              <img src="{% static 'images/animation/50/Friends_4x4.gif' %}" title="Friend & Invite"
+                   height="60" width="60" class="img2"/>
+              <p>Friends</p>
+
+                    <span id="friend_badge"
+                          style="{% if friend_request_notification %}visibility:visible !important;{% else %}display: none !important;{% endif %}"
+                          class="badge badge-danger">{% if friend_request_notification %}
+                      {{ friend_request_notification }}{% else %}0{% endif %}</span>
+              <div class="tabbable hide custom_popup" id="friendContent">
+                <ul class="list-group notification_ul" id="frnd_notification">
+                  <li class="f_type" style="color:#bbb9b9; font-size: smaller; text-align: center;">
+                    There is no pending Notifications.
+                  </li>
+                </ul>
+
+                <center><a class="f_type" href="/friends/friends-&-invite" style="color:#0a80be"> Go to my Friends
+                  & Invites page </a></center>
+              </div>
+            </a>
+          </li>
+
+          <li>
+            <a href="/search_skigit/" class="text-center">
+              <img src="{% static 'images/animation/50/PNG/Search_4x4.png' %}" height="60" width="60"
+                   class="img1"/>
+              <img src="{% static 'images/animation/50/Search_4x4.gif' %}" height="60" width="60"
+                   class="img2"/>
+              <p>Search</p>
+            </a>
+          </li>
+
+          <li class="hidden-xs dropdown">
+            <a href="{% url 'user_profile' %}" class="text-center dropdown-toggle" data-toggle="dropdown">
+              {% if user_profile.profile_img %}
+                <img class="avatar" height="60" width="auto" alt="{{ user.username }}" src=
+                    "{{ user_profile.profile_img.url }}" style="border-radius: 25px;"/>
+              {% else %}
+                <img src="{% static 'skigit/detube/images/noimage_user.jpg' %}" height="25" width="25"
+                     class="avatar"/>
+              {% endif %}
+
+              <p>{{ user.username }}</p>
+            </a>
+            <ul class="dropdown-menu" id="guideline_menu">
+              <li>
+                <a href="/profile/">Profile and Settings</a>
+              </li>
+              <li>
+                <a href="/my_skigits/">My Skigits</a>
+              </li>
+              <li>
+                <a href="/plugged_in_skigits/">Skigits I Plugged Into</a>
+              </li>
+              <li>
+                <a href="/like/">Skigits I like</a>
+              </li>
+              <li>
+                <a href="/favorite/">My Favorites</a>
+              </li>
+              <li>
+                <a href="/following/">I'm Following</a>
+              </li>
+              <li>
+                <a href="/friends/friends-&-invite">Friends and Invites</a>
+              </li>
+              <li>
+                <a href="/skigistats/">My Skigistats</a>
+              </li>
+              <li>
+                <a id="bug_report" data-toggle="model" data-target=".bugModal">Bug Report</a>
+              </li>
+              <li>
+                <a href="#logout" onclick="logoutCnfm()">Logout</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="overlay"></div>
+        <div id="confirmLogoutBox" style="border: none !important;">
+          <div style="text-align: center !important; font-family: segoe_print !important;">
+            <p><img src="{% static 'images/logo_65.png' %}"/></p>
+
+            <p id="confirm_logout_text" style="padding: 30px 0;">Do you really want to leave us?</p>
+
+            <div class="del-bott" style="padding-bottom: 20px;">
+              <button type="button" onclick="ok_logout_click()" id="ok_logout_logo">Ok</button>
+              <button type="button" onclick="cancel_logout()" id="cancel_logout">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <script>
+          logoutCnfm = function (e) {
+            jQuery('#confirmLogoutBox').addClass('open')
+            jQuery('.overlay').addClass('open')
+          }
+          cancel_logout = function (e) {
+            jQuery('#confirmLogoutBox').removeClass('open')
+            jQuery('.overlay').removeClass('open')
+          }
+          ok_logout_click = function (e) {
+            window.location = '{% url 'logout_user' %}'
+          }
+        </script>
+
+
+      {% else %}
+        <ul id="user_action" class="nav navbar-nav navbar-right list-inline">
+          <li>
+            <a class="text-center" modal-form data="user" template-url="/static/js/user/templates/login.html"
+               method="POST" dialog-class="login-modal"
+               path="/login_ajax/" redirect="/" close-on-success="true">
+              <img src="{% static 'images/animation/50/PNG/Star_4x4.png' %}" height="60" width="60"
+                   class="img1"/>
+              <img src="{% static 'images/animation/50/Star_4x4.gif' %}" height="60" width="60"
+                   class="img2"/>
+              <p>Log In</p>
+            </a>
+          </li>
+          <li>
+            <a href="/search_skigit/" class="text-center">
+              <img src="{% static 'images/animation/50/PNG/Search_4x4.png' %}" height="60" width="60"
+                   class="img1"/>
+              <img src="{% static 'images/animation/50/Search_4x4.gif' %}" height="60" width="60"
+                   class="img2"/>
+              <p>Search</p>
+            </a>
+          </li>
+        </ul>
+      {% endif %}
+    </div><!--/.nav-collapse -->
+  </div><!--/.container-fluid -->
+</nav>
+
+

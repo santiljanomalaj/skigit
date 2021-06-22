@@ -1,0 +1,23 @@
+{% load staticfiles %}
+{% load i18n%}
+
+{% if category_list %}
+<ul>
+    {% for cat in category_list%}
+    {% if cat.cat_name == 'Dramaskigit' %}
+    <li><a href="{{ cat.get_absolute_url}}"><img src="{% static 'skigit/detube/images/menuicons_wd_dramaskigit.png' %}" alt="{{cat.cat_name}}" title="{{cat.cat_name}}" height="80" width="80"></a></li>
+    {% elif cat.cat_name == 'Vibraskigit'%}
+    <li><a href="{{ cat.get_absolute_url}}"><img src="{% static 'skigit/detube/images/menuicons_wd_vibraskigit.png' %}" alt="{{cat.cat_name}}" title="{{cat.cat_name}}" height="80" width="80"></a></li>
+    {% elif cat.cat_name == 'Demoskigit'%}
+    <li><a href="{{ cat.get_absolute_url}}"><img src="{% static 'skigit/detube/images/menuicons_wd_demoskigit.png' %}" alt="{{cat.cat_name}}" title="{{cat.cat_name}}" height="80" width="80"></a></li>
+    {% elif cat.cat_name == 'Wackiskigit'%}
+    <li><a href="{{ cat.get_absolute_url}}"><img src="{% static 'skigit/detube/images/menuicons_wd_weckiskigit.png' %}" alt="{{cat.cat_name}}" title="{{cat.cat_name}}" height="80" width="80"></a></li>
+    {% elif cat.cat_name == 'Selfieskigit'%}
+    <li><a href="{{ cat.get_absolute_url}}"><img src="{% static 'skigit/detube/images/menuicons_wd_selfieskigit.png' %}" alt="{{cat.cat_name}}" title="{{cat.cat_name}}" height="80" width="80"></a></li>
+
+    {% else %}
+    {% endif %}
+    {% endfor%}
+    <li><a></a></li>
+</ul>
+{% endif %}

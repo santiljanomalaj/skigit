@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block title %}{{ block.super }}Sperks{% endblock %}
+
+{% block content %}
+
+<div class="row mar_zero" id="main">
+    <div class="wrap cf">
+        <div id="content" class=" no-padd-form" role="main">
+            <div class="post-2110 page type-page status-publish hentry" id="post-2110">
+                <div style="text-align:center; padding-top:25px">
+                    <p class="text-center">
+                        <img src="{% static 'images/animation/50/Skitbit_4x4.gif' %}" width="150" height="auto"
+                             class="aligncenter">
+                        <br>
+                        <br>
+                    </p>
+                    <h2>
+                        <center>Click the logo to see what Skitbits you can scarf up!</center>
+                    </h2>
+                    <br>
+                    <br>
+                    <!-- <span style="font-family: 'Segoe_Print'; font-size: 115%; color: #3D3D3D; text-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5); vertical-align: 30px;">
+                       Click on a logo to view the Sperks offered...
+                     </span>-->
+
+                </div>
+                <div class="endless_page_template" id="skigit_content_list" style="padding: 10px 20px 10px 20px;">
+
+                    <div class="row">
+
+                        <div class="col-lg-12" style="margin-left: 10%;margin-top: -4%;">
+
+                            <form method="GET"  id="search" class="form_search ng-pristine ng-valid" action="/search_skigit/">
+
+                                <input type="hidden" name="csrfmiddlewaretoken"
+                                       value="Gu1CCLRtH2pKq50IGJxqiKITC1nQqYbxA4iADNib7tPbPRIMZk383BmKMARdzp60"
+                                       autocomplete="off">
+                                <div class="col-lg-3 col-md-3 col-sm-3" id="token">
+
+
+                                </div>
+
+                                <div class="col-lg-7 col-md-7 col-sm-7">
+                                    <div class="input-group" id="search-input">
+                                        <input type="text" autofocus="on" spellcheck="false" autocomplete="off"
+                                               id="searchBox" name="searchBox" class="form-control f_type"
+                                               placeholder="Search by  Company Name">
+                                        <span class="input-group-addon" style="margin: 0px" id="basic-addon1"><input
+                                                type="submit" value="Search" id="button"
+                                                style="margin-top: 8px;" ></span>
+                                    </div>
+                                </div>
+                            </form>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="page-content rich-content row" id="sperk" style="margin: 0;">
+                    {% include 'sperk/sperk_body.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

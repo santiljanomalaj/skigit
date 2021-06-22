@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block main_video_block %}
+{% endblock %}
+
+{% block title %}{{ block.super }}FAQ {% endblock %}
+
+
+{% block content %}
+  <div class="row" id="main">
+    <div class="wrap cf">
+      <div role="main" id="content">
+        <div id="post-4192" class="post-4192 page type-page status-publish hentry">
+          <h1 class="sageo">FAQ</h1>
+          <div class="page-content rich-content">
+            <h3>1. What the heck is a skigit? &nbsp; &nbsp;
+              <img width="33" height="33" alt="puzzle"
+                   src="{% static 'images/puzzled.png' %}"/>
+            </h3>
+            <p>A skigit (pronounced ski'jit) is a member created video story of 3 minutes or less about something,
+              someone or someplace awesome that has special and positive meaning to you.
+            </p>
+            <h3>2. How long can my skigit be?&nbsp; &nbsp;
+              <img width="39" height="38" alt="clock"
+                   src="{% static 'images/clock.png' %}">
+            </h3>
+            <p>Three (3) minutes maximum with no limit on the short end, except that it must run T&gt;0 in the 3rd
+              dimension.
+            </p>
+            <h3>3. Is there any limit to how many skigits I can create? &nbsp; &nbsp;
+              <img width="38" height="37" alt="limit"
+                   src="{% static 'images/limit.png' %}">
+            </h3>
+            <p>
+              No. You can can create as many skigits as you'd like, just remember to keep the length within the 30MB
+              limit. Linked videos can be as large as you want but we recommend no longer than 3 minutes.
+            </p>
+            <h3>4. Which video formats can I create my skigit in? &nbsp; &nbsp;
+              <img width="49" height="43"
+                   alt="formats"
+                   src="{% static 'images/format.png' %}">
+            </h3>
+            <p>
+              <a target="_blank"
+                 href="{% url 'guidelines_url:guidelines_view' %}"
+                 title="Guidelines">
+                <em>
+                  <span style="color: #3366ff;">Guidelines </span>
+                </em>
+              </a>page on the menu tab at the top of your page.
+            </p>
+            <p>
+            <h3>5. Why should I choose to display the logo of my product? &nbsp; &nbsp;
+            <img width="37" height="37" alt="Favorites"
+                 src="{% static 'images/logo_faq.png' %}">
+          </h3>
+            <p>By sharing the logo for your awesome thing, you are creating a personal and emotional connection
+              between you, the maker of your awesome thing and your viewers.
+            </p>
+            <h3>6. Can I share my skigit with friends on other sites? &nbsp; &nbsp;
+              <img width="51" height="34" alt="Favorites"
+                   src="{% static 'images/share_faq.png' %}">
+            </h3>
+            <p> Absolutely! You can post and share any skigit to other websites. If you prefer, you can even email
+              them to family and friends. Heck, why not do all three!
+            </p>
+            <h3>7. Why are some logos on skigits larger than others? &nbsp; &nbsp;
+              <img width="51"
+                   height="34"
+                   alt="Favorites"
+                   src="{% static 'images/Nike1.png' %}" />&nbsp; &nbsp;
+              <span style="font-size:14px; color:#006699 ">vs</span> &nbsp; &nbsp;
+              <img width="51" height="34"
+                   alt="Favorites"
+                   src="{% static 'images/Nike2.png' %}"/>
+            </h3>
+            <p>The smaller logo depicts instances where the creator has chosen to display the logo but the maker is
+              not a Skigit member. The larger logo depicts instances where the <span style="font-family: 'LAO UI',arial,helvetica,sans-serif; font-size: 16px;">skigit creator has
+                chosen to incorporate the logo and the maker is a member and skigit supporter.</span>
+            </p>
+            <h3> 8. What does it mean to plug-in to a skigit and what does it really do? &nbsp; &nbsp;
+              <img width="70" height="37" alt="plug-in" src="{% static 'images/plugin_faq.png' %}">
+            </h3>
+            <p><span style="font-family: 'LAO UI',arial,helvetica,sans-serif; font-size: 16px; color: #006699;">
+              <em>For additional guidance, reference the
+                <a href="{% url 'guidelines_url:guidelines_view' %}"
+                   title="Guidelines">
+                <span style="color: #0000ff;"><em>Guidelines </em></span>
+                </a>
+              </em>
+            </span>
+              <em><span
+                style="font-family: 'LAO UI',arial,helvetica,sans-serif; font-size: 16px; color: #006699;">page on the menu tab located at the top of your page.</span></em>
+            </p>
+
+            <h3> 9. What happens if I plug into a skigit and the Primary skigit get's deleted? </h3>
+
+            <p>If a Primary skigit gets deleted, by default you automatically plug-in to the next plugged-in skigit
+              based on time of plug-in. You will then receive a notification and of course, have the option to
+              delete that plug-in connection on your
+              <em>
+                <a target="_blank"
+                   href="http://skigit.com/plugged_in_skigits/"
+                   title="My Skigits">Skigits I Plugged Into
+                </a>
+              </em>page.
+            </p>
+
+            <p>
+              <img width="303" height="161" alt="plug-in"
+                   src="{% static 'images/delete_primary.png' %}" class="text-center">
+            </p>
+          </div>
+        </div><!--end .hentry-->
+
+      </div><!--end #content-->
+
+
+      <div role="complementary" id="sidebar">
+      </div><!--end #sidebar-->
+    </div>
+  </div>
+{% endblock %}

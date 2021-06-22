@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load i18n %}
+{% load category_list %}
+{% load meta %}
+{% load compress %}
+
+<html lang="en" {% meta_namespaces_gplus %} ng-app="skigitApp">
+<head {% meta_namespaces %}>
+  <title>{% block title %}Skigit - {% endblock %}</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  {% include 'meta/meta.html' %}
+
+  <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  {% compress css %}
+    <link rel="apple-touch-icon" href="{% static 'apple-touch-icon.png' %}">
+    {#    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">#}
+    {#    <link rel="stylesheet" href="{% static 'css/bootstrap-grid.min.css' %}">#}
+    {#  <link rel="stylesheet" href="{% static 'css/bootstrap-reboot.min.css' %}">#}
+    {#    <link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}">#}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {#    <link rel="stylesheet" href="{% static 'css/lightbox.min.css' %}">#}
+    {% block css %}
+    {% endblock %}
+  {% endcompress %}
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"
+          integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+          crossorigin="anonymous">
+  </script>
+</head>
+
+<body id="page-top" data-spy="scroll">
+<div class="overlayErrorBox"></div>
+<div id="errorBox">
+  <img src="{% static 'images/logo_65.png' %}"/>
+</div>
+
+<div class="container">
+  <div class="notify_msg_div">
+    {% if messages %}
+      {% for ms in messages %}
+        <div style="display:none;" {% if ms.tags %} class="{{ ms.tags }} message"{% endif %}>
+          <h3>{{ ms }}</h3>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+  <div class="row">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div class="socialIcons horz pull-right">
+
+        <div class="social-box"><a target="_blank" title="facebook" href="#"><img
+            src="{% static 'images/facebook.png' %}" border="0" width="28" height="28" alt="facebook"/></a>
+        </div>
+        <div class="social-box"><a target="_blank" title="twitter" href="#"><img
+            src="{% static 'images/twitter.png' %}" border="0" width="28" height="28" alt="twitter"/></a></div>
+        <div class="social-box"><a target="_blank" title="MySpace" href="#"><img
+            src="{% static 'images/myspace.png' %}" border="0" width="28" height="28" alt="MySpace"/></a></div>
+        <div class="social-box"><a target="_blank" title="youtube" href="#"><img
+            src="{% static 'images/youtube.png' %}" border="0" width="28" height="28" alt="youtube"/></a></div>
+        <div class="social-box"><a target="_blank" title="Google+" href="#"><img
+            src="{% static 'images/google.png' %}" border="0" width="28" height="28" alt="Google+"/></a></div>
+        <div class="social-box"><a target="_blank" title="Vimeo" href="#"><img
+            src="{% static 'images/vimeo.png' %}" border="0" width="28" height="28" alt="Vimeo"/></a></div>
+        <div class="social-box"><a target="_blank" title="Tumblr" href="#"><img
+            src="{% static 'images/tumblr.png' %}" border="0" width="28" height="28" alt="Tumblr"/></a></div>
+      </div>
+      <header id="header">
+        <div class="logo center-align pull-left">
+          <a href="/">
+            <img src="{% static 'images/logo.png' %}" alt="Skigit logo"/>
+          </a>
+        </div>
+        {% user_navigation %}
+      </header>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 main_video_1_content_div"></div>
+  </div>
+  {% block content %}
+  {% endblock %}
+  {% block main_div_block %}
+  {% endblock %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <hr>
+        <footer>
+
+        </footer>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="skigit-modal" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+{#<script#}
+{#  src="https://code.jquery.com/jquery-1.12.4.min.js"#}
+{#  integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="#}
+{#  crossorigin="anonymous"></script>#}
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous">
+</script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous">
+</script>
+
+{% include 'javascripts.html' %}
+{% compress js %}
+  {% block js %}
+  {% endblock %}
+{% endcompress %}
+</body>
+
+</html>

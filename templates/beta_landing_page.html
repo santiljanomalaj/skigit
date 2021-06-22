@@ -1,0 +1,471 @@
+{% load staticfiles %}
+{% load compress %}
+
+<style>
+
+.container {
+  position: relative;
+ color: #040404;
+}
+
+.bottom-left {
+    position: absolute;
+    bottom: 466px;
+    left: 138px;
+}
+
+.top-left {
+  position: absolute;
+  top: 8px;
+  left: 16px;
+}
+
+.top-right {
+    position: absolute;
+    top: -85px;
+    left: -30px;
+    background-color: #0386b4;
+    padding: 24px;
+    border-radius: 16px;
+	text-align: center;
+}
+
+.top-right-app {
+    left: -68%;
+    height: 55%;
+	width: 80%;
+	  top: 10%;
+    padding-top: 24px;
+    border-radius: 16px;
+    position: absolute;
+   /* background-color: #e0e0e0;*/
+    text-align: center;
+	/*box-shadow: #3e3d3d 2px 4px 16px;*/
+}
+
+b#get-app {
+    font-size: 22px;
+   color: #effaff;
+    padding: 5px 15px 5px 15px;
+    border-radius: 50px;
+    margin-left: 15vw;
+    font-family: cursive;
+    font-weight: 700;
+}
+
+
+input[type=checkbox] + label:before {
+    border: 1px solid #d8d8d8;
+    border-radius: 4px;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+	}
+
+
+.login-c {
+    font-size: 18pt;
+	color: #ffffff;
+	font-weight: normal;
+}
+
+.bottom-right {
+    bottom: 114px;
+    right: 137px;
+	    margin-top: 15px;
+}
+
+.centered {
+    position: absolute;
+    top: 470px;
+    left: 62.7%;
+    transform: translate(-50%, -50%);
+}
+.logo-class
+{
+display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+    top: -30px;
+     margin-bottom: 30px;
+    position: relative;
+}
+.image2-c
+{
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+	width: 80%;
+	border-radius: 8px;
+	box-shadow: #3e3d3d 2px 3px 16px;
+}
+
+.image-app-c
+{
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+	width: 60%;
+	    margin-bottom: 15px;
+		    border-radius: 12px;
+}
+
+.image-app-d
+{
+    margin-left: 15vw;
+    display: block;
+	width: 27%;
+	height: auto;
+	margin-top: 15px;
+}
+
+.image-app-e
+{
+     margin-left: auto;
+    margin-right: auto;
+    display: inline-block;
+	width: 37%;
+	height: auto;
+	margin-top: 15px;
+}
+
+
+.image4-c {
+    width: 440px;
+    position: relative;
+    margin: -65px 0px 0px 0px; 
+}
+
+img.image4-c {
+ position: absolute;
+    top: -2%!important;
+    left: -22%;
+    border-radius: 16px;
+    padding: 6px 0 12px 12px;
+   width: 23%;
+	/*background-color: #670202;*/
+}
+
+.live-c {
+    font-size: 13pt;
+    color: rgb(255, 110, 219);
+    position: absolute;
+    font-weight: bold;
+    right: 160px;
+	margin: -15px 0px 0px 3px;
+}
+.join-c {
+    width: 85%;
+    text-align: left;
+    margin-top: 0px;
+    margin-left: 40px;
+    display: block;
+	line-height: 1.2;
+	padding-top:16px;
+}
+.font-join-c
+{
+font-size: 14pt;
+color: #f9f6f6;
+}
+.make-c {
+    margin: -19px 0px 0px 106px;
+    white-space: nowrap;
+}
+
+<!--.lets-c {
+    width: 62%;
+}-->
+
+ 
+.font-gets-c:hover {
+    color: #b1ebff;
+}
+
+.font-gets-c {
+    color: #2abff4;
+    text-align: right;
+    display: block;
+    font-size: 12pt;
+    margin-top: -25px;
+	margin-left: 50%;
+	position: absolute;
+	font-family: cursive;
+}
+
+.font-lets-c {
+    color: #2abff4;
+    display: block;
+    font-size: 16pt;
+    margin-top: 20px;
+    margin-left: 30%;
+	font-weight: bold;
+}
+
+#font-lets-c {
+    color: #2abff4;
+	font-family: cursive;
+}
+
+#font-lets-c:hover {
+    color: #b1ebff;
+}
+
+.chb-c {
+    position: absolute;
+    right: 94px;
+    bottom: -2px;
+}
+.font-dont-c {
+    position: absolute;
+    right: -57px;
+    font-size: 9pt;
+    bottom: -5px;
+    color: black;
+    font-weight: 400;
+}
+#fixed-social {
+    /* width: 60px; */
+    float: right;
+    position: relative;
+    bottom: 390px;
+    right: -64px;
+}
+#fixed-social a {
+   color: #037bb8;
+   display: block;
+   height: 30px;
+   position: relative;
+   text-align: center;
+    line-height: 30px;
+   width: 38px;
+   margin-bottom: 6px;
+   z-index: 2;
+  border-radius: 24px;
+  font-size: 18px;
+  /*box-shadow: 2px 3px 3px 0px #e6e5e5;*/
+}
+#fixed-social .fa {
+    margin-top: 5px;
+}
+ .fixed-facebook{
+ 	background-color: #effaff;
+ }
+ .fixed-twitter{
+	background-color: #effaff;
+
+ }
+ 
+ .fixed-linkedin{
+	background-color: #effaff;
+
+ }
+ .fixed-instagrem{
+	background-color: #effaff;
+
+ }
+ .fixed-pinterest{
+	background-color: #effaff;
+
+ }
+
+/*end fixed social*/
+
+@media (min-width: 1024px)
+{
+.landing-modal-dialog {
+    width: auto!important;
+    margin: 10% 20%!important;
+}
+
+.skigit-logo {
+	position: absolute;
+    top: 3%;
+    left: -55%;
+    z-index: 1;	
+}
+
+}
+ 
+ 
+@media only screen and (min-width: 1367px) and (max-width: 1600px)  {
+
+    .login-c {font-size:18pt; color: #ffffff;}
+    .top-right{left:-30px; background-color: #0386b4;padding: 24px; border-radius: 16px;}
+    .logo-class{margin-bottom:20px}
+    .font-join-c{font-size:14pt; font-weight: 500;line-height: 1.4;}
+	.image4-c {width: 440px;position: relative;margin: -70px 0px 0px 0px;}
+    .live-c{left: 13px;margin: -15px 0px 0px 3px;font-size: 13pt; width:100%}
+}
+
+
+@media only screen and (min-width: 1024px) and (max-width: 1367px)  {
+    #fixed-social{Left: 12%;bottom: 290px;}
+    .login-c {font-size:18pt; color: #ffffff;}
+    .top-right{left:-30px; background-color: #0386b4;padding: 24px; border-radius: 16px;}
+    .logo-class{margin-bottom:20px}
+    .font-join-c{font-size:14pt; font-weight: 500;line-height: 1.4;}
+    .image4-c {width: 440px; top: 8%!important;}
+    .live-c {left: 13px;margin: -15px 0px 0px 3px;font-size: 13pt; width:100%}
+}
+
+@media only screen and (min-width : 800px) and (max-width : 1280px) {  
+
+    #fixed-social{left: 14%;bottom: 243px;}
+    .login-c {font-size:18pt}
+   .top-right{left:-30px; background-color: #0386b4;padding: 24px; border-radius: 16px;}
+    .logo-class{margin-bottom:0;width:150px}
+    .font-join-c{font-size:10pt}
+    <!-- .image4-c {width: 440px;position: relative;margin: -250px 0px 0px 0px;}-->
+    .font-lets-c, .font-gets-c{font-size:12pt}
+    .form-check-label{font-size:9px}
+    .live-c {left: 13px;font-size: 13pt; margin-top: -15px; width:100%}
+	.modal-content{padding-top: 0px;}
+	.skigit-logo {position: absolute;top: 3%;left: -55%;z-index: 1;}
+}
+
+@media only screen and (min-width: 275px) and (max-width: 799px)  {
+
+    #fixed-social{left: 32%;bottom: 243px;}
+    .login-c {font-size:18pt}
+   .logo-class{margin-bottom:0;width:150px}
+    .font-join-c{font-size:14pt}
+   .image4-c { top: 10%!important;left: 30%; transform: scale(0.8); }
+    .font-lets-c, .font-gets-c{font-size:12pt}
+    .form-check-label{font-size:9px}
+    .live-c {left: 13px;font-size: 13pt;width: 100%;}
+	.modal-content{padding-top: 0px;}
+	.font-gets-c {width: 100%;margin-left: 60%;position: relative;display: inline-block;text-align: left;margin-top:0}
+	.font-lets-c {Margin-left:10px;display: inline-block}
+	.skigit-logo {position: absolute;top: 3%;left: -55%;z-index: 1;}
+	b#get-app {font-size: 18px;padding-right: 0px;}
+}
+
+
+
+
+
+</style>
+
+
+
+
+<div class="container" data-target="#landing_modal">
+    
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="landing_modal" role="dialog">
+    <div class="modal-dialog landing-modal-dialog">
+    
+      <div class="modal-content" style="border-radius: 10px !important;width: 75%;background-color: #000000; left: 20%;">
+        <div class="modal-body">
+          <div class="">
+            <!--<img class="logo-class"  src="{% static 'images/logo_glow_2.png' %}" alt="Snow" style="
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+				margin-top: 10px;
+				width: 150px;
+				margin-bottom: -10px;
+            " >-->
+              <img class="image2-c" src="{% static 'images/landing/image2.png' %}" alt="Snow">
+
+
+              <div class="bottom-left">
+              </div>
+              <div class="top-left">
+              </div>
+
+              <div class="top-right"><font color="#001f5d"><font face="cursive"><font class="login-c" size="7"><b style="
+    font-weight: normal">Help us get Started Right.</b><br><b style="
+    font-weight: normal">Login for Beta Now!</b></font></div>
+			  
+			  <div class="skigit-logo"><img src="https://static.skigit.com/images/Skigit_Logo_Glow.png" title="Play Skigit" width="150px"></div>
+			  
+			  <div id="live-share"><img class="image4-c" src="https://static.skigit.com/images/landing/Live-Share%20Icon_Landing-Banner.png" alt="Snow1" align="LEFT" border="0"></div>
+			  
+		 <div class="top-right-app">
+			  <img class="image-app-c" src="https://static.skigit.com/images/landing/login_app_image.png" alt="Snow2">
+			   
+
+			  </div>
+							
+			  
+			  <div class="bottom-right">
+			  
+              <div class="bottom-right">
+              <div id="fixed-social">
+              <div>
+                <a class="fixed-facebook"><i class="fa fa-facebook"></i></a>
+              </div>
+              <div>
+                <a class="fixed-twitter"><i class="fa fa-twitter"></i></a>
+              </div>
+              <div>
+                <a class="fixed-instagrem"><i class="fa fa-instagram"></i></a>
+              </div>
+              <div>
+                <a class="fixed-linkedin"><i class="fa fa-linkedin"></i></a>
+              </div>
+              <div>
+                <a class="fixed-pinterest"><i class="fa fa-pinterest"></i></a>
+              </div>
+            </div>
+
+			<div id="get_app_group">
+            <b id="get-app">Get the app!</b>
+			  <br>
+			  <div  id="app-store-group" >
+              <!--Apple store image and link -->	
+			 <a class="mobile-app-link-apple" href="#" onclick="window.open(encodeURI('https://apps.apple.com/app/instagram/id389801252?vt=lo'), '_blank', 'location=yes,enableViewPortScale=yes');">
+				<span class="mobile-app-span">
+				<img class="image-app-d" alt="-" src="https://static.skigit.com/images/landing/AppleStore.png">
+			</span>
+				</a>
+			</div>
+			
+			
+			  <!--Google play store image and link -->			
+				<a class="mobile-app-link-google" href="#" onclick="window.open(encodeURI('https://play.google.com/store/apps/details?id=com.instagram.android&referrer=utm_source%3Dinstagramweb%26utm_campaign%3DloginPage%26ig_mid%3D996C2F48-94F0-4CE2-BD02-A31A40B588E0%26utm_content%3Dlo%26utm_medium%3Dbadge'), '_blank', 'location=yes,enableViewPortScale=yes');">
+				<span class="mobile-app-span">
+				<img class="image-app-d" alt="-" src="https://static.skigit.com/images/landing/GoogleStore.png">
+			</span>
+			</a>
+		 </div>
+			<p><font color="#ffffff"><font face="Segoe UI, serif"><font size="7" class="font-join-c"><font class="font-join-c" size="7">Join
+              the <span style="font-size: 20px; font-weight:700;font-family: segoe print;color: #dcd7ff;">Skigit Beta</span> program and help us test our site. It's easy and wicked fun! Just login and share your life in 30 seconds. Make your Skigit then post it to your favorite Social Networks! </font></font></font></font>
+              </p>
+			   
+			  
+			  
+              <p class="lets-c"><font face="Segoe Print, serif">
+			  <font class="live font-lets-c" size="6"><a id="font-lets-c" href="/register/">Let's do it!</a></font>
+              <font face="Segoe Print, serif"><a data-dismiss="modal"><font class="live font-gets-c" size="6" >Get
+                me outta here</font></a></font></p>
+				<br>
+				<br>
+              <div class="form-check form-check-inline" style="float: right;position: relative;text-align: right;bottom: 41px;">
+                <input  font size="4" class="form-check-input landing-checkbox" type="checkbox" id="inlineCheckbox1" value="option1">
+                <label font size="4" class="form-check-label" for="inlineCheckbox1" style="font-size: 12px;color: #cecece;"> &nbsp; Don’t show this page again</label>
+              </div>
+            </div>
+              <div class="centered">
+              </div>
+            </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
+
+<script>
+
+function closeWin() {
+  myWindow.close();
+}
+
+</script>

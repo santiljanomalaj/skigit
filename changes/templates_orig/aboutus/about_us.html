@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block main_video_block %}
+{% endblock %}
+
+{% block window_page_title_block %}
+Skigit - About Us
+{% endblock %}
+
+{% block window_page_meta_block %}
+<meta property="og:site_name" content="Skigit" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://demo.mrphpguru.com/skigitdev/step-1/" />
+<meta property="og:title" content="Skigit - About Us" />
+{% endblock %}
+
+{% block head_inline_css_block %}
+<style>
+    .section-title {
+        text-align: center !important;
+    }
+</style>
+{% endblock %}
+
+
+{% block main_div_block %}
+<div id="main"><div class="wrap cf">
+        <div role="main" id="content main-fnt-mch">
+            <div id="post-139" class="post-139 page type-page status-publish hentry">
+                <h1 class="sageo">About us</h1>
+                <div class="page-content rich-content">
+               <img width="68" height="50" alt="logo" src="{% static 'skigit/images/logo.png' %}" style="position: relative;">
+ <p>A video social networking website intended to bring people and their favorite things together in an intimate way through video storytelling. Advances in video capture and formatting have provided people everywhere the means to be able to create video simply at the click of a smartphone button. This advancement offers us the unprecedented ability to create videos about ours lives and our favorite things all in a matter of seconds when the moment strikes us, when our creativity is peaked or when we have an exciting experience that we simply can't wait to share with others!</p>
+                <p>Skigit offers you the ability to make a connection with others through sight, sound, motion with only the limits of your creativity which simply can't be achieved through static photo scrapbooks or written words. We are the fun yet meaningful website that brings real value to your life.</p>
+ <p>
+ <h3>Our Mission  <img width="52" height="48" alt="puzzle" src="{% static 'skigit/images/aboutus_mission.png' %}" style="position: relative;">  </h3>
+ <ul>
+ <li>To provide a free video sharing feature-rich website available to all users across the planet for the purpose of enabling people to express themselves by creating and sharing video files of their favorite people, places and things in a way that intimately connects us and brings value to our lives.</li>
+<li>To provide users the opportunity to partner with businesses in donating incentives to make a lasting impact on our world. We think this is kind of important. </li>
+<li>To continuously improve skigit through user feedback and suggestions to make our site easy and fun to use.
+</li>
+</ul>
+    </p>
+    <p>
+    <h3>Our Location <img width="79" height="56" alt="puzzle" src="{% static 'skigit/images/aboutus_sun.png' %}" style="position: relative;">  </h3>
+    <p style="font-size:16px;">Skigit is headquartered in sunny Land O' Lakes, Florida, USA. </p>
+    
+    </p>
+   <!-- <p>
+    <h3>Contact Us  
+<img width="29" height="23" alt="puzzle" src="{% static 'skigit/images/icon/email_icon.png' %}" style="position: relative;"></h3>
+    
+    </p>-->
+                </div>
+            </div><!--end .hentry-->
+
+        </div><!--end #content-->
+
+
+        <div role="complementary" id="sidebar">
+        </div><!--end #sidebar-->
+    </div></div>
+{% endblock %}

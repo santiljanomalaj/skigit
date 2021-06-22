@@ -1,0 +1,76 @@
+{% load thumbnail %}
+{% if conv_msg %}
+
+    <div class="message_thread{% if conv_msg_count %} msg_read{% endif %}" data-id="{{ conv.id }}">
+
+        <a href='{% url 'messages_conversation1' partner_user.username %}'>
+            <div class="msg_data">
+                <div class="partner_profile">
+
+                    {% if partner_user_profile.profile_img %}
+                        <img width='50' height='50' class='avatar avatar-wordpress-social-loginvatar-32 photo' src='{% thumbnail partner_user_profile.profile_img "50x50" crop="center" %}'>
+                    {% else %}
+                        <img width='50' height='50' class='avatar avatar-wordpress-social-loginvatar-32 photo' src='{{ settings.PROFILE_PLACEHOLDER }}'>
+                    {% endif %}
+                </div>
+
+                <h3>{{ partner_user.username }}
+                    {%  if conv_msg_count %}
+                        <span class="msg_unread_count">({{ conv_msg_count }})</span>
+                    {% endif %}
+                    {% if partner_user_profile.online %}
+                        <span><img src="{{ settings.ONLINE_BUTTON_IMG }}" height="10" width="10"></span>
+                    {% else %}
+                        <span><img src="{{ settings.OFFLINE_BUTTON_IMG }}" height="10" width="10"></span>
+                    {% endif %}
+                    <small>{{  conv_msg.created_date|date:'b d Y I:M:S p' }}</small>
+                </h3>
+
+                <h6>subject: {{ conv_msg.msg_subject }}</h6>
+
+                <h6>
+                    {% if conv_msg.user == current_user %}
+                        <span><img src="{{ settings.MSG_SENDER_IMG }}" height="12" width="12" /></span>
+                    {% endif %}
+                    {{ conv_msg.text }}
+                </h6>
+
+            </div>
+        </a>
+        <div class="msg_action">
+            <h3>
+                {% if conv_msg.user == current_user %}
+                    <span class="delete"><img src="{{ settings.MSG_DELETE_IMG }}" height="15" width="15" /></span>
+                {%  elif conv_msg.user != current_user and conv_msg.is_read %}
+                    <span class="unread"><img src="{{ settings.MSG_UNREAD_IMG }}" height="15" width="15" title="Mark Conversation Unread" /></span>
+                {% elif conv_msg.user != current_user and not conv_msg.is_read %}
+                    <span class="read"><img src="{{ settings.MSG_READ_IMG }}" height="15" width="15" title="Mark Conversation Read"/></span>
+                {% endif %}
+            </h3>
+        </div>
+    </div>
+
+{% else %}
+    <div class="message_thread" data-id="{{ conv.id }}">
+        <a href='{% url 'messages_conversation1' partner_user.username %}'>
+            <div class="msg_data">
+                <div class="partner_profile">
+                    {%  if partner_user_profile.profile_img %}
+                        <img width='50' height='50' class='avatar avatar-wordpress-social-loginvatar-32 photo' src='{% thumbnail partner_user_profile.profile_img "50x50" crop="center" %}'>
+                    {% else %}
+                        <img width='50' height='50' class='avatar avatar-wordpress-social-loginvatar-32 photo' src='{{ settings.PROFILE_PLACEHOLDER }}'>
+                    {% endif %}
+                </div>
+
+                <h3>{{ partner_user.username }}
+                    {% if partner_user_profile.online %}
+                        <span><img src="{{ settings.ONLINE_BUTTON_IMG }}" height="10" width="10"></span>
+                    {% else %}
+                        <span><img src="{{ settings.OFFLINE_BUTTON_IMG }}" height="10" width="10"></span>
+                    {% endif %}
+                </h3>
+                <h6>No Message Left In The Conversation</h6>
+            </div>
+        </a>
+    </div>
+{% endif %}

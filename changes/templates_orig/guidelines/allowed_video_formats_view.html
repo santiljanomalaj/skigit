@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block main_video_block %}
+{% endblock %}
+
+{% block window_page_title_block %}
+Video Formats - Skigit
+{% endblock %}
+
+{% block window_page_meta_block %}
+<meta property="og:site_name" content="Skigit" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://demo.mrphpguru.com/skigitdev/step-1/" />
+<meta property="og:title" content="Video Formats - Skigit" />
+{% endblock %}
+
+{% block head_inline_css_block %}
+<style>
+    .section-title {
+        text-align: center !important;
+    }
+</style>
+{% endblock %}
+
+
+{% block main_div_block %}
+<div id="main"><div class="wrap cf">
+
+        <div role="main" id="content main-fnt-mch">
+
+            <div id="post-427" class="post-427 page type-page status-publish hentry">
+                <h1 class="sageo">Video Formats</h1>
+
+                <div class="page-content rich-content">
+                   
+                   
+                    <h1><span style=" color: #006699; font-size: 20px;">Supported Video Formats </span></h1>
+                    <div style="width:100%; float:left;">
+                    <img width="295" height="130" src="{% static 'skigit/detube/images/format_2.png' %}" alt="Format" style="float: left;" class="alignnone">
+                    <ul style="float:left;">
+              <li>WMV</li>
+              <li>AVI (VIDEO, AVI)</li>
+              <li>FLV (VIDEO, X-FLV)</li>
+              <li>MPEG4, MPG, MPE (VIDEO,MPEG)</li>
+              <li>WEBM (VIDEO, WEBM)</li>
+              <li>MOV (VIDEO, QUICKTIME)</li>
+              <li>WMV, WVX, WM, WMX (VIDEO, X-MS-WMV)</li>         
+              <li>3GP, 3GPP, 3GPP2, 3G2 (VIDEO, 3GPP)</li>
+                    </ul>
+                    </div>
+                    <p>&nbsp;</p>
+                    <h2><span style=" color: #006699; font-size: 20px;">Can I link a video to any URL ?</span></h2>
+                    <p><span style=" font-size: 16px; color: #333333;">No,not by default.Skigit will only embed URLs matching an internal whitelist. This is for security purposes.</span></p>
+                    
+                    <h3><span style=" color: #006699; font-size: 20px;">Okay, so what sites can I link to?</span></h3>
+                    <p><span style="font-size: 16px; color: #333333;">At this time….</span><span title="http://blip.tv/">&nbsp;&nbsp; </span><span style="color: #3366ff;"><em><span style="font-size: 14px; font-family: tahoma,arial,helvetica,sans-serif;"><a target="_blank" href="http://www.youtube.com/" title="http://www.youtube.com/"><span style="color: #3366ff;">YouTube</span></a></span></em></span></p>
+                </div>
+            </div><!--end .hentry-->
+
+        </div><!--end #content-->
+
+
+        <div role="complementary" id="sidebar">
+        </div><!--end #sidebar-->
+    </div></div>
+{% endblock %}

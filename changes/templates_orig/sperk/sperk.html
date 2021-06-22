@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block main_video_block %}
+
+{% endblock %}
+
+{% block window_page_title_block %}
+    Sperk - Skigit
+{% endblock %}
+{% block window_page_meta_block %}
+    <meta property="og:site_name" content="Skigit" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content=""/>
+    <meta property="og:title" content="Login - Skigit" />
+{% endblock %}
+
+{% block head_inline_css_block %}
+{% endblock %}
+
+{% block main_nav_under_css_block %}
+{% endblock %}
+
+{% block main_div_block %}
+
+    <div>
+        <div class="wrap cf">
+            <div id="content" class=" no-padd-form" role="main">
+                <div class="post-2110 page type-page status-publish hentry" id="post-2110">
+                    <div style="text-align:center; padding-top:25px">
+                        <span style="font-family: 'Segoe_Print'; font-size: 115%; color: #3D3D3D; text-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5); vertical-align: 30px;">
+                            Click on a logo to view the Sperks offered...
+                        </span>
+                      <!--  <img src="{% static 'skigit/images/sperk.png' %}" style="width:65px; min-width:35px; margin-bottom: 5px;"/>-->
+                    </div>
+                    <div class="page-content rich-content">
+                        {% include 'sperk/sperk_body.html' %}
+                    </div>
+                </div>
+                </br>
+                </br>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

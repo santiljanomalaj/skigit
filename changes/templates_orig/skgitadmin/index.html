@@ -1,0 +1,481 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Admin Panel</title>
+
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<!-- basic styles -->
+		<!--href="{% static 'skigit/assets/bootstrap.min.css' %}"-->
+		<link href="{% static 'skigit/assets/css/bootstrap.min.css' %}" rel="stylesheet" />
+		<link rel="stylesheet" href="{% static 'skigit/assets/css/font-awesome.min.css' %}" />
+
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="{% static 'skigit/assets/css/font-awesome-ie7.min.css' %}" />
+		<![endif]-->
+
+		
+		<!-- fonts -->
+
+		<link rel="stylesheet" href="{% static 'skigit/assets/css/ace-fonts.css' %}" />
+
+		<!-- ace styles -->
+        <link rel="stylesheet" href="{% static 'skigit/assets/css/ace.css' %}"/>
+		<link rel="stylesheet" href="{% static 'skigit/assets/css/ace.min.css' %}" />
+		<link rel="stylesheet" href="{% static 'skigit/assets/css/ace-rtl.min.css' %}" />
+		<link rel="stylesheet" href="{% static 'skigit/assets/css/ace-skins.min.css' %}" />
+		<link rel="stylesheet" href="{% static 'skigit/assets/css/user.css' %}" />
+		<link rel="stylesheet" href="{% static 'skigit/assets/css/bootstrap-multiselect.css' %}" />
+		<link rel="stylesheet" href="{% static 'skigit/assets/css/ace-rtl.min.css' %}" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        
+        
+		<!--[if lte IE 8]>
+		<link rel="stylesheet" href="{% static 'skigit/assets/css/ace-ie.min.css' %}"/>
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<!-- ace settings handler -->
+		<script type="text/javascript" src="{% static 'skigit/assets/js/ace-extra.min.js' %}"></script>
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+
+		<![endif]-->
+	</head>
+
+	<body>
+		<div class="navbar navbar-default" id="navbar">
+			<script type="text/javascript">
+				try{ace.settings.check('navbar' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="navbar-container" id="navbar-container">
+				<div class="navbar-header pull-left">
+					<a href="index.php" class="navbar-brand">
+						<small>
+							Admin Panel
+						</small>
+					</a><!-- /.brand -->
+				</div><!-- /.navbar-header -->
+				<div class="navbar-header pull-right" role="navigation">
+					<ul class="nav ace-nav">
+                    
+                      <li class="purple">
+							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+								<i class="ace-icon fa fa-bell icon-animated-bell"></i>
+								<span class="badge badge-important">4</span>
+							</a>
+
+							<ul class="dropdown-menu-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
+								<li class="dropdown-header">
+									<i class="ace-icon fa fa-exclamation-triangle"></i>
+									4 Notifications
+								</li>
+
+								<li class="dropdown-content">
+									<ul class="dropdown-menu dropdown-navbar navbar-pink">
+										<li>
+											<a href="#">
+												<div class="clearfix">
+													<span class="pull-left">
+														<i class="btn btn-xs btn-primary fa fa-user"></i>
+														New Comments
+													</span>
+													
+												</div>
+											</a>
+										</li>
+
+										<li>
+											<a href="#">
+												<i class="btn btn-xs btn-primary fa fa-user"></i>
+												Bob just signed up as an editor ...
+											</a>
+										</li>
+
+										<li>
+											<a href="#">
+												<div class="clearfix">
+													<span class="pull-left">
+														<i class="btn btn-xs btn-primary fa fa-user"></i>
+														New Orders
+													</span>
+													
+												</div>
+											</a>
+										</li>
+
+										<li>
+											<a href="#">
+												<div class="clearfix">
+													<span class="pull-left">
+														<i class="btn btn-xs btn-primary fa fa-user"></i>
+														Followers
+													</span>
+													
+												</div>
+											</a>
+										</li>
+									</ul>
+								</li>
+
+								<li class="dropdown-footer">
+									<a href="notification-details.php">
+										See all notifications
+										<i class="ace-icon fa fa-arrow-right"></i>
+									</a>
+								</li>
+							</ul>
+						</li>
+                    
+						<li class="light-blue">
+							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+								<img class="nav-user-photo" src="{% static 'assets/avatars/user.jpg' %}" alt="Jason's Photo" />
+								<span class="user-info">
+									<small>Welcome,</small>
+									Admin
+								</span>
+
+								<i class="icon-caret-down"></i>
+							</a>
+
+							<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+							<li>
+									<a href="admin-profile.php">
+										<i class="icon-user"></i>
+										Edit Profile
+								</a>
+							</li>
+							
+								<li>
+									<a href="logout.php">
+										<i class="icon-off"></i>
+										Logout
+								</a>
+							</li>
+							</ul>
+						</li>
+					</ul><!-- /.ace-nav -->
+				</div><!-- /.navbar-header -->
+			</div><!-- /.container -->
+		</div>
+
+
+
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>				</a>
+
+
+				<div class="sidebar " id="sidebar">
+					<script type="text/javascript">
+						try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+					</script>
+					<ul class="nav nav-list">
+						<!--<li >
+							<a target="_blank" href="../index.html">
+								<i class="icon-dashboard"></i>
+								<span class="menu-text">Dashboard </span>
+							</a>
+						</li>
+						<li>
+							<a href="#" class="dropdown-toggle">
+							    <i class="icon-envelope-alt"></i>
+								<span class="menu-text">Posts</span>
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								<li>
+									<a href="approved-posts.php">
+										<i class="icon-double-angle-right"></i>
+										Approved
+									</a>
+								</li>
+								<li>
+									<a href="index.php">
+										<i class="icon-double-angle-right"></i>
+										Unapproved
+									</a>
+								</li>
+							</ul>
+						</li>
+
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-file"></i>
+								<span class="menu-text">Pages</span>
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								
+
+								<li>
+									<a href="pages.php">
+										<i class="icon-double-angle-right"></i>
+										Pages									
+										</a>								
+										</li>
+								<li>
+									<a href="add-page.php">
+										<i class="icon-double-angle-right"></i>
+										Add New Page									
+										</a>								
+										</li>
+								<li>
+									<a href="banners.php">
+										<i class="icon-double-angle-right"></i>
+										Banners									
+										</a>								
+										</li>																														
+								<li>
+									<a href="add-banner.php">
+										<i class="icon-double-angle-right"></i>
+										Add New Banner									
+										</a>								
+										</li>		
+										
+								
+																				
+							</ul>
+						</li>
+
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-edit"></i>
+								<span class="menu-text"> Language </span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								<li>
+									<a href="constants.php">
+										<i class="icon-double-angle-right"></i>
+										Labels
+									</a>
+								</li>
+
+
+								<li>
+									<a href="chart-titles.php">
+										<i class="icon-double-angle-right"></i>
+										Chart Titles
+									</a>
+								</li>
+
+								<li>
+									<a href="informations.php">
+										<i class="icon-double-angle-right"></i>
+										Informations Buttons
+									</a>
+								</li>
+								
+								<li>
+									<a href="calendar-labels.php">
+										<i class="icon-double-angle-right"></i>
+										Calendar Labels
+									</a>
+								</li>
+								
+							</ul>
+						</li>-->
+						
+						<!--<?php-->
+						<!--$curr_file_selected =  basename($_SERVER['SCRIPT_FILENAME']);-->
+						<!--?>-->
+						<!-- -->
+						
+                        <li class="open">
+							<a href="#" class="dropdown-toggle">
+							<i class="icon-user"></i>
+								<span class="menu-text"> Skigit </span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+
+								<li id="call_inapp" >
+									<a href="#" >
+										<i class="icon-double-angle-right"></i>
+										Inappropriate Skigit Managemant.
+									</a>
+								</li>
+                                </ul>
+                        </li>
+
+						<script>
+
+						$(document).ready(function(){
+
+							$( "#call_inapp" ).on( "click", function() {
+								$.get("/admin_tools/dashboard/inapp/", function(data, status){
+									 $("#ajax_div").empty()
+								     $("#ajax_div").append(data);
+								});
+							})
+
+
+						});
+
+
+						</script>
+
+
+
+						<!--<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-edit"></i>
+								<span class="menu-text"> Forms </span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								<li>
+									<a href="form-elements.html">
+										<i class="icon-double-angle-right"></i>
+										Form Elements
+									</a>
+								</li>
+
+								<li>
+									<a href="form-wizard.html">
+										<i class="icon-double-angle-right"></i>
+										Wizard &amp; Validation
+									</a>
+								</li>
+
+								<li>
+									<a href="wysiwyg.html">
+										<i class="icon-double-angle-right"></i>
+										Wysiwyg &amp; Markdown
+									</a>
+								</li>
+
+								<li>
+									<a href="dropzone.html">
+										<i class="icon-double-angle-right"></i>
+										Dropzone File Upload
+									</a>
+								</li>
+							</ul>
+						</li>-->
+
+						<!--<li>
+							<a href="widgets.html">
+								<i class="icon-list-alt"></i>
+								<span class="menu-text"> Widgets </span>
+							</a>
+						</li>-->
+					</ul><!-- /.nav-list -->
+
+				<div class="sidebar-collapse" id="sidebar-collapse">
+						<i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+					</div>
+					<script type="text/javascript">
+						try{ace.settings.check('sidebar' , '')}catch(e){}
+					</script>
+				</div>
+      
+
+
+				<div class="main-content">
+					<!--<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+
+							<li class="active">Admin Panel</li>
+						</ul>
+					</div>-->
+
+					<!--page-content-->
+					<div class="page-content">
+					<div class="page-header col-lg-12">
+						   <span style="font-size:18px;color:#428bca">User Managemant</span>
+						   <button  class="btn btn-xs btn-primary" style="margin-left:30px;" id="cat_page">Add New</button>
+                           <select size="1" name="sample-table-6_length" aria-controls="sample-table-6" class="userDropDown">
+                            <option value="10" selected="selected">Select User Type</option>
+                           <option value="10" >Admin</option>
+                           <option value="25">Provider</option>
+                         </select>
+
+   
+						</div>
+						<div id ="ajax_div"class="col-xs-12">
+							<div class="table-responsive">
+						testing
+							
+								
+							</div><!-- /.table-responsive -->
+						</div><!-- /span -->
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+				</div><!-- /.main-container-inner -->
+				
+				<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+					<i class="icon-double-angle-up icon-only bigger-110"></i>				</a>
+		</div><!-- /.main-container -->
+
+
+		
+		<!-- basic scripts -->
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='assets/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+
+		
+		<!-- page specific plugin scripts -->
+
+
+		
+
+		<!-- ace scripts -->
+
+
+
+
+
+
+
+
+
+
+		<!-- inline scripts related to this page -->
+
+	</body>
+</html>

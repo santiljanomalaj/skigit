@@ -1,0 +1,323 @@
+{% load staticfiles %}
+<!--<link rel="stylesheet" href="{% static 'skigit/detube/style.css' %}" type="text/css" media="all" />-->
+<style>
+    .suggestedvds {
+        margin: 10px 0 0 45px;
+        width: 90%;
+    }
+
+    .section-title_thumbs {
+        float: left;
+        margin-top: 45px;
+        width: 30%;
+    }
+
+    .demo_gal {
+        float: left;
+        margin: 0;
+        position: relative;
+        width: 67.7%;
+    }
+    #suggestedvds .scroll-img {
+        width: 100%;
+    }
+    .scroll-img {
+        font-size: 0;
+        height: 110px;
+        margin: 5px auto auto -102px;
+        overflow: hidden;
+        width: 860px;
+    }
+
+    .section-title_thumbs h2 {
+        color: #000;
+        font-family: "Segoe Print" !important;
+        font-size: 11px;
+        font-weight: bold;
+        line-height: 24px;
+        margin: 0 10px 0 15px;
+        text-align: left;
+        text-transform: capitalize;
+    }
+
+    .demo_gal {
+        float: left;
+        margin: 0;
+        position: relative;
+        width: 67.7%;
+    }
+
+    .scroll-img ul {
+        height: 110px;
+        margin: 0 0 0 100px;
+        width: 100%;
+    }
+    ul, ol {
+        list-style: outside none none;
+        margin: 0;
+        padding: 0;
+        text-align: left !important;
+    }
+
+    .scroll-img ul li {
+        background: none repeat scroll 0 0 #3f95b7;
+        border-radius: 6px;
+        display: inline-block;
+        height: 100%;
+        margin: 2px 5px 0 0;
+        width: 115px;
+    }
+
+
+    ul, ol {
+        list-style: outside none none;
+        text-align: left !important;
+    }
+
+
+    #post_class_home_box_gal h2 a {
+        color: #fff;
+        font-family: "Segoe Print";
+    }
+    a {
+        color: #555;
+        outline: 0 none;
+        text-decoration: none;
+        transition: background-color 0.15s linear 0s, color 0.15s linear 0s;
+    }
+
+
+    #post_class_home_box_gal .thumb {
+        height: 70px;
+        width: 100%;
+    }
+    .thumb {
+        background: none repeat scroll 0 0 #000;
+        display: inline-block;
+        overflow: hidden;
+        position: relative;
+        vertical-align: bottom;
+    }
+
+    .clip {
+        height: 150px !important;
+        width: 220px !important;
+    }
+
+    .single_title {
+        color: #000;
+        font-family: "Segoe Print";
+        font-size: 11px;
+        margin: 20px 0px 0px 0px;
+        text-align: left
+    }
+    #title_single {
+        color: #1e72b0;
+        float: left;
+        font: 300 18px/10px segoe print;
+        margin: 0 10px 0 45px;
+        text-align: center;
+        text-shadow: 1px 1px 7px #44bae9;
+    }
+    h1 {
+        font-size: 24px;
+    }
+    h1, h2, h3 {
+        line-height: 1.25;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        color: #111;
+        margin: 0 0 15px;
+    }
+
+    .video_heading {
+        float: left;
+    }
+
+    .video_text_color{
+        float: left;
+        margin: 0 0 0 5px;
+    }
+
+    .video_text_color a {
+        color: #0381c3;
+        font: 600 11px/26px segoe print;
+    }
+
+    .video_text {
+        color: #000;
+        float: left;
+        font: 400 11px/26px segoe print;
+    }
+    .fb_default {
+        display: block !important;
+        float: left;
+        width: 530px;
+    }
+    .fb_default {
+        margin: 20px 0px 21px -40px;
+        width: 600px !important;
+    }
+
+    .videofooter {
+        color: #000;
+        float: left;
+        font: 400 11px/26px segoe print;
+        margin: 0 0 0 5px;
+    }
+    a {
+        color: #555;
+        outline: 0 none;
+        text-decoration: none;
+        transition: background-color 0.15s linear 0s, color 0.15s linear 0s;
+    }
+    .single_title span {
+        color: #0381c3;
+        font-family: "Segoe Print";
+    }
+
+    .single_title span a {
+        color: #0381c3;
+        font-family: "Segoe Print";
+        font-size: 12px;
+        font-weight: normal;
+    }
+    .collapse_div {
+        margin-top: 11px;
+        position: relative;
+        width: 50%;
+    }
+
+    .video_det_heading {
+        color: #000000;
+    //float: left;
+        font-family: "Segoe Print";
+        font-size: 11px;
+        font-weight: bold;
+        line-height: 15px;
+        margin: 17px 0 0 0px;
+    }
+
+    .collapse_div > p {
+        color: #000;
+        font: 400 10px/15px "Segoe Print";
+        margin: 8px 0px 0px 10px;
+        min-height: 70px;
+        text-align: justify;
+        width: 280px;
+        word-wrap: break-word;
+    }
+    ol, p, table, form, pre {
+        margin: 0;
+    }
+</style>
+
+{%if vid%}
+
+    <div id="main">
+    <div class="wrap cf" style="margin-left: 15px">
+    <div role="main" id="content">
+        <div id="post-8762" class="post-8762 post type-post status-publish format-standard hentry category-dramas category-sporting-and-outdoor-goods">
+            <div class="section-box_vedio" id="details">
+                <div class="fb_default">
+                    <h1 id="title_single">
+                        {%block title%}
+                            {{vid.skigit_id.title}}
+                        {%endblock title%}
+                    </h1>
+                    <div class="video_heading">
+                            <span class="video_text">
+                                by
+                            </span>
+                            <span class="video_text_color">
+                                <a target="_blank" href="http://demo.mrphpguru.com/skigitdev/members/skigit/profile/">
+                                    {{vid.skigit_id.user.username}}
+                                </a>
+                            </span>
+                        <div class="videofooter">
+                            on
+                            {{vid.created_date}}
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="entry-content">
+                    <div class="single_youtube">
+                        <iframe id="homeframe" class="homeframe" title="YouTube video player" width="840" height="350"
+                                src="http://www.youtube.com/embed/{{ vid.skigit_id.video_id  }}?autoplay=0&origin={{ origin }}&modestbranding=0&showinfo=0"
+                                frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen/>
+                        </iframe>		</div>            <!---->
+                </div>
+
+                <!-- end .entry-content -->
+                <div class="singlevideo_left">
+                    <div class="inner">
+                        <div style="display:none;" class="fb_extra">
+                            <h1 id="title_single">
+                                {{vid.skigit_id.title}}
+                            </h1>
+                            <div class="video_heading"> <span class="video_text">
+                                        by                  </span>
+                                <span class="video_text_color"> <a target="_blank" href="http://demo.mrphpguru.com/skigitdev/members/skigit/profile/">skigit</a></span>
+                                <div class="videofooter"> on
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="single_title">
+                            A <span><a target="_blank" href="{{ vid.category.get_absolute_url}}">{{vid.category.cat_name}}</a></span> about <span><a target="_blank" href="http://demo.mrphpguru.com/skigitdev/category/dramas/sporting-and-outdoor-goods">{{vid.subject_category.sub_cat_name}}</a></span>              </div>
+                    </div>
+                </div>
+
+
+            </div>
+            {%if vid.why_rocks %}
+                <div class="collapse_div">
+                    <span class="video_det_heading">Why my Skigit rocks!</span>
+                    <p>{{vid.why_rocks}}</p>
+
+                </div>
+            {%endif%}
+
+            <div class="collapse_div">
+                <span class="video_det_heading">Skigits You Might Like</span>
+
+            </div>
+            <!--for loop for sligit might like-->
+            <div class="demo_gal">
+                <div class="scroll-img">
+                    <ul>
+                        {% if skigits_might_like%}
+                            {% for skigits in skigits_might_like%}
+                                <li>
+                                    <div id="post_class_home_box_gal">
+                                        <h2><a href="http://demo.mrphpguru.com/skigitdev/test-skigit-by-rana/">Test skigit ...</a></h2>
+
+                                        <div class="thumb">
+                                            <a href="http://localhost:8000/youtube/popup_detail/{{skigits.id}}" title="test-skigit-by-rana" data-id="5222" onclick="countviews(8630);" class="clip-link">
+                                                <span style="background:url(http://i.ytimg.com/vi/{{skigits.skigit_id.video_id}}/0.jpg) center center; display:block; position:relative; height:110px; width:185px;" class="clip"></span>
+                                                <span class="overlay_small">&nbsp;</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor%}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+        <!--end #deatils-->
+    </div>
+    <div style="clear: both"></div>
+
+{%else%}
+    <div>Video details not found</div>
+{% endif %}
+
+</div>

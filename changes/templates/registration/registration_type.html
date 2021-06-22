@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n%}
+{#{% load account %}#}
+{#{% load socialaccount %}#}
+{% load category_list %}
+
+<!--        Meta Content              -->
+{% block window_page_meta_block %}
+<title>Register | Skigit</title>
+<meta name="description" content="Skigit" />
+<link rel="image_src" href="{% static 'img/ico/arabic-media-icon-100x110.jpg' %}" />
+<meta property="og:title" content="Skigit" />
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="{{ request.build_absolute_uri }}"/>
+<meta property="og:image" content="{% static 'img/ico/arabic-media-icon-100x110.jpg' %}"/>
+<meta name="description" content="Register"/>
+<link rel="image_src" href="{% static 'img/ico/arabic-media-icon-100x110.jpg' %}" />
+<meta property="og:site_name" content="Skigit"/>
+<!--        <meta property="fb:app_id" content="120554071328497"/>-->
+<meta property="og:description" content="Skigit"/>
+
+<meta itemprop="name" content="Skigit" />
+<meta itemprop="description" content="Skigit" />
+<meta itemprop="image" content="{% static 'img/ico/arabic-media-icon-100x110.jpg' %}" />
+<meta name="description" content=  "Register"/>
+<meta name="keywords" content="Register" />
+<meta name="rating" content="Skigit"/>
+<meta name="revisit-after" content="1 days"/>
+<meta name="robots" content="index,follow"/>
+<meta name="Author" content="(c) Skigit"/>
+{% endblock window_page_meta_block %}
+
+<!--     End Meta Content              -->
+{% block main_video_block %}
+{% endblock %}
+{% block main_div_block %}
+<div class="row mar_zero" id="main" style="min-height: 400px;">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 margin_top_30">
+        <form action="{% url 'register_type' %}" method="POST" name="reg_type">
+            {% csrf_token %}
+            <h3 class="text-center sego word_space_2">Register for skigit!</h3>
+			            <Div class="text-center sego  small-text" style="Font-size:100% !important; color:#037BB8 !important">Are you joining Skigit as a general user or as the representative of a business?</Div>
+            <h2 class="text-center sego margin_top_50 small-text" style="Font-size:100% !important; color:#A10000  !important">Choose one account type</h2>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center  sego " style="Font-size:100% !important; color:#000000 !important; font-weight: bold;">
+                <label for="acc_type1">
+                    <input name="acc_type" type="radio" value="general" checked="checked" id="acc_type1" tabindex='1'  />
+                    General Account
+                </label>
+                <label for="acc_type2">
+                    <input name="acc_type" type="radio" value="business" id="acc_type2"  tabindex='2' />
+                    Business Account
+                </label>
+
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center margin_top_30 for-button">
+                <a href="#" onclick="location.href = '/'" class="btn no-p">Cancel</a>
+                <button type="submit" class="btn no-p" name="register_type">&nbsp;Next&nbsp;</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock main_div_block %}
+

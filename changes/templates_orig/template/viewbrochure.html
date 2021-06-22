@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load category_list %}
+
+{% block window_page_meta_block %}
+    <title> Brochure | Skigit </title>
+    <meta name="description" content="Skigit" />
+    <meta property="og:title" content="Skigit" />
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="{{ request.build_absolute_uri }}"/>
+    <meta name="description" content="Skigit"/>
+    <meta property="og:site_name" content="Skigit"/>
+    <meta property="og:description" content="{{ user.first_name }}{{ user.last_name }}{{ user.username}}"/>
+    <meta itemprop="name" content="Skigit" />
+    <meta itemprop="description" content="{{ user.first_name }}{{ user.last_name }}{{ user.username}}" />
+    <meta name="description" content= "Skigit"/>
+    <meta name="keywords" content="{{ user.first_name }} {{ user.last_name }}{{ user.username}}" />
+    <meta name="rating" content="Skigit"/>
+    <meta name="Author" content="(c) Skigit"/>
+{% endblock window_page_meta_block %}
+
+{% block head_inline_css_block %}
+{% endblock %}
+
+{% block main_video_block %}
+{% endblock %}
+
+{% block main_div_block %}
+
+    <style>
+	.logo_funbox {
+            padding: 10px 30px 10px 30px;
+            width: 165px;
+            float: left;
+            margin-left: 15px;
+            margin-right: 30px;
+            background-color: #fff;
+            border-radius: 60%;
+            -webkit-box-shadow: 0px 0px 10px 5px rgba(255,255,255,255) !important;
+        }
+
+        .imgbox_brocherr1 {
+            display: table;
+            position: absolute;
+            width: 63px;
+            margin-top: 2%;
+            margin-left: 3%;
+        }
+	
+        .imgbox_brocherr {
+            display: table;
+            position: absolute;
+            width: 63px;
+            margin-top: 15%;
+            margin-left: 39%;
+        }
+
+        .box_brocherr {
+            width: 1100px;
+            margin: 0 auto;
+            display: table;
+            position: relative;
+        }
+        .box_brocherr img { width: 100%; }
+
+        .imgbox_brocherr img {
+            width: 110%;
+            max-height: 70px;
+        }
+
+
+        @media screen and (max-width: 1200px) {
+
+
+            .box_brocherr { width: 950px;}
+            .imgbox_brocherr {    margin-top: 14%;  margin-left: 38.5%;}
+        }
+
+        @media screen and (max-width: 992px) {
+            .box_brocherr { width: 750px;}
+            .imgbox_brocherr {margin-top: 14%; margin-left: 39%; }
+            .imgbox_brocherr img { width: 70%;  }
+        }
+
+        @media screen and (max-width: 767px) {
+            .box_brocherr { width: 400px;}
+            .imgbox_brocherr {width: 34px;}
+            .logo-url {display: table; width: inherit !important; margin: 20px auto 20px auto;}
+            section#id_print_section { text-align: center;}
+            .lbl_print { margin: 0 auto; display: table;}
+        }
+
+
+
+        @media screen and (max-width: 500px) {
+            .box_brocherr { width: 350px;}
+            .imgbox_brocherr {width: 34px;}
+        }
+
+        @media screen and (max-width: 400px) {
+            .box_brocherr { width: 200px;     margin-top: 13%;}
+            .imgbox_brocherr {width: 15px;}
+        }
+
+    </style>
+
+    <script>
+
+        refreshIframe = function(){
+            var ifr = document.getElementsByName('frame11x8.5')[0];
+            ifr.src = ifr.src;
+        };
+
+        selectLogo = function(logo_id){
+            var logoImg;
+            logoImg = $("input[type='radio'][name='select_logo']:checked").closest('[data-img]').attr('data-img')
+
+            $.ajax({
+                url: '/friends/set-brochure-logo/',
+                type: "POST",
+                data: {'b_logo': logoImg, 'logo_id':logo_id, 'user_id': {{ request.user.id }} }, // data sent with the post request
+                success: function (data) {
+                    if(data.is_success){
+                        $('#id_b_brochure').attr('src', logoImg);
+                        refreshIframe();
+                    }
+                }
+            });
+        };
+
+        $(document).ready(function(){
+
+            $.getJSON('/friends/wall-poster-b-logos/', function(data) {
+                var idd, check, current_logo, i, imagesCollection, image_div;
+                imagesCollection = data.all_business_logo;
+                if(imagesCollection){
+
+                    for(i = 0; i < imagesCollection.length; i++)
+                    {
+                        idd= imagesCollection[i][0];
+                        if((idd.length == 0))
+                        {
+                            continue;
+                        }
+                        current_logo = '{{ poster_obj.b_logo }}'
+
+                        if(current_logo == imagesCollection[i][1]){
+                            check = 'checked'
+                        }
+                        else{
+                            check = ''
+                        }
+                        image_div = ' <input type="radio" class="b_logo_poster"  data-img="'+imagesCollection[i][1]+'" onclick="selectLogo('+idd +')" id='+idd +' value='+idd +'  name="select_logo" '+check+'/>'+ '<label for='+idd +' class="label"><div class="dz-image"> <img data-dz-thumbnail="" src=' + imagesCollection[i][1] + '></div></label>'
+                        $('.logo-url').append(image_div);
+                    }
+                }
+            });
+
+        });
+
+    </script>
+
+    <div class="list-group" style="margin-top:15px; background: transparent; border:none;">
+
+        {% if brochure_exists %}
+
+            <section class="list-group-item" style="background: transparent; border: none;" id="id_logo_section">
+                <label class="f_type lbl_print">Select business logo:</label>
+                <div class="logo-url f_type" id="logos" style="margin-bottom:20px;"></div>
+            </section>
+
+            <section class="list-group-item" style="background: transparent; border: none;" id="id_print_section">
+                <iframe src="{{ request.scheme }}://{{ request.get_host }}/friends/brochure-print/" name="frame11x8.5" hidden></iframe>
+                <input type="button" id="id_print11x8.5" onclick="refreshIframe(); return frames['frame11x8.5'].print();" value="Print" >
+            </section>
+
+            <section  style="margin: 15px;">
+                <div class="box_brocherr">
+                    <!--<div class="imgbox_brocherr">
+                        <img id="id_b_brochure" src="{{ poster_obj.b_logo }}">
+                    </div>-->
+		    <div class="imgbox_brocherr1">
+                        <div class="logo_funbox">
+                            <img id="id_b_brochure" src="{{ poster_obj.b_logo }}">
+                        </div>
+                    </div>
+		    <div class="imgbox_brocherr">
+                        <img id="id_b_brochure" src="{% static 'skigit/images/logo.png' %}">
+                    </div>
+                    <img src="{{ poster_1 }}" id="id_brochure_img" style="width:100%;" />
+                </div>
+            </section>
+
+        {% else %}
+            <center><label class="f_type" style="margin-top: 30px;">No Brochures are Available Now. Coming Soon... </label></center>
+        {% endif %}
+
+    </div>
+
+{% endblock %}
